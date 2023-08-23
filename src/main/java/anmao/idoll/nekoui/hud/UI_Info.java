@@ -44,7 +44,7 @@ public class UI_Info {
 
                 int rr = 80;
                 Vec3 forward = oplayer.getForward();
-                Vec3 opv = oplayer.position().multiply(forward);//.multiply(forward);
+                Vec3 opv = oplayer.position();
                 for (Mob omob : oent){
                     if (omob != null ){
                         Vec3 omp = omob.position();
@@ -67,45 +67,40 @@ public class UI_Info {
                         poseStack.blit(MOB_POI, ox, oz,0,0,12,12,12,12);
                          */
                         Vec3 omobv = v(omp,opv,rr);
-                        poseStack.blit(MOB_POI, sx + (int)  omobv.x, sy + (int) omobv.z,0,0,12,12,12,12);
-
-                        //d = Math.sqrt(ox * ox + )
                         /*
-                        if (opx > ox){
-                            if (opz >oz){
-                                System.out.println("> hou >");
-                            }else {
-                                System.out.println("> hou2 <=");
-                            }
-                        }else {
-                            if (opz >oz){
-                                System.out.println("> qian >");
-                            }else {
-                                System.out.println("> qian2 <=");
-                            }
-                        }
-
+                        //            北（0，-1）
+                        // （-1，0）西    东（1，0）
+                        //            南（0，1）
+                        //（-0.6，-0.6）    （0.6，-0.6）
+                        //（-0.6，0.6）     （0.6，0.6）
                          */
-                        //poseStack.blit(MOB_POI,sx - 94 ,sy - 54,0,0,12,12,12,12);
-                            /*
-                            if (opx > ox && opz > oz){
-                                System.out.println("> 后 >");
-                            }
-                            if (opx > ox && opz <= oz){
-                                System.out.println("> 右 <=");
-                            }
-                            if (opx <= ox && opz > oz){
-                                System.out.println("<= 左 >");
-                            }
-                            if (opx <= ox && opz <= oz){
-                                System.out.println("<= 前 <=");
-                            }
-
-                             */
-                        //double a = omob.getX() - opx;
-                        //double b = omob.getZ() - opz;
-                        //System.out.println("x:"+a);
-                        //System.out.println("z:"+b);
+                        double cx = omp.x - opv.x;
+                        double cz = omp.z - opv.z;
+                        double g = Math.atan2(cz,cx) - Math.atan2(forward.z,forward.x);
+                        if (g > Math.PI){
+                            g = g - 2 * Math.PI;
+                        }
+                        if (g < -Math.PI){
+                            g = g + 2 * Math.PI;
+                        }
+                        /*
+                        double at = Math.atan2(omobv.z,omobv.x);
+                        double cg = at +g;
+                        if (cg > Math.PI){
+                            cg = cg - 2 * Math.PI;
+                        }
+                        if (cg < -Math.PI){
+                            cg = cg + 2 * Math.PI;
+                        }
+                        double cr = Math.sqrt(omobv.x * omobv.x + omobv.z * omobv.z);
+                        int sox = (int) (cr * Math.cos(cg));
+                        int soz = (int) (cr * Math.sin(cg));
+                        System.out.println("[F]"+g);
+                         */
+                        //System.out.println("[F]"+g * (180/Math.PI));
+                        int ox = (int) ( rr * Math.cos(g));
+                        int oz = (int) ( rr * Math.sin(g));
+                        poseStack.blit(MOB_POI,sx +( oz), sy + (- ox),0,0,12,12,12,12);
                     }
                 }
             }
