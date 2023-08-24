@@ -1,63 +1,47 @@
 package anmao.idoll.nekoui;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = NekoUI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-
-    private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
-            .define("logDirtBlock", true);
-
-    private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
-            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
-
-    public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
-            .define("magicNumberIntroduction", "The magic number is... ");
-
-    // a list of strings that are treated as resource locations for items
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
-
+    private static final ForgeConfigSpec.BooleanValue POI_DYNAMIC_SIZE = BUILDER
+            .comment("[poi]Dynamic size or not")
+            .define("poiDynamicSize", true);
+    private static final ForgeConfigSpec.IntValue POI_D_RADIUS = BUILDER
+            .comment("[poi]Detection radius")
+            .defineInRange("poiDetectionRadius", 20, 0, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue POI_S_RADIUS = BUILDER
+            .comment("[poi]Show radius")
+            .defineInRange("poiShowRadius", 80, 0, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue POI_SD_RADIUS = BUILDER
+            .comment("[poi]Dynamic radius (square) .if you want set 10,this write 100 .(10*10)")
+            .defineInRange("poiDynamicRadius", 100, 0, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue POI_SIZE = BUILDER
+            .comment("[poi]poi size")
+            .defineInRange("poiSize", 7, 0, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue POI_SIZE_DYNAMIC = BUILDER
+            .comment("[poi]poi size (Dynamic)")
+            .defineInRange("poiSizeDynamic", 10, 0, Integer.MAX_VALUE);
     static final ForgeConfigSpec SPEC = BUILDER.build();
-
-    public static boolean logDirtBlock;
-    public static int magicNumber;
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-
-    private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
-    }
-
+    public static boolean poiDynamicSize;
+    public static int poiDetectionRadius;
+    public static int poiShowRadius;
+    public static int poiDynamicRadius;
+    public static int poiSize;
+    public static int poiSizeDynamic;
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
-
-        // convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream()
-                .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))
-                .collect(Collectors.toSet());
+        poiDynamicSize = POI_DYNAMIC_SIZE.get();
+        poiDetectionRadius = POI_D_RADIUS.get();
+        poiShowRadius = POI_S_RADIUS.get();
+        poiDynamicRadius = POI_SD_RADIUS.get();
+        poiSize = POI_SIZE.get();
+        poiSizeDynamic = POI_SIZE_DYNAMIC.get();
     }
 }
