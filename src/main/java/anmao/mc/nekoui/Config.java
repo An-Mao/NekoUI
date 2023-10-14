@@ -1,14 +1,23 @@
-package anmao.idoll.nekoui;
+package anmao.mc.nekoui;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = NekoUI.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = NekoUI.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    private static final ForgeConfigSpec.BooleanValue PLAYER_INFO = BUILDER
+            .comment("[PlayerInfo]ShowPlayerInfo")
+            .define("ShowPlayerInfo", true);
+    private static final ForgeConfigSpec.BooleanValue PLAYER_SHOW_NUM_HEALTH = BUILDER
+            .comment("[PlayerInfo]ShowPlayerHealthNumber")
+            .define("ShowPlayerHealthNumber", false);
+    private static final ForgeConfigSpec.BooleanValue PLAYER_SHOW_NUM_FOOD = BUILDER
+            .comment("[PlayerInfo]ShowPlayerFoodNumber")
+            .define("ShowPlayerFoodNumber", false);
     private static final ForgeConfigSpec.BooleanValue POI_DYNAMIC_SIZE = BUILDER
             .comment("[poi]Dynamic size or not")
             .define("poiDynamicSize", true);
@@ -28,6 +37,9 @@ public class Config
             .comment("[poi]poi size (Dynamic)")
             .defineInRange("poiSizeDynamic", 10, 0, Integer.MAX_VALUE);
     static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static boolean playerInfo;
+    public static boolean playerShowHealthNumber;
+    public static boolean playerShowFoodNumber;
     public static boolean poiDynamicSize;
     public static int poiDetectionRadius;
     public static int poiShowRadius;
@@ -37,6 +49,10 @@ public class Config
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        playerInfo = PLAYER_INFO.get();
+        playerShowHealthNumber = PLAYER_SHOW_NUM_HEALTH.get();
+        playerShowFoodNumber = PLAYER_SHOW_NUM_FOOD.get();
+
         poiDynamicSize = POI_DYNAMIC_SIZE.get();
         poiDetectionRadius = POI_D_RADIUS.get();
         poiShowRadius = POI_S_RADIUS.get();

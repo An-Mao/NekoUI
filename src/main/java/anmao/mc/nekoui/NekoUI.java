@@ -1,4 +1,4 @@
-package anmao.idoll.nekoui;
+package anmao.mc.nekoui;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,11 +14,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(NekoUI.MODID)
+@Mod(NekoUI.MOD_ID)
 public class NekoUI
 {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "nekoui";
+    public static final String MOD_ID = "nekoui";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     public NekoUI()

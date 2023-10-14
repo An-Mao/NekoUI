@@ -1,7 +1,7 @@
-package anmao.idoll.nekoui.hud;
+package anmao.mc.nekoui.hud;
 
-import anmao.idoll.nekoui.Config;
-import anmao.idoll.nekoui.NekoUI;
+import anmao.mc.nekoui.Config;
+import anmao.mc.nekoui.NekoUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -18,11 +18,11 @@ import java.util.List;
 
 public class UI_Info {
     public static final double TWICEPI = 2 * Math.PI;
-    private static final ResourceLocation MOB_POI = new ResourceLocation(NekoUI.MODID,"textures/ui/info/poi.png");
-    private static final ResourceLocation MOB_PLAYER = new ResourceLocation(NekoUI.MODID,"textures/ui/info/player.png");
-    private static final ResourceLocation MOB_ANIMAL = new ResourceLocation(NekoUI.MODID,"textures/ui/info/animal.png");
-    private static final ResourceLocation MOB_MONSTER = new ResourceLocation(NekoUI.MODID,"textures/ui/info/monster.png");
-    private static final ResourceLocation MOB_OTHER = new ResourceLocation(NekoUI.MODID,"textures/ui/info/other.png");
+    private static final ResourceLocation MOB_POI = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/poi.png");
+    private static final ResourceLocation MOB_PLAYER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/player.png");
+    private static final ResourceLocation MOB_ANIMAL = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/animal.png");
+    private static final ResourceLocation MOB_MONSTER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/monster.png");
+    private static final ResourceLocation MOB_OTHER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/other.png");
 
     public static Vec3 v(Vec3 pos,Vec3 focus, double r){
         Vec3 v = pos.subtract(focus);
