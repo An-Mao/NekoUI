@@ -1,5 +1,6 @@
 package anmao.mc.nekoui;
 
+import anmao.mc.nekoui.config.CConfig;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -20,9 +21,11 @@ public class NekoUI
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "nekoui";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public NekoUI()
     {
+        //CConfig._start();
+        //CConfig._load();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // Register the commonSetup method for modloading

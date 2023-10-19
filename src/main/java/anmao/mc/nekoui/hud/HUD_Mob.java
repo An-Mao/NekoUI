@@ -2,6 +2,9 @@ package anmao.mc.nekoui.hud;
 
 import anmao.mc.nekoui.Config;
 import anmao.mc.nekoui.NekoUI;
+import anmao.mc.nekoui.constant._MC;
+import anmao.mc.nekoui.constant._Math;
+import com.mojang.blaze3d.platform.TextureUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +16,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class UI_Info {
-    public static final double TWICEPI = 2 * Math.PI;
+public class HUD_Mob {
+    public static final String id = "hud_mob";
     private static final ResourceLocation MOB_POI = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/poi.png");
     private static final ResourceLocation MOB_PLAYER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/player.png");
     private static final ResourceLocation MOB_ANIMAL = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/animal.png");
@@ -29,7 +35,7 @@ public class UI_Info {
         return new Vec3(v.x,0,v.z).normalize().scale(r).add(pos);
 
     }
-    public static final IGuiOverlay UI_INFO = ((gui, poseStack, partialTick, screenWidth, screenHeight)->{
+    public static final IGuiOverlay UI_INFO = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
         int sx = screenWidth / 2;
         int sy = screenHeight / 2;
         Level olevel = Minecraft.getInstance().level;
@@ -53,10 +59,10 @@ public class UI_Info {
                         double cz = omp.z - opv.z;
                         double g = Math.atan2(cz,cx) - Math.atan2(forward.z,forward.x);
                         if (g > Math.PI){
-                            g = g - TWICEPI;
+                            g = g - _Math.TWICE_PI;
                         }
                         if (g < -Math.PI){
-                            g = g + TWICEPI;
+                            g = g + _Math.TWICE_PI;
                         }
                         int ox = (int) ( Config.poiShowRadius * Math.cos(g));
                         int oz = (int) ( Config.poiShowRadius * Math.sin(g));
@@ -66,15 +72,14 @@ public class UI_Info {
                                 or = Config.poiSizeDynamic;
                             }
                         }
-
                         //ResourceLocation show = MOB_OTHER;
                         if (omob instanceof Animal){
                             //show = MOB_ANIMAL;
-                            poseStack.blit(MOB_ANIMAL,sx + oz, sy - ox,0,0,or,or,or,or);
+                            guiGraphics.blit(MOB_ANIMAL,sx + oz, sy - ox,0,0,or,or,or,or);
                         } else if (omob instanceof Monster) {
-                            poseStack.blit(MOB_MONSTER,sx + oz, sy - ox,0,0,or,or,or,or);
+                            guiGraphics.blit(MOB_MONSTER,sx + oz, sy - ox,0,0,or,or,or,or);
                         }else {
-                            poseStack.blit(MOB_OTHER, sx + oz, sy -ox, 0, 0, or,or,or,or);
+                            guiGraphics.blit(MOB_OTHER, sx + oz, sy -ox, 0, 0, or,or,or,or);
                         }
                     }
                 }
