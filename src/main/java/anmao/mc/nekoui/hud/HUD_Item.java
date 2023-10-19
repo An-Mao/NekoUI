@@ -1,10 +1,9 @@
 package anmao.mc.nekoui.hud;
 
 import anmao.mc.nekoui.NekoUI;
-import anmao.mc.nekoui.am._Sys;
+import anmao.mc.nekoui.lib.am._Sys;
 import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
-import anmao.mc.nekoui.lib.AM;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.CrashReport;
@@ -12,23 +11,16 @@ import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Matrix4f;
-
-import java.util.Collection;
 
 public class HUD_Item {
     public static final String id = "hud_item";

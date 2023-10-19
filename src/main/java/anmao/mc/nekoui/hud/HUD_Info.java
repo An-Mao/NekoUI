@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.hud;
 
-import anmao.mc.nekoui.am._Sys;
+import anmao.mc.nekoui.lib.am._Sys;
 import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.AM;
@@ -47,9 +47,9 @@ public class HUD_Info {
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
         startX = CC.hudInfoX;
         startY = screenHeight - CC.hudInfoY;
-        if ( CC.hudItemDynamicDisplay){
-            if (!_Sys.isOutTime() ){
-                startY -= CC.hudItemY;
+        if (CC.hudItemMode && CC.hudItemDynamicDisplay){
+            if (_Sys.isOutTime() ){
+                startY += CC.hudItemY;
             }
         }
         Level clientLevel = _MC.MC.level;

@@ -1,12 +1,10 @@
 package anmao.mc.nekoui.event;
 
 import anmao.mc.nekoui.NekoUI;
-import anmao.mc.nekoui.am._Sys;
+import anmao.mc.nekoui.lib.am._Sys;
 import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.hud.*;
-import net.minecraft.client.telemetry.events.WorldLoadEvent;
-import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;

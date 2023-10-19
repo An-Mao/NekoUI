@@ -1,8 +1,8 @@
 package anmao.mc.nekoui.config;
 
 import anmao.mc.nekoui.NekoUI;
-import anmao.mc.nekoui.am.XmlCore;
-import anmao.mc.nekoui.am._Sys;
+import anmao.mc.nekoui.lib.am.XmlCore;
+import anmao.mc.nekoui.lib.am._Sys;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -129,7 +129,7 @@ public class CC {
             Element info = xmlCore.addElement("info",hud);
             xmlCore.addElement("mode",info,"enable");
             xmlCore.addElement("x",info,"3");
-            xmlCore.addElement("y",info,"15");
+            xmlCore.addElement("y",info,"39");
             xmlCore.addElement("space",info,"auto");
 
 

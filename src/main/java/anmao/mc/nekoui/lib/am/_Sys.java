@@ -1,4 +1,4 @@
-package anmao.mc.nekoui.am;
+package anmao.mc.nekoui.lib.am;
 
 import java.util.Objects;
 
