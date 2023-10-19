@@ -1,11 +1,9 @@
 package anmao.mc.nekoui.hud;
 
-import anmao.mc.nekoui.Config;
 import anmao.mc.nekoui.NekoUI;
+import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.constant._Math;
-import com.mojang.blaze3d.platform.TextureUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -16,10 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class HUD_Mob {
@@ -38,11 +33,11 @@ public class HUD_Mob {
     public static final IGuiOverlay UI_INFO = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
         int sx = screenWidth / 2;
         int sy = screenHeight / 2;
-        Level olevel = Minecraft.getInstance().level;
-        LocalPlayer oplayer = Minecraft.getInstance().player;
+        Level olevel = _MC.MC.level;
+        LocalPlayer oplayer = _MC.MC.player;
         if (olevel != null && oplayer != null){
             if (olevel.isClientSide){
-                List<Mob> oent = olevel.getEntities(EntityTypeTest.forClass(Mob.class), oplayer.getBoundingBox().inflate(Config.poiDetectionRadius), Entity::isAlive);
+                List<Mob> oent = olevel.getEntities(EntityTypeTest.forClass(Mob.class), oplayer.getBoundingBox().inflate(CC.hudMobPoiRadius), Entity::isAlive);
                 Vec3 forward = oplayer.getForward();
                 Vec3 opv = oplayer.position();
                 for (Mob omob : oent){
@@ -64,14 +59,9 @@ public class HUD_Mob {
                         if (g < -Math.PI){
                             g = g + _Math.TWICE_PI;
                         }
-                        int ox = (int) ( Config.poiShowRadius * Math.cos(g));
-                        int oz = (int) ( Config.poiShowRadius * Math.sin(g));
-                        int or = Config.poiSize;
-                        if (Config.poiDynamicSize){
-                            if (cx * cx + cz * cz <= Config.poiDynamicRadius){
-                                or = Config.poiSizeDynamic;
-                            }
-                        }
+                        int ox = (int) ( CC.hudMobPoiShowRadius * Math.cos(g));
+                        int oz = (int) ( CC.hudMobPoiShowRadius * Math.sin(g));
+                        int or = chickRadius(cx, cz);
                         //ResourceLocation show = MOB_OTHER;
                         if (omob instanceof Animal){
                             //show = MOB_ANIMAL;
@@ -87,4 +77,17 @@ public class HUD_Mob {
         }
 
     });
+
+    private static int chickRadius(double cx, double cz) {
+        int or = CC.hudMobPoiSize;
+        if (CC.hudMobDynamicDisplay){
+            double xxzz = cx * cx + cz * cz;
+            if (xxzz <= CC.hudMobPoiDynamicRadiusClose ){
+                or =  CC.hudMobPoiDynamicSizeClose;
+            }else if (xxzz <= CC.hudMobPoiDynamicRadiusMid){
+                or = CC.hudMobPoiDynamicSizeMid;
+            }
+        }
+        return or;
+    }
 }

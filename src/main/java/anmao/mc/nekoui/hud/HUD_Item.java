@@ -2,6 +2,7 @@ package anmao.mc.nekoui.hud;
 
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.am._Sys;
+import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.AM;
 import com.mojang.blaze3d.platform.Lighting;
@@ -49,7 +50,7 @@ public class HUD_Item {
     private static final int imageWidth = 16;
     private static int startX,startY;
     private static void addRow(){
-        startX += 17;
+        startX += CC.hudItemSpace;
     }
 
     private static void addLine(){
@@ -61,11 +62,11 @@ public class HUD_Item {
         //int handItemY = screenHeight - 50;
         //int mainHandItemX = screenWidth / 2 + 4;
         //
-        if (_Sys.isOutTime()) {
+        if (_Sys.isOutTime() && CC.hudItemDynamicDisplay) {
             return;
         }
-        startX = 0;
-        startY = screenHeight - 24;
+        startX = CC.hudItemX;
+        startY = screenHeight - CC.hudItemY;
         Level clientLevel = _MC.MC.level;
         LocalPlayer localPlayer = _MC.MC.player;
         if (clientLevel != null && localPlayer != null) {

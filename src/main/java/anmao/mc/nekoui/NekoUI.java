@@ -1,6 +1,6 @@
 package anmao.mc.nekoui;
 
-import anmao.mc.nekoui.config.CConfig;
+import anmao.mc.nekoui.config.CC;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -24,7 +24,7 @@ public class NekoUI
     public static final Logger LOGGER = LogUtils.getLogger();
     public NekoUI()
     {
-        //CConfig._start();
+        CC._start();
         //CConfig._load();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

@@ -2,6 +2,7 @@ package anmao.mc.nekoui.event;
 
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.am._Sys;
+import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.hud.*;
 import net.minecraft.client.telemetry.events.WorldLoadEvent;
@@ -47,10 +48,15 @@ public class ClientEvent {
     {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event){
-
-            event.registerAboveAll(HUD_Mob.id, HUD_Mob.UI_INFO);
-            event.registerAboveAll(HUD_Info.id,HUD_Info.UI);
-            event.registerAboveAll(HUD_Item.id,HUD_Item.UI);
+            if (CC.hudInfoMode){
+                event.registerAboveAll(HUD_Info.id,HUD_Info.UI);
+            }
+            if (CC.hudItemMode){
+                event.registerAboveAll(HUD_Item.id,HUD_Item.UI);
+            }
+            if (CC.hudMobMode) {
+                event.registerAboveAll(HUD_Mob.id, HUD_Mob.UI_INFO);
+            }
             //event.registerAboveAll("uitem", UI_Item.UI_ITEM);
             //event.registerAboveAll("uiplayer", UI_Player.UI_PLAYER);
         }
