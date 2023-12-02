@@ -1,9 +1,8 @@
 package anmao.mc.nekoui.lib.dat;
 
-import anmao.mc.nekoui.constant._MC;
 import net.minecraft.resources.ResourceLocation;
 
-public class RXYI {
+public class CustomDataTypes_InfoConfig_Icon {
     private ResourceLocation r;
     private int x;
 

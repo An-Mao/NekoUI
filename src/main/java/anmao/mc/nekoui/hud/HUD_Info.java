@@ -4,10 +4,9 @@ import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.AM;
 import anmao.mc.nekoui.lib.am._Sys;
-import anmao.mc.nekoui.lib.dat.CD_IS;
-import anmao.mc.nekoui.lib.dat.RXYI;
-import anmao.mc.nekoui.lib.dat.TXYI;
-import anmao.mc.nekoui.lib.player.PlayerInfo;
+import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key;
+import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Text;
+import anmao.mc.nekoui.lib.player.GameInfo;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -61,17 +60,19 @@ public class HUD_Info {
         if (clientLevel != null && localPlayer != null) {
             if (clientLevel.isClientSide){
                 String str;
-                for (CD_IS ik : CC.infoKeys){
-                    if (ik.getType() == 0){
-                        String t = CC.infoTexts.get(ik.getId());
-                        guiGraphics.drawString(_MC.FONT,t , ik.getX(), ik.getY(), color);
-                        guiGraphics.drawString(_MC.FONT,PlayerInfo.getDat(ik.getSa()) , ik.getX(), ik.getI(), color);
-                    }else if (ik.getType() == 1){
-                        ResourceLocation resourceLocation = CC.infoIcons.get(ik.getId());
-                        guiGraphics.blit(resourceLocation, ik.getX(), ik.getY(), 0, 0, imageSize, imageSize, imageSize, imageSize);
-                        guiGraphics.drawString(_MC.FONT,PlayerInfo.getDat(ik.getSa()) , ik.getX(),ik.getI(), color);
+                for (CustomDataTypes_InfoConfig_Key ik : CC.infoKeys){
+                    if (ik.isIcon()){
+                        ResourceLocation resourceLocation = CC.infoIcons.get(ik.getTipId());
+                        guiGraphics.blit(resourceLocation, ik.getTipX(), ik.getTipY(), 0, 0, imageSize, imageSize, imageSize, imageSize);
+                    }else{
+                        CustomDataTypes_InfoConfig_Text t = CC.infoTexts.get(ik.getTipId());
+                        guiGraphics.drawString(_MC.FONT,t.getTipText() , ik.getTipX(), ik.getTipY(), t.getColor());
                     }
+                    guiGraphics.drawString(_MC.FONT, GameInfo.getPlayerDat(ik.getKeyType(), ik.getKeyArray()) , ik.getInfoX(),ik.getInfoY(), ik.getInfoColor());
                 }
+
+
+
                 guiGraphics.blit(playerLevel, startX, startY, 0, 0, imageSize, imageSize, imageSize, imageSize);
                 addLine();
                 str = String.valueOf(localPlayer.experienceLevel);
