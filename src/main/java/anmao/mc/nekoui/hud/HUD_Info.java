@@ -4,6 +4,9 @@ import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.AM;
 import anmao.mc.nekoui.lib.am._Sys;
+import anmao.mc.nekoui.lib.dat.CD_IS;
+import anmao.mc.nekoui.lib.dat.RXYI;
+import anmao.mc.nekoui.lib.dat.TXYI;
 import anmao.mc.nekoui.lib.player.PlayerInfo;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -56,10 +59,19 @@ public class HUD_Info {
         Level clientLevel = _MC.MC.level;
         LocalPlayer localPlayer = _MC.MC.player;
         if (clientLevel != null && localPlayer != null) {
-            PlayerInfo.getDat(localPlayer);
             if (clientLevel.isClientSide){
                 String str;
-
+                for (CD_IS ik : CC.infoKeys){
+                    if (ik.getType() == 0){
+                        String t = CC.infoTexts.get(ik.getId());
+                        guiGraphics.drawString(_MC.FONT,t , ik.getX(), ik.getY(), color);
+                        guiGraphics.drawString(_MC.FONT,PlayerInfo.getDat(ik.getSa()) , ik.getX(), ik.getI(), color);
+                    }else if (ik.getType() == 1){
+                        ResourceLocation resourceLocation = CC.infoIcons.get(ik.getId());
+                        guiGraphics.blit(resourceLocation, ik.getX(), ik.getY(), 0, 0, imageSize, imageSize, imageSize, imageSize);
+                        guiGraphics.drawString(_MC.FONT,PlayerInfo.getDat(ik.getSa()) , ik.getX(),ik.getI(), color);
+                    }
+                }
                 guiGraphics.blit(playerLevel, startX, startY, 0, 0, imageSize, imageSize, imageSize, imageSize);
                 addLine();
                 str = String.valueOf(localPlayer.experienceLevel);
