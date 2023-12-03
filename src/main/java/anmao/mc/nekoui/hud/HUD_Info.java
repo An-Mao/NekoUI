@@ -6,7 +6,7 @@ import anmao.mc.nekoui.lib.AM;
 import anmao.mc.nekoui.lib.am._Sys;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Text;
-import anmao.mc.nekoui.lib.player.GameInfo;
+import anmao.mc.nekoui.lib.player.PlayerInfo;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -68,7 +68,12 @@ public class HUD_Info {
                         CustomDataTypes_InfoConfig_Text t = CC.infoTexts.get(ik.getTipId());
                         guiGraphics.drawString(_MC.FONT,t.getTipText() , ik.getTipX(), ik.getTipY(), t.getColor());
                     }
-                    guiGraphics.drawString(_MC.FONT, GameInfo.getPlayerDat(ik.getKeyType(), ik.getKeyArray()) , ik.getInfoX(),ik.getInfoY(), ik.getInfoColor());
+                    if (ik.getKeyType() == 0){
+                        str = PlayerInfo.getPlayerDat(ik.getKey());
+                    }else {
+                        str = PlayerInfo.getPlayerDat(ik.getKeyType(), ik.getKeyArray());
+                    }
+                    guiGraphics.drawString(_MC.FONT, str, ik.getInfoX(),ik.getInfoY(), ik.getInfoColor());
                 }
 
 
