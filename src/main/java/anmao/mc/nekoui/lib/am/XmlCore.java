@@ -7,7 +7,7 @@ import org.w3c.dom.Text;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class XmlCore {
+public class XmlCore extends XmlGet{
     private static Document DOCUMENT;
     public XmlCore(Document document){
         DOCUMENT = document;
@@ -30,17 +30,5 @@ public class XmlCore {
         }
         Objects.requireNonNullElse(element, DOCUMENT).appendChild(a);
         return a;
-    }
-    public Element getElement(Element element,String s){
-        return getElement(element,s,0);
-    }
-    public Element getElement(Element element,String s,int index){
-        return (Element) element.getElementsByTagName(s).item(index);
-    }
-    public String getText(Element element,String s){
-        return getText(element,s,0);
-    }
-    public String getText(Element element,String s,int index){
-        return element.getElementsByTagName(s).item(index).getTextContent();
     }
 }

@@ -3,11 +3,13 @@ package anmao.mc.nekoui.config;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.lib.am.XmlCore;
 import anmao.mc.nekoui.lib.am._Sys;
+import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Icon;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Text;
 import net.minecraft.resources.ResourceLocation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -20,6 +22,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CC {
     private static File CONFIG_FILE;
@@ -52,7 +55,7 @@ public class CC {
     public static int hudItemSpace;
 
     public static CustomDataTypes_InfoConfig_Key[] infoKeys;
-    public static HashMap<String, ResourceLocation> infoIcons = new HashMap<>();
+    public static HashMap<String, CustomDataTypes_InfoConfig_Icon> infoIcons = new HashMap<>();
     public static HashMap<String, CustomDataTypes_InfoConfig_Text> infoTexts = new HashMap<>();
     public static void _start(){
         DIR_RUN = System.getProperty("user.dir");
@@ -76,53 +79,19 @@ public class CC {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document document = dBuilder.parse(CONFIG_FILE);
-
             XmlCore xmlCore = new XmlCore(document);
-            Element config = document.getDocumentElement();
-            //------------------------------------------
-            Element infoKey = xmlCore.getElement(config,"infoKey");
-            NodeList tags = infoKey.getElementsByTagName("s");
-            infoKeys = new CustomDataTypes_InfoConfig_Key[tags.getLength()];
-            for (int i = 0; i < tags.getLength(); i++) {
-                Element sElement = (Element) tags.item(i);
-                if (infoKeys[i] == null){
-                    infoKeys[i] = new CustomDataTypes_InfoConfig_Key();
-                }
-                infoKeys[i].setDat(sElement);
+            //Element config = document.getDocumentElement();
+            NodeList n = document.getElementsByTagName("default");
+            if (n.getLength() < 1){
+                NekoUI.LOGGER.error("Tag can't find, load stop");
+                return;
             }
-            System.out.println("----------------------------");
-            System.out.println(Arrays.toString(infoKeys));
 
+            Element config = (Element) n.item(0);
+            loadInfoKey(xmlCore,config);
+            loadInfoIcon(xmlCore,config);
+            loadInfoText(xmlCore,config);
 
-            //-------------------------------------------
-            Element infoIco = xmlCore.getElement(config,"infoIcon");
-            NodeList icos = infoIco.getElementsByTagName("ico");
-            infoIcons.clear();
-            for (int i = 0; i < icos.getLength(); i++) {
-                Element sElement = (Element) icos.item(i);
-                infoIcons.put(sElement.getElementsByTagName("id").item(0).getTextContent(),
-                            new ResourceLocation(
-                                    sElement.getElementsByTagName("mod").item(0).getTextContent(),
-                                    sElement.getElementsByTagName("path").item(0).getTextContent()));
-            }
-            System.out.println("----------------------------");
-            System.out.println(infoIcons);
-
-
-
-            //--------------------------------------------
-            Element infoTxt = xmlCore.getElement(config,"infoText");
-            NodeList txts = infoTxt.getElementsByTagName("txt");
-            infoTexts.clear();
-            for (int i = 0; i < txts.getLength(); i++) {
-                Element sElement = (Element) txts.item(i);
-                CustomDataTypes_InfoConfig_Text customDataTypesInfoConfigText = new CustomDataTypes_InfoConfig_Text();
-                customDataTypesInfoConfigText.setDat(sElement);
-                infoTexts.put(sElement.getElementsByTagName("id").item(0).getTextContent(),
-                        customDataTypesInfoConfigText);
-            }
-            System.out.println("----------------------------");
-            System.out.println(infoTexts);
             Element hud = xmlCore.getElement(config,"hud");
             Element mob = xmlCore.getElement(hud,"mob");
             hudMobMode = _Sys.getBoolean(xmlCore.getText(mob,"mode"));
@@ -166,67 +135,11 @@ public class CC {
             Element aDefault = xmlCore.addElement("default");
             Element hud = xmlCore.addElement("hud",aDefault);
 
-            Element infoKey = xmlCore.addElement("infoKey",aDefault);
-            //
-            Element sk = xmlCore.addElement("s",infoKey);
-            xmlCore.addElement("tipType",sk,"text");
-            xmlCore.addElement("tipId",sk,"speed");
-            xmlCore.addElement("tipX",sk,"0");
-            xmlCore.addElement("tipY",sk,"0");
-            xmlCore.addElement("infoX",sk,"0");
-            xmlCore.addElement("infoY",sk,"0");
-            xmlCore.addElement("infoColor",sk,"336699");
-            xmlCore.addElement("keyType",sk,"2");
-            xmlCore.addElement("key",sk,"Attributes#Name#minecraft:generic.movement_speed#Base");
-            //
-            sk = xmlCore.addElement("s",infoKey);
-            xmlCore.addElement("tipType",sk,"icon");
-            xmlCore.addElement("tipId",sk,"health");
-            xmlCore.addElement("tipX",sk,"0");
-            xmlCore.addElement("tipY",sk,"0");
-            xmlCore.addElement("infoX",sk,"0");
-            xmlCore.addElement("infoY",sk,"0");
-            xmlCore.addElement("infoColor",sk,"336699");
-            xmlCore.addElement("keyType",sk,"1");
-            xmlCore.addElement("key",sk,"Health");
-            //
-            sk = xmlCore.addElement("s",infoKey);
-            xmlCore.addElement("tipType",sk,"text");
-            xmlCore.addElement("tipId",sk,"lvl");
-            xmlCore.addElement("tipX",sk,"0");
-            xmlCore.addElement("tipY",sk,"0");
-            xmlCore.addElement("infoX",sk,"0");
-            xmlCore.addElement("infoY",sk,"0");
-            xmlCore.addElement("infoColor",sk,"336699");
-            xmlCore.addElement("keyType",sk,"1");
-            xmlCore.addElement("key",sk,"XpLevel");
 
-            Element infoText = xmlCore.addElement("infoText",aDefault);
-            Element st = xmlCore.addElement("txt",infoText);
-            xmlCore.addElement("id",st,"lvl");
-            xmlCore.addElement("con",st,"level:");
-            xmlCore.addElement("color",st,"669900");
-            //
-            st = xmlCore.addElement("txt",infoText);
-            xmlCore.addElement("id",st,"health");
-            xmlCore.addElement("con",st,"Health:");
-            xmlCore.addElement("color",st,"669900");
-            //
-            st = xmlCore.addElement("txt",infoText);
-            xmlCore.addElement("id",st,"speed");
-            xmlCore.addElement("con",st,"Speed:");
-            xmlCore.addElement("color",st,"669900");
+            resetInfoKey(xmlCore,aDefault);
+            resetInfoText(xmlCore,aDefault);
+            resetInfoIcon(xmlCore,aDefault);
 
-            Element infoIcon = xmlCore.addElement("infoIcon",aDefault);
-            Element si = xmlCore.addElement("ico",infoIcon);
-            xmlCore.addElement("id",si,"exp");
-            xmlCore.addElement("mod",si,"minecraft");
-            xmlCore.addElement("path",si,"textures/item/experience_bottle.png");
-            //
-            si = xmlCore.addElement("ico",infoIcon);
-            xmlCore.addElement("id",si,"health");
-            xmlCore.addElement("mod",si,"minecraft");
-            xmlCore.addElement("path",si,"textures/mob_effect/regeneration.png");
 
             Element mob = xmlCore.addElement("mob",hud);
             xmlCore.addElement("mode",mob,"enable");
@@ -262,5 +175,112 @@ public class CC {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private static void loadInfoKey(XmlCore core,Element element){
+        Element infoKey = core.getElement(element,"infoKey");
+        NodeList tags = infoKey.getElementsByTagName("s");
+        infoKeys = new CustomDataTypes_InfoConfig_Key[tags.getLength()];
+        for (int i = 0; i < tags.getLength(); i++) {
+            Element sElement = (Element) tags.item(i);
+            if (infoKeys[i] == null){
+                infoKeys[i] = new CustomDataTypes_InfoConfig_Key();
+            }
+            infoKeys[i].setDat(sElement);
+        }
+    }
+    private static void resetInfoKey(XmlCore core,Element element){
+        Element infoKey = core.addElement("infoKey",element);
+        //addInfoKey(core,infoKey, new String[]{"icon","speed","0","0","15","0","336699","2","Attributes#Name#minecraft:generic.movement_speed#Base"});
+        addInfoKey(core,infoKey, new String[]{
+                "icon","damage","0","15","15","15","336699","0","atkWithItem"
+        });
+        addInfoKey(core,infoKey, new String[]{
+                "icon","exp","0","30","15","30","336699","1","XpLevel"
+        });
+        addInfoKey(core,infoKey, new String[]{
+                "icon","hunger","0","40","15","40","336699","0","hunger"
+        });
+        addInfoKey(core,infoKey, new String[]{
+                "icon","luck","0","50","15","50","336699","0","luck"
+        });
+        addInfoKey(core,infoKey, new String[]{
+                "icon","health","0","60","15","60","336699","0","health"
+        });
+    }
+    private static void loadInfoText(XmlCore core,Element element){
+        Element infoTxt = core.getElement(element,"infoText");
+        NodeList txts = infoTxt.getElementsByTagName("txt");
+        infoTexts.clear();
+        for (int i = 0; i < txts.getLength(); i++) {
+            Element sElement = (Element) txts.item(i);
+            CustomDataTypes_InfoConfig_Text customDataTypesInfoConfigText = new CustomDataTypes_InfoConfig_Text();
+            customDataTypesInfoConfigText.setDat(sElement);
+            infoTexts.put(sElement.getElementsByTagName("id").item(0).getTextContent(),
+                    customDataTypesInfoConfigText);
+        }
+    }
+    private static void resetInfoText(XmlCore core,Element element){
+        Element infoText = core.addElement("infoText",element);
+        addInfoText(core,infoText,"lvl","level:","669900");
+        addInfoText(core,infoText,"health","Health:","669900");
+        addInfoText(core,infoText,"speed","Speed:","669900");
+    }
+    private static void loadInfoIcon(XmlCore core,Element element){
+        Element infoIco = core.getElement(element,"infoIcon");
+        NodeList icos = infoIco.getElementsByTagName("ico");
+        infoIcons.clear();
+        for (int i = 0; i < icos.getLength(); i++) {
+            Element sElement = (Element) icos.item(i);
+            CustomDataTypes_InfoConfig_Icon cuI=new CustomDataTypes_InfoConfig_Icon();
+            cuI.setDat(sElement);
+            infoIcons.put(sElement.getElementsByTagName("id").item(0).getTextContent(),cuI);
+        }
+    }
+    private static void resetInfoIcon(XmlCore core,Element element){
+        Element infoIcon = core.addElement("infoIcon",element);
+        addInfoIcon(core,infoIcon,"exp","10","10","minecraft","textures/item/experience_bottle.png");
+        addInfoIcon(core,infoIcon,"health","10","10","minecraft","textures/mob_effect/regeneration.png");
+        addInfoIcon(core,infoIcon,"hunger","10","10","minecraft","textures/mob_effect/hunger.png");
+        addInfoIcon(core,infoIcon,"luck","10","10","minecraft","textures/mob_effect/luck.png");
+        addInfoIcon(core,infoIcon,"damage","10","10","minecraft","textures/mob_effect/strength.png");
+        addInfoIcon(core,infoIcon,"speed","10","10","minecraft","textures/mob_effect/speed.png");
+    }
+    private static void addInfoKey(XmlCore core,Element element,String[] key){
+        Element sk = core.addElement("s",element);
+        core.addElement("tipType",sk,key[0]);
+        core.addElement("tipId",sk,key[1]);
+        core.addElement("tipX",sk,key[2]);
+        core.addElement("tipY",sk,key[3]);
+        core.addElement("infoX",sk,key[4]);
+        core.addElement("infoY",sk,key[5]);
+        core.addElement("infoColor",sk,key[6]);
+        core.addElement("keyType",sk,key[7]);
+        //core.addElement("keys",sk,key[8]);
+        if (key[7] != "2") {
+            core.addElement("keys",sk,key[8]);
+        }else {
+            Element ks = core.addElement("keys", sk);
+            Element k = core.addElement("key", ks);
+            core.addElement("valueType", k, key[8]);
+            core.addElement("key", k, key[9]);
+            if (Objects.equals(key[7], "2")) {
+                core.addElement("needKey", k, key[10]);
+                core.addElement("needEqual", k, key[11]);
+            }
+        }
+    }
+    private static void addInfoText(XmlCore core,Element element,String id ,String con ,String color){
+        Element st = core.addElement("txt",element);
+        core.addElement("id",st,id);
+        core.addElement("con",st,con);
+        core.addElement("color",st,color);
+    }
+    private static void addInfoIcon(XmlCore core,Element element,String id ,String width ,String height ,String mod ,String path){
+        Element si = core.addElement("ico",element);
+        core.addElement("id",si,id);
+        core.addElement("width",si,width);
+        core.addElement("height",si,height);
+        core.addElement("mod",si,mod);
+        core.addElement("path",si,path);
     }
 }

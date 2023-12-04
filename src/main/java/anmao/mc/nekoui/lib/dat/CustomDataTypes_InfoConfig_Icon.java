@@ -1,49 +1,30 @@
 package anmao.mc.nekoui.lib.dat;
 
 import net.minecraft.resources.ResourceLocation;
+import org.w3c.dom.Element;
 
 public class CustomDataTypes_InfoConfig_Icon {
-    private ResourceLocation r;
-    private int x;
+    private ResourceLocation icon;
+    private int w;
+    private int h;
 
-    private int y;
-    private int i;
+    public void setDat(Element element) {
+        icon = new ResourceLocation(element.getElementsByTagName("mod").item(0).getTextContent(),
+                element.getElementsByTagName("path").item(0).getTextContent());
+        w = Integer.parseInt(element.getElementsByTagName("width").item(0).getTextContent());
+        h = Integer.parseInt(element.getElementsByTagName("height").item(0).getTextContent());
 
-    public void setDat(String str) {
-        setR(str);
     }
 
-    public ResourceLocation getR() {
-        return r;
+    public ResourceLocation getIcon() {
+        return icon;
     }
 
-    public void setR(String s) {
-        String[] sa = s.split(":");
-        if (sa.length == 2){
-            this.r = new ResourceLocation(sa[0], sa[1]);
-        }
-    }
-    public int getI() {
-        return i;
+    public int getH() {
+        return h;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setI(int i) {
-        this.i = i + this.y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public int getW() {
+        return w;
     }
 }
