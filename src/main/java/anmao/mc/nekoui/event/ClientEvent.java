@@ -57,8 +57,6 @@ public class ClientEvent {
             if (CC.hudMobMode) {
                 event.registerAboveAll(HUD_Mob.id, HUD_Mob.UI_INFO);
             }
-            //event.registerAboveAll("uitem", UI_Item.UI_ITEM);
-            //event.registerAboveAll("uiplayer", UI_Player.UI_PLAYER);
         }
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)

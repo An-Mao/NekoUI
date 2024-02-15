@@ -1,7 +1,7 @@
 package anmao.mc.nekoui.ai;
 
-import anmao.mc.nekoui.Config;
 import anmao.mc.nekoui.NekoUI;
+import anmao.mc.nekoui.config.CC;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -27,7 +27,7 @@ public class HUDToggleEventHandler {
     }
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Pre event){
-        if (!Config.playerInfo){return;}
+        if (!CC.showMinecraftHud){return;}
         for (ResourceLocation resourceLocation : RM) {
             if (event.getOverlay().id().equals(resourceLocation)) {
                 event.setCanceled(true);

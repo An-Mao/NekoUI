@@ -1,15 +1,13 @@
 package anmao.mc.nekoui.config;
 
-import anmao.mc.nekoui.NekoUI;
+import anmao.mc.nekoui.lib.Debug;
 import anmao.mc.nekoui.lib.am.XmlCore;
 import anmao.mc.nekoui.lib.am._Sys;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Icon;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Text;
-import net.minecraft.resources.ResourceLocation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,19 +17,24 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class CC {
-    private static File CONFIG_FILE;
+    private static File FILE_CONFIG_CONFIG;
+    private static File FILE_CONFIG_HUD;
     private static String DIR_RUN;
     private static String DIR_CONFIG;
 
-    private static String FILE_CONFIG_ITEM;
+    private static String PATH_CONFIG_HUD;
+    private static String PATH_CONFIG_CONFIG;
+    private static String hudId = "default";
     private static Map<String,Element> kv = new HashMap<>();
 
+
+    //
+    public static boolean showMinecraftHud;
     public static boolean hudMobMode;
     public static boolean hudMobDynamicDisplay;
     public static int hudMobPoiShowRadius;
@@ -63,36 +66,41 @@ public class CC {
         File folder = new File(DIR_CONFIG);
         if (!folder.exists()){
             if (!folder.mkdir()){
-                NekoUI.LOGGER.debug("Create Dir failed");
-                //System.exit(-9999);
+                Debug.error("Create Dir failed");
             }
         }
-        FILE_CONFIG_ITEM = DIR_CONFIG +"\\NekoUI.xml";
-        CONFIG_FILE = new File(FILE_CONFIG_ITEM);
-        if (!CONFIG_FILE.exists()){
-            reSet();
+        //load
+        PATH_CONFIG_CONFIG = DIR_CONFIG +"\\NekoUI-Config.xml";
+        FILE_CONFIG_CONFIG = new File(PATH_CONFIG_CONFIG);
+        if (!FILE_CONFIG_CONFIG.exists()){
+            reSetConfig();
         }
-        _load();
+        _loadConfig();
+        PATH_CONFIG_HUD = DIR_CONFIG +"\\NekoUI-Hud.xml";
+        FILE_CONFIG_HUD = new File(PATH_CONFIG_HUD);
+        if (!FILE_CONFIG_HUD.exists()){
+            reSetHud();
+        }
+        _loadHud();
     }
-    public static void _load(){
+    public static void _loadConfig(){
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document document = dBuilder.parse(CONFIG_FILE);
+            Document document = dBuilder.parse(FILE_CONFIG_CONFIG);
             XmlCore xmlCore = new XmlCore(document);
             //Element config = document.getDocumentElement();
-            NodeList n = document.getElementsByTagName("default");
+            NodeList n = document.getElementsByTagName("config");
             if (n.getLength() < 1){
-                NekoUI.LOGGER.error("Tag can't find, load stop");
+                Debug.error("Config load : Tag can't find, load stop");
                 return;
             }
 
             Element config = (Element) n.item(0);
-            loadInfoKey(xmlCore,config);
-            loadInfoIcon(xmlCore,config);
-            loadInfoText(xmlCore,config);
-
             Element hud = xmlCore.getElement(config,"hud");
+            hudId = xmlCore.getText(hud,"id");
+            showMinecraftHud = _Sys.getBoolean(xmlCore.getText(hud,"showMinecraftHud"));
+            //mob
             Element mob = xmlCore.getElement(hud,"mob");
             hudMobMode = _Sys.getBoolean(xmlCore.getText(mob,"mode"));
             hudMobDynamicDisplay = _Sys.getBoolean(xmlCore.getText(mob,"dynamicDisplay"));
@@ -105,6 +113,32 @@ public class CC {
             hudMobPoiDynamicSizeClose = _Sys.getInt(xmlCore.getText(mob,"poiDynamicSizeClose"));
             hudMobPoiDynamicRadiusClose = _Sys.getInt(xmlCore.getText(mob,"poiDynamicRadiusClose"));
             hudMobPoiDynamicRadiusClose *= hudMobPoiDynamicRadiusClose;
+
+        } catch (Exception e) {
+            Debug.error(e.getMessage());
+            //e.printStackTrace();
+        }
+    }
+    public static void _loadHud(){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(FILE_CONFIG_HUD);
+            XmlCore xmlCore = new XmlCore(document);
+            //Element config = document.getDocumentElement();
+
+            NodeList n = document.getElementsByTagName(hudId);
+            if (n.getLength() < 1){
+                Debug.error("Tag can't find, load stop");
+                return;
+            }
+
+            Element config = (Element) n.item(0);
+            loadInfoKey(xmlCore,config);
+            loadInfoIcon(xmlCore,config);
+            loadInfoText(xmlCore,config);
+
+            Element hud = xmlCore.getElement(config,"hud");
 
             Element info = xmlCore.getElement(hud,"info");
             hudInfoMode = _Sys.getBoolean(xmlCore.getText(info,"mode"));
@@ -122,24 +156,22 @@ public class CC {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Debug.error(e.getMessage());
         }
     }
 
-    private static void reSet(){
+    private static void reSetConfig(){
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document document = dBuilder.newDocument();
             XmlCore xmlCore = new XmlCore(document);
-            Element aDefault = xmlCore.addElement("default");
+
+
+            Element aDefault = xmlCore.addElement("config");
             Element hud = xmlCore.addElement("hud",aDefault);
-
-
-            resetInfoKey(xmlCore,aDefault);
-            resetInfoText(xmlCore,aDefault);
-            resetInfoIcon(xmlCore,aDefault);
-
+            xmlCore.addElement("showMinecraftHud",hud,"enable");
+            xmlCore.addElement("id",hud,"default");
 
             Element mob = xmlCore.addElement("mob",hud);
             xmlCore.addElement("mode",mob,"enable");
@@ -152,6 +184,28 @@ public class CC {
             xmlCore.addElement("poiDynamicSizeClose",mob,"11");
             xmlCore.addElement("poiDynamicRadiusClose",mob,"5");
 
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(FILE_CONFIG_CONFIG);
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            Debug.error(e.getMessage());
+        }
+    }
+    private static void reSetHud(){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.newDocument();
+            XmlCore xmlCore = new XmlCore(document);
+            Element aDefault = xmlCore.addElement("default");
+            Element hud = xmlCore.addElement("hud",aDefault);
+
+
+            resetInfoKey(xmlCore,aDefault);
+            resetInfoText(xmlCore,aDefault);
+            resetInfoIcon(xmlCore,aDefault);
 
             Element info = xmlCore.addElement("info",hud);
             xmlCore.addElement("mode",info,"enable");
@@ -170,10 +224,10 @@ public class CC {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(CONFIG_FILE);
+            StreamResult result = new StreamResult(FILE_CONFIG_HUD);
             transformer.transform(source, result);
         } catch (Exception e) {
-            e.printStackTrace();
+            Debug.error(e.getMessage());
         }
     }
     private static void loadInfoKey(XmlCore core,Element element){
@@ -256,8 +310,8 @@ public class CC {
         core.addElement("infoColor",sk,key[6]);
         core.addElement("keyType",sk,key[7]);
         //core.addElement("keys",sk,key[8]);
-        if (key[7] != "2") {
-            core.addElement("keys",sk,key[8]);
+        if (!Objects.equals(key[7], "2")) {
+            core.addElement("key",sk,key[8]);
         }else {
             Element ks = core.addElement("keys", sk);
             Element k = core.addElement("key", ks);

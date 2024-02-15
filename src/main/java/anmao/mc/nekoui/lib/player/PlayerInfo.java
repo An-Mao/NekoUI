@@ -1,8 +1,9 @@
 package anmao.mc.nekoui.lib.player;
 
+import anmao.mc.amlib.item.ItemHelper;
 import anmao.mc.nekoui.constant._MC;
-import anmao.mc.nekoui.lib.AM;
 import anmao.mc.nekoui.lib.FormattedData;
+import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key_AK;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -16,6 +17,59 @@ import java.util.Collection;
 
 public class PlayerInfo {
     public static Player clientPlayer = _MC.MC.player;
+    public static String getPlayerNbtDat(CustomDataTypes_InfoConfig_Key_AK[] caks){
+        if (clientPlayer != null) {
+            String dat = clientPlayer.serializeNBT().toString();
+            try {
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(dat, JsonObject.class);
+                JsonElement jsonElement = null;
+                for (CustomDataTypes_InfoConfig_Key_AK cak : caks) {
+                    if (cak.getType() == 0) {
+                        if (jsonElement == null) {
+                            jsonElement = jsonObject.get(cak.getKey());
+                        } else {
+                            if (jsonElement.isJsonObject()) {
+                                JsonObject object = jsonElement.getAsJsonObject();
+                                jsonElement = object.get(cak.getKey());
+                            }
+                        }
+                    } else if (cak.getType() == 1) {
+                        if (jsonElement != null) {
+                            if (jsonElement.isJsonArray()) {
+                                JsonArray array = jsonElement.getAsJsonArray();
+                                for (JsonElement element : array) {
+                                    JsonObject o = element.getAsJsonObject();
+                                    if (cak.getNeedValue().equals(o.get(cak.getNeedKey()).getAsString())) {
+                                        jsonElement = o.get(cak.getKey());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (jsonElement != null) {
+                    return FormattedData.numberToString(jsonElement.getAsString());
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return "Invalid index";
+    }
+    public static String getPlayerNbtDat(String str){
+        if (clientPlayer != null) {
+            String dat = clientPlayer.serializeNBT().toString();
+            try {
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(dat, JsonObject.class);
+                return FormattedData.numberToString(jsonObject.get(str).getAsString());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return "error";
+    }
     public static String getPlayerDat(int type, String[] str){
         if (clientPlayer != null) {
             int l = str.length;
@@ -28,18 +82,18 @@ public class PlayerInfo {
                 if (type == 1) {
                     if (l == 1) {
                         //System.out.println(bs[1] + " : " + value);
-                        return FormattedData.numberToString(jsonObject.get(str[0]).getAsString());
+                        return jsonObject.get(str[0]).getAsString();
                     }
                 }
                 if (type == 2) {
+
                     if (l == 4) {
                         JsonArray array = jsonObject.getAsJsonArray(str[0]);
                         for (JsonElement element : array) {
                             JsonObject object = element.getAsJsonObject();
                             if (str[2].equals(object.get(str[1]).getAsString())) {
-                                String value = object.get(str[3]).getAsString();
                                 //System.out.println(bs[4] + " : " + value);
-                                return FormattedData.numberToString(value);
+                                return object.get(str[3]).getAsString();
                             }
                         }
                     }
@@ -50,9 +104,8 @@ public class PlayerInfo {
                         int index = Integer.parseInt(str[1]);
                         if (index >= 0 && index < array.size()) {
                             JsonObject object = array.get(index).getAsJsonObject();
-                            String value = object.get(str[2]).getAsString();
                             //System.out.println("Base value at index " + index + ": " + value);
-                            return FormattedData.numberToString(value);
+                            return object.get(str[2]).getAsString();
                         }
                     }
                 }
@@ -108,7 +161,7 @@ public class PlayerInfo {
     private static double getTotalAttackDamage() {
         Collection<AttributeModifier> att = clientPlayer.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE);
         double baseDamage = getAttackDamage();
-        double itemDamage = AM.getAdddamage(att);
+        double itemDamage = ItemHelper.getAttributeModifierDamage(att);// AM.getAdddamage(att);
         return baseDamage + itemDamage;
     }
 }

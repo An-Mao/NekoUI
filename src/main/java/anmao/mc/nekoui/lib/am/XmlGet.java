@@ -13,6 +13,9 @@ public class XmlGet {
     public int getInt(Element element, String s){
         return Integer.parseInt(getText(element, s));
     }
+    public int getIntHex(Element element, String s){
+        return Integer.parseInt(getText(element, s),16);
+    }
     public double getDouble(Element element, String s){
         return Double.parseDouble(getText(element, s));
     }

@@ -1,20 +1,24 @@
 package anmao.mc.nekoui.lib.dat;
 
+import anmao.mc.nekoui.lib.am.XmlGet;
 import org.w3c.dom.Element;
 
 public class CustomDataTypes_InfoConfig_Key_AK {
+    private final int TYPE_USUAL = 0;
+    private final int TYPE_NEED_KEY = 1;
+    private final XmlGet xmlGet = new XmlGet();
     private int type;
     private int valueType;
     private String key;
     private String needKey;
-    private String needEqual;
+    private String needValue;
     public void setDat(Element element){
-        this.type = Integer.parseInt(element.getElementsByTagName("keyType").item(0).getTextContent());
-        this.valueType = Integer.parseInt(element.getElementsByTagName("valueType").item(0).getTextContent());
-        this.key = element.getElementsByTagName("key").item(0).getTextContent();
-        if (this.type == 1){
-            this.needKey = element.getElementsByTagName("needKey").item(0).getTextContent();
-            this.needEqual = element.getElementsByTagName("needEqual").item(0).getTextContent();
+        this.type = xmlGet.getInt(element,"keyType");
+        this.valueType = xmlGet.getInt(element,"valueType");
+        this.key = xmlGet.getText(element,"key");
+        if (this.type == TYPE_NEED_KEY){
+            this.needKey = xmlGet.getText(element,"needKey");
+            this.needValue = xmlGet.getText(element,"needValue");
         }
     }
 
@@ -34,7 +38,7 @@ public class CustomDataTypes_InfoConfig_Key_AK {
         return needKey;
     }
 
-    public String getNeedEqual() {
-        return needEqual;
+    public String getNeedValue() {
+        return needValue;
     }
 }

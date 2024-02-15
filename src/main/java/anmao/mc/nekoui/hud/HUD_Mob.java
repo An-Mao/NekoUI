@@ -4,6 +4,7 @@ import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.constant._Math;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;

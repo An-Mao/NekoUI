@@ -2,7 +2,6 @@ package anmao.mc.nekoui.hud;
 
 import anmao.mc.nekoui.config.CC;
 import anmao.mc.nekoui.constant._MC;
-import anmao.mc.nekoui.lib.AM;
 import anmao.mc.nekoui.lib.am._Sys;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Icon;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key;
@@ -10,14 +9,9 @@ import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Text;
 import anmao.mc.nekoui.lib.player.PlayerInfo;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
-import java.util.Collection;
 import java.util.Objects;
 
 public class HUD_Info {
@@ -57,17 +51,18 @@ public class HUD_Info {
                 String str;
                 for (CustomDataTypes_InfoConfig_Key ik : CC.infoKeys){
                     if (ik.isIcon()){
-                        CustomDataTypes_InfoConfig_Icon customDataTypesInfoConfigIcon = CC.infoIcons.get(ik.getTipId());
-                        guiGraphics.blit(customDataTypesInfoConfigIcon.getIcon(), ik.getTipX(), ik.getTipY(), 0, 0, customDataTypesInfoConfigIcon.getW(), customDataTypesInfoConfigIcon.getH(), customDataTypesInfoConfigIcon.getW(), customDataTypesInfoConfigIcon.getH());
+                        CustomDataTypes_InfoConfig_Icon ci = CC.infoIcons.get(ik.getTipId());
+                        guiGraphics.blit(ci.getIcon(), ik.getTipX(), ik.getTipY(), 0, 0, ci.getW(), ci.getH(), ci.getW(), ci.getH());
                     }else{
                         CustomDataTypes_InfoConfig_Text t = CC.infoTexts.get(ik.getTipId());
                         guiGraphics.drawString(_MC.FONT,t.getTipText() , ik.getTipX(), ik.getTipY(), t.getColor());
                     }
-                    if (ik.getKeyType() == 0){
-                        str = PlayerInfo.getPlayerDat(ik.getKey());
-                    }else {
-                        str = PlayerInfo.getPlayerDat(ik.getKeyType(), ik.getKeyArray());
-                    }
+                    str = switch (ik.getKeyType() ){
+                        default -> "error type";
+                        case 0 -> PlayerInfo.getPlayerDat(ik.getKey());
+                        case 1 -> PlayerInfo.getPlayerNbtDat(ik.getKey());
+                        case 2 -> PlayerInfo.getPlayerNbtDat(ik.getKk());
+                    };
                     guiGraphics.drawString(_MC.FONT, str, ik.getInfoX(),ik.getInfoY(), ik.getInfoColor());
                 }
             }
