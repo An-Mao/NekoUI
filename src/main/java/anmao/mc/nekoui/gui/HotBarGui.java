@@ -75,7 +75,7 @@ public class HotBarGui extends HotBarConfig{
                     case "bottom" -> screenHeight;
                 };
                 startY += hotBarData.getY();
-
+                System.out.println("render hot bar ::"+startX+"-"+startY);
 
                 Inventory opi = localPlayer.getInventory();
                 NonNullList<ItemStack> oItems = opi.items;

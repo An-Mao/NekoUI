@@ -4,6 +4,7 @@ import anmao.mc.amlib.math._MathCDT;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
 import anmao.mc.nekoui.constant._MC;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -35,24 +36,17 @@ public class MobDirectionGui extends MobDirectionConfig{
         LocalPlayer localPlayer = _MC.MC.player;
         if (olevel != null && localPlayer != null){
             if (olevel.isClientSide){
-                int sx = screenWidth / 2;
-                int sy = screenHeight / 2;
+                int startX = screenWidth / 2;
+                int startY = screenHeight / 2;
                 List<Mob> mobs = olevel.getEntities(EntityTypeTest.forClass(Mob.class), localPlayer.getBoundingBox().inflate(mobDirectionConfig.getPoiRadius()), Entity::isAlive);
-                Vec3 forward = localPlayer.getForward();
+                Vec3 playerForward = localPlayer.getForward();
                 Vec3 playerPosition = localPlayer.position();
                 for (Mob mob : mobs){
                     if (mob != null ){
                         Vec3 mobPosition = mob.position();
-                        /*
-                        //            N（0，-1）
-                        // （-1，0）E    W（1，0）
-                        //            S（0，1）
-                        //（-0.6，-0.6）    （0.6，-0.6）
-                        //（-0.6，0.6）     （0.6，0.6）
-                         */
                         double cx = mobPosition.x - playerPosition.x;
                         double cz = mobPosition.z - playerPosition.z;
-                        double g = Math.atan2(cz,cx) - Math.atan2(forward.z,forward.x);
+                        double g = Math.atan2(cz,cx) - Math.atan2(playerForward.z,playerForward.x);
                         if (g > Math.PI){
                             g = g - _MathCDT.TWICE_PI;
                         }
@@ -61,20 +55,29 @@ public class MobDirectionGui extends MobDirectionConfig{
                         }
                         int ox = (int) ( mobDirectionConfig.getPoiShowRadius() * Math.cos(g));
                         int oz = (int) ( mobDirectionConfig.getPoiShowRadius() * Math.sin(g));
-                        int or = mobDirectionConfig.chickRadius(cx, cz);
-                        //ResourceLocation show = MOB_OTHER;
-                        if (mob instanceof Animal){
-                            //show = MOB_ANIMAL;
-                            guiGraphics.blit(MOB_ANIMAL,sx + oz, sy - ox,0,0,or,or,or,or);
-                        } else if (mob instanceof Monster) {
-                            guiGraphics.blit(MOB_MONSTER,sx + oz, sy - ox,0,0,or,or,or,or);
+                        int imageSize;
+                        if (mobDirectionConfig.isDynamicDisplay()) {
+                            double distance = playerPosition.distanceTo(mobPosition);
+                            distance *= mobDirectionConfig.getRatio();
+                            imageSize = (int) (mobDirectionConfig.getPoiSize() + distance);
+                            imageSize = Math.min(imageSize , mobDirectionConfig.getPoiMaxSize());
+                            imageSize = Math.max(imageSize , mobDirectionConfig.getPoiMinSize());
                         }else {
-                            guiGraphics.blit(MOB_OTHER, sx + oz, sy -ox, 0, 0, or,or,or,or);
+                            imageSize = mobDirectionConfig.getPoiSize();
+                        }
+                        if (mob instanceof Animal){
+                            drawPoint(guiGraphics,MOB_ANIMAL,startX + oz, startY - ox,imageSize);
+                        } else if (mob instanceof Monster) {
+                            drawPoint(guiGraphics,MOB_MONSTER,startX + oz, startY - ox,imageSize);
+                        }else {
+                            drawPoint(guiGraphics,MOB_OTHER,startX + oz, startY - ox,imageSize);
                         }
                     }
                 }
             }
         }
-
     });
+    private static void drawPoint(GuiGraphics guiGraphics,ResourceLocation res,int x,int y,int imageSize){
+        guiGraphics.blit(res,x,y,0,0,imageSize,imageSize,imageSize,imageSize);
+    }
 }

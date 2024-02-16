@@ -16,8 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientModEvent {
     @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent event){
-        if (Config.mobDirectionConfig.isRenderScreenElement()){
-            System.out.println("render reg : screen");
+        if (Config.configData.isRenderScreenElement()){
             event.registerAboveAll(ScreenElementGui.id, ScreenElementGui.UI);
         }
         if (HotBarConfig.hotBarData.isEnable()){

@@ -27,12 +27,11 @@ public class MobDirectionConfig {
                       "enable": true,
                       "dynamicDisplay":true,
                       "poiShowRadius":80,
-                      "poiSize":3,
                       "poiRadius":22,
-                      "poiDynamicSizeMid":7,
-                      "poiDynamicRadiusMid":11,
-                      "poiDynamicSizeClose":11,
-                      "poiDynamicRadiusClose":5
+                      "poiSize":11,
+                      "poiMaxSize": 9,
+                      "poiMinSize": 2,
+                      "ratio":-0.5
                     }""");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());

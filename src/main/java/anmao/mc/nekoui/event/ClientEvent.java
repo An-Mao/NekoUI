@@ -18,11 +18,10 @@ public class ClientEvent {
     private static final Logger LOGGER = LogUtils.getLogger();
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Pre event) {
-        if (Config.mobDirectionConfig.isOutputGuiId()) {
+        if (Config.configData.isOutputGuiId()) {
             LOGGER.info("Render Gui => " + event.getOverlay().id().toString());
         }
         if (HideGuiConfig.guiList.contains(event.getOverlay().id().toString())) {
-            LOGGER.info("Hide Render Gui => " + event.getOverlay().id().toString());
             event.setCanceled(true);
         }
     }

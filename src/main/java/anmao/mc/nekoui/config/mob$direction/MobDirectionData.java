@@ -6,10 +6,9 @@ public class MobDirectionData {
     private int poiShowRadius;
     private int poiSize;
     private int poiRadius;
-    private int poiDynamicSizeMid;
-    private int poiDynamicRadiusMid;
-    private int poiDynamicSizeClose;
-    private int poiDynamicRadiusClose;
+    private int poiMaxSize;
+    private int poiMinSize;
+    private double ratio;
 
     public void setEnable(boolean enable) {
         this.enable = enable;
@@ -51,48 +50,27 @@ public class MobDirectionData {
         return poiRadius;
     }
 
-    public void setPoiDynamicSizeMid(int poiDynamicSizeMid) {
-        this.poiDynamicSizeMid = poiDynamicSizeMid;
+    public void setPoiMaxSize(int poiMaxSize) {
+        this.poiMaxSize = poiMaxSize;
     }
 
-    public int getPoiDynamicSizeMid() {
-        return poiDynamicSizeMid;
+    public int getPoiMaxSize() {
+        return poiMaxSize;
     }
 
-    public void setPoiDynamicRadiusMid(int poiDynamicRadiusMid) {
-        this.poiDynamicRadiusMid *= poiDynamicRadiusMid;
+    public void setPoiMinSize(int poiMinSize) {
+        this.poiMinSize *= poiMinSize;
     }
 
-    public int getPoiDynamicRadiusMid() {
-        return poiDynamicRadiusMid;
+    public int getPoiMinSize() {
+        return poiMinSize;
     }
 
-    public void setPoiDynamicSizeClose(int poiDynamicSizeClose) {
-        this.poiDynamicSizeClose = poiDynamicSizeClose;
+    public void setRatio(double ratio) {
+        this.ratio = ratio;
     }
 
-    public int getPoiDynamicSizeClose() {
-        return poiDynamicSizeClose;
-    }
-
-    public void setPoiDynamicRadiusClose(int poiDynamicRadiusClose) {
-        this.poiDynamicRadiusClose *= poiDynamicRadiusClose;
-    }
-
-    public int getPoiDynamicRadiusClose() {
-        return poiDynamicRadiusClose;
-    }
-
-    public int chickRadius(double cx, double cz) {
-        int or = poiSize;
-        if (dynamicDisplay){
-            double v = cx * cx + cz * cz;
-            if (v <= poiDynamicRadiusClose){
-                or =  poiDynamicSizeClose;
-            }else if (v <= poiDynamicRadiusMid){
-                or = poiDynamicSizeMid;
-            }
-        }
-        return or;
+    public double getRatio() {
+        return ratio;
     }
 }

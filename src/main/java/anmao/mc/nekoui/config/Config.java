@@ -11,7 +11,7 @@ public class Config {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String configFile = NekoUI.ConfigDir +"config.json";
 
-    public static ConfigData mobDirectionConfig;
+    public static ConfigData configData;
     public static void init(){
         File file = new File(configFile);
         if (!file.exists()){
@@ -23,7 +23,6 @@ public class Config {
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write("""
                     {
-                      "mobDirection": true,
                       "renderScreenElement": true,
                       "outputGuiId": false
                     }""");
@@ -34,7 +33,7 @@ public class Config {
     private static void load(){
         Gson gson = new Gson();
         try (Reader reader = new FileReader(configFile)) {
-            mobDirectionConfig = gson.fromJson(reader, ConfigData.class);
+            configData = gson.fromJson(reader, ConfigData.class);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }

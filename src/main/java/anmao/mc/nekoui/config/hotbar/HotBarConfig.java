@@ -28,7 +28,7 @@ public class HotBarConfig {
                       "startX": "center",
                       "startY": "bottom",
                       "x": 7,
-                      "y": 24,
+                      "y": -24,
                       "space": 17,
                       "direction": "horizontal"
                     }""");
