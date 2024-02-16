@@ -1,6 +1,5 @@
 package anmao.mc.nekoui.lib.dat;
 
-import anmao.mc.nekoui.lib.am.XmlCore;
 import anmao.mc.nekoui.lib.am.XmlGet;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

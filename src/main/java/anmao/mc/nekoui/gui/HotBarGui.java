@@ -1,7 +1,7 @@
-package anmao.mc.nekoui.hud;
+package anmao.mc.nekoui.gui;
 
 import anmao.mc.nekoui.NekoUI;
-import anmao.mc.nekoui.config.CC;
+import anmao.mc.nekoui.config.hotbar.HotBarConfig;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.am._Sys;
 import com.mojang.blaze3d.platform.Lighting;
@@ -22,8 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Matrix4f;
 
-public class HUD_Item {
-    public static final String id = "hud_item";
+public class HotBarGui extends HotBarConfig{
+    public static final String id = "hot_bar";
 
     private static final ResourceLocation itemSlot = new ResourceLocation(NekoUI.MOD_ID,"textures/hud/item/slot.png");
     private static final ResourceLocation itemSelet = new ResourceLocation(NekoUI.MOD_ID,"textures/hud/item/slot_select.png");
@@ -41,12 +41,11 @@ public class HUD_Item {
     private static final int imageHeight = 16;
     private static final int imageWidth = 16;
     private static int startX,startY;
-    private static void addRow(){
-        startX += CC.hudItemSpace;
-    }
-
-    private static void addLine(){
-        startY += 24;
+    private static void addSpace(){
+        switch (HotBarConfig.hotBarData.getDirection()){
+            case "horizontal" -> startX += hotBarData.getSpace();
+            case "vertical" -> startY += hotBarData.getSpace();
+        }
     }
 
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
@@ -54,15 +53,28 @@ public class HUD_Item {
         //int handItemY = screenHeight - 50;
         //int mainHandItemX = screenWidth / 2 + 4;
         //
-        if (_Sys.isOutTime() && CC.hudItemDynamicDisplay) {
+        if (_Sys.isOutTime() && hotBarData.isDynamicDisplay()) {
             return;
         }
-        startX = CC.hudItemX;
-        startY = screenHeight - CC.hudItemY;
+        //startX = CC.hudItemX;
+        //startY = screenHeight - CC.hudItemY;
         Level clientLevel = _MC.MC.level;
         LocalPlayer localPlayer = _MC.MC.player;
         if (clientLevel != null && localPlayer != null) {
             if (clientLevel.isClientSide){
+
+                startX = switch (hotBarData.getStartX()) {
+                    default -> 0;
+                    case "center" -> screenWidth / 2;
+                    case "right" -> screenWidth;
+                };
+                startX += hotBarData.getX();
+                startY = switch (hotBarData.getStartY()) {
+                    default -> 0;
+                    case "center" -> screenHeight / 2;
+                    case "bottom" -> screenHeight;
+                };
+                startY += hotBarData.getY();
 
 
                 Inventory opi = localPlayer.getInventory();
@@ -77,7 +89,7 @@ public class HUD_Item {
                 }
                 for (ItemStack itemStack : oItems){
                     if (i < 9){
-                        addRow();
+                        addSpace();
                         if (i == opi.selected)
                         {
                             guiGraphics.blit(itemSelects[itemSelectIndex],startX,startY,0,0, imageWidth, imageHeight, imageWidth, imageHeight);
