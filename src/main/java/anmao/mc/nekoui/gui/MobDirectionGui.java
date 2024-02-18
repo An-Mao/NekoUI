@@ -1,25 +1,35 @@
 package anmao.mc.nekoui.gui;
 
 import anmao.mc.amlib.math._MathCDT;
+import anmao.mc.amlib.render.DrawImage;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
 import anmao.mc.nekoui.constant._MC;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.common.Tags;
+import org.joml.AxisAngle4d;
+import org.joml.Quaternionf;
 
 import java.util.List;
 
 public class MobDirectionGui extends MobDirectionConfig{
     public static final String id = "mob_direction";
+    private static final double additionalAngle = -135.0 * Math.PI / 180.0;
     private static final ResourceLocation MOB_POI = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/poi.png");
     private static final ResourceLocation MOB_PLAYER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/player.png");
     private static final ResourceLocation MOB_ANIMAL = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/animal.png");
@@ -55,28 +65,53 @@ public class MobDirectionGui extends MobDirectionConfig{
                         }
                         int ox = (int) ( mobDirectionConfig.getPoiShowRadius() * Math.cos(g));
                         int oz = (int) ( mobDirectionConfig.getPoiShowRadius() * Math.sin(g));
+
+                        g += additionalAngle;
                         int imageSize;
                         if (mobDirectionConfig.isDynamicDisplay()) {
                             double distance = playerPosition.distanceTo(mobPosition);
                             distance *= mobDirectionConfig.getRatio();
                             imageSize = (int) (mobDirectionConfig.getPoiSize() + distance);
-                            imageSize = Math.min(imageSize , mobDirectionConfig.getPoiMaxSize());
-                            imageSize = Math.max(imageSize , mobDirectionConfig.getPoiMinSize());
+                            imageSize = Mth.clamp(imageSize,mobDirectionConfig.getPoiMinSize(), mobDirectionConfig.getPoiMaxSize());
                         }else {
                             imageSize = mobDirectionConfig.getPoiSize();
                         }
+                        PoseStack pose = guiGraphics.pose();
+                        pose.pushPose();
+                        pose.translate(startX + oz, startY - ox,0);
+                        pose.mulPose(new Quaternionf(new AxisAngle4d(g,0,0,1)));
+                        //RenderSystem.setShaderColor(255,0,0,1.0F);
+                        setRenderColor(mob);
+                        /*
                         if (mob instanceof Animal){
-                            drawPoint(guiGraphics,MOB_ANIMAL,startX + oz, startY - ox,imageSize);
+                            drawPoint(guiGraphics,MOB_POI,imageSize);
                         } else if (mob instanceof Monster) {
-                            drawPoint(guiGraphics,MOB_MONSTER,startX + oz, startY - ox,imageSize);
+                            drawPoint(guiGraphics,MOB_MONSTER,imageSize);
                         }else {
-                            drawPoint(guiGraphics,MOB_OTHER,startX + oz, startY - ox,imageSize);
+                            drawPoint(guiGraphics,MOB_OTHER,imageSize);
                         }
+
+                         */
+                        drawPoint(guiGraphics,MOB_POI,imageSize);
+                        pose.popPose();
                     }
                 }
             }
         }
     });
+    private static void setRenderColor(LivingEntity livingEntity){
+        if (livingEntity instanceof AgeableMob || livingEntity instanceof WaterAnimal){
+            RenderSystem.setShaderColor(0,255,0,255);
+        } else if (livingEntity instanceof Monster || livingEntity instanceof FlyingMob || livingEntity instanceof Slime) {
+            RenderSystem.setShaderColor(255,0,0,255);
+        }else {
+            RenderSystem.setShaderColor(64,64,64,255);
+        }
+
+    }
+    private static void drawPoint(GuiGraphics guiGraphics,ResourceLocation res,int imageSize){
+        guiGraphics.blit(res,0,0,0,0,imageSize,imageSize,imageSize,imageSize);
+    }
     private static void drawPoint(GuiGraphics guiGraphics,ResourceLocation res,int x,int y,int imageSize){
         guiGraphics.blit(res,x,y,0,0,imageSize,imageSize,imageSize,imageSize);
     }

@@ -1,5 +1,7 @@
 package anmao.mc.nekoui.gui;
 
+import anmao.mc.amlib.component.ComponentStyle;
+import anmao.mc.amlib.format._FormatToString;
 import anmao.mc.nekoui.config.screen$element.ScreenElementConfig;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.player.PlayerInfo;
@@ -53,9 +55,14 @@ public class ScreenElementGui extends ScreenElementConfig {
                                         default -> "error type";
                                         case 1 -> key;
                                         case 2 -> PlayerInfo.getPlayerDat(key);
-                                        //case 3 -> PlayerInfo.getPlayerNbtDat(key);
+                                        case 3 -> _FormatToString.numberToString(PlayerInfo.getPlayerAttribute(key));
                                     };
-                                    guiGraphics.drawString(_MC.FONT, str, dx, dy, Integer.parseInt(p.get("color").getAsString(), 16));
+                                    key = p.get("color").getAsString();
+                                    if (key.equals("rainbow")){
+                                        guiGraphics.drawString(_MC.FONT, ComponentStyle.Flash(str,clientLevel.getDayTime()),dx,dy,0);
+                                    }else {
+                                        guiGraphics.drawString(_MC.FONT, str, dx, dy, Integer.parseInt(key, 16));
+                                    }
                                 }
                             }
                         }

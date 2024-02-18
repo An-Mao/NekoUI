@@ -49,15 +49,9 @@ public class HotBarGui extends HotBarConfig{
     }
 
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
-        //int offhandItemX = screenWidth / 2 - 20;
-        //int handItemY = screenHeight - 50;
-        //int mainHandItemX = screenWidth / 2 + 4;
-        //
         if (_Sys.isOutTime() && hotBarData.isDynamicDisplay()) {
             return;
         }
-        //startX = CC.hudItemX;
-        //startY = screenHeight - CC.hudItemY;
         Level clientLevel = _MC.MC.level;
         LocalPlayer localPlayer = _MC.MC.player;
         if (clientLevel != null && localPlayer != null) {
@@ -75,7 +69,6 @@ public class HotBarGui extends HotBarConfig{
                     case "bottom" -> screenHeight;
                 };
                 startY += hotBarData.getY();
-                System.out.println("render hot bar ::"+startX+"-"+startY);
 
                 Inventory opi = localPlayer.getInventory();
                 NonNullList<ItemStack> oItems = opi.items;

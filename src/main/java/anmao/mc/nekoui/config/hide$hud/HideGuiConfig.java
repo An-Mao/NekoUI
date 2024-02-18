@@ -28,7 +28,9 @@ public class HideGuiConfig {
                       "minecraft:experience_bar",
                       "minecraft:hotbar",
                       "minecraft:player_health",
-                      "minecraft:food_level"
+                      "minecraft:food_level",
+                      "minecraft:armor_level",
+                      "minecraft:air_level"
                     ]""");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());

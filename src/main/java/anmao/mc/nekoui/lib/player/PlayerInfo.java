@@ -1,6 +1,7 @@
 package anmao.mc.nekoui.lib.player;
 
-import anmao.mc.amlib.item.ItemHelper;
+import anmao.mc.amlib.attribute.AttributeHelper;
+import anmao.mc.amlib.format._FormatToString;
 import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.FormattedData;
 import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key_AK;
@@ -8,12 +9,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInfo {
     public static Player clientPlayer = _MC.MC.player;
@@ -119,25 +124,9 @@ public class PlayerInfo {
         if (clientPlayer == null) {
             return "clientPlayer is null";
         }
-        switch (s){
-            default: return "";
-            case "xp": return FormattedData.numberToString(clientPlayer.experienceProgress);
-            case "lvl": return FormattedData.numberToString(clientPlayer.experienceLevel);
-            case "health": return FormattedData.numberToString(clientPlayer.getHealth());
-            case "maxHealth": return FormattedData.numberToString(clientPlayer.getMaxHealth());
-            case "hunger": return FormattedData.numberToString(clientPlayer.getFoodData().getFoodLevel());
-            case "atk": return FormattedData.numberToString(getAttackDamage());
-            case "atkWithItem": return FormattedData.numberToString(getTotalAttackDamage());
-            case "luck": return FormattedData.numberToString(clientPlayer.getLuck());
-            case "speed": return FormattedData.numberToString(clientPlayer.getSpeed());
-            case "posX": return FormattedData.numberToString(clientPlayer.getX());
-            case "posY": return FormattedData.numberToString(clientPlayer.getY());
-            case "posZ": return FormattedData.numberToString(clientPlayer.getZ());
-            case "dayTime": return FormattedData.numberToString(clientPlayer.level().getDayTime());
-            case "gameTime": return FormattedData.numberToString(clientPlayer.level().getGameTime());
-        }
+        return _FormatToString.numberToString(getPlayerData(s));
     }
-    private static Number getPlayerAttribute(String string) {
+    private static Number getPlayerData(String string) {
         return switch (string) {
             case "xp" -> clientPlayer.experienceProgress;
             case "lvl" -> clientPlayer.experienceLevel;
@@ -151,17 +140,47 @@ public class PlayerInfo {
             case "posX" -> clientPlayer.getX();
             case "posY" -> clientPlayer.getY();
             case "posZ" -> clientPlayer.getZ();
+            case "dayTime" -> clientPlayer.level().getDayTime();
+            case "gameTime" -> clientPlayer.level().getGameTime();
+            case "airSupply" -> clientPlayer.getAirSupply();
+            case "armor" -> clientPlayer.getArmorValue();
+            case "armorToughness" -> clientPlayer.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+            case "attackSpeed" -> clientPlayer.getAttributeValue(Attributes.ATTACK_SPEED);
+            case "attackKnockBack" -> clientPlayer.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+            case "serverPing" -> getServerInfo(string);
             default -> 0;
         };
+    }
+    public static double getPlayerAttribute(String s){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null){
+            return 0;
+        }
+        double[] v = {0};
+        player.getAttributes().getSyncableAttributes().forEach(attributeInstance -> {
+            if (attributeInstance.getAttribute().getDescriptionId().equals(s)){
+                v[0] = attributeInstance.getValue();
+            }
+        });
+        return v[0];
+    }
+    private static double getServerInfo(String s){
+        ServerData server = Minecraft.getInstance().getCurrentServer();
+        if (server == null){
+            return 0;
+        }
+        if (s.equals("serverPing")){
+            return server.ping;
+        }
+        return 0;
     }
     private static double getAttackDamage() {
         return clientPlayer.getAttributes().getValue(Attributes.ATTACK_DAMAGE);
     }
-
     private static double getTotalAttackDamage() {
         Collection<AttributeModifier> att = clientPlayer.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE);
         double baseDamage = getAttackDamage();
-        double itemDamage = ItemHelper.getAttributeModifierDamage(att);// AM.getAdddamage(att);
+        double itemDamage = AttributeHelper.getAttributeModifierValue(att);// AM.getAdddamage(att);
         return baseDamage + itemDamage;
     }
 }
