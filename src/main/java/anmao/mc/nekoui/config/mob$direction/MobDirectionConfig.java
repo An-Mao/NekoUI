@@ -3,10 +3,13 @@ package anmao.mc.nekoui.config.mob$direction;
 import anmao.mc.nekoui.NekoUI;
 import com.google.gson.Gson;
 import com.mojang.logging.LogUtils;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
 import java.io.*;
 
+@OnlyIn(Dist.CLIENT)
 public class MobDirectionConfig {
 
     private static final Logger LOGGER = LogUtils.getLogger();

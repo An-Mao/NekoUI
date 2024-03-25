@@ -7,8 +7,10 @@ import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
 import anmao.mc.nekoui.gui.HotBarGui;
 import anmao.mc.nekoui.gui.MobDirectionGui;
 import anmao.mc.nekoui.gui.ScreenElementGui;
+import anmao.mc.nekoui.util.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -29,5 +31,10 @@ public class ClientModEvent {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event)
     {
+    }
+    @SubscribeEvent
+    public static void onKeyRegister(RegisterKeyMappingsEvent event){
+        event.register(KeyBinding.OPEN_MENU);
+        event.register(KeyBinding.OPEN_SET_MENU);
     }
 }

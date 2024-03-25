@@ -2,13 +2,13 @@ package anmao.mc.nekoui.gui;
 
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.hotbar.HotBarConfig;
-import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.am._Sys;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -52,8 +52,8 @@ public class HotBarGui extends HotBarConfig{
         if (_Sys.isOutTime() && hotBarData.isDynamicDisplay()) {
             return;
         }
-        Level clientLevel = _MC.MC.level;
-        LocalPlayer localPlayer = _MC.MC.player;
+        Level clientLevel = Minecraft.getInstance().level;
+        LocalPlayer localPlayer = Minecraft.getInstance().player;
         if (clientLevel != null && localPlayer != null) {
             if (clientLevel.isClientSide){
 
@@ -110,20 +110,20 @@ public class HotBarGui extends HotBarConfig{
     private static void renderItemCountAndDamage(GuiGraphics guiGraphics,ItemStack itemStack){
         int count = itemStack.getCount();
         if (count >1 && count < 10) {
-            guiGraphics.drawString(_MC.FONT, String.valueOf(count), startX + 10, startY+8, color);
+            guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 10, startY+8, color);
         }else if (count >= 10) {
-            guiGraphics.drawString(_MC.FONT, String.valueOf(count), startX + 8, startY+8, color);
+            guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 8, startY+8, color);
         }else {
             if (itemStack.getDamageValue() > 0) {
                 float d = (1 - (float) itemStack.getDamageValue() / itemStack.getMaxDamage()) * 100F;
-                guiGraphics.drawString(_MC.FONT, String.format("%.0f", d) + "%", startX + 1 , startY+8, color);
+                guiGraphics.drawString(Minecraft.getInstance().font, String.format("%.0f", d) + "%", startX + 1 , startY+8, color);
             }
         }
     }
     private static void ri(GuiGraphics guiGraphics, ItemStack stack) {
         if (!stack.isEmpty()) {
             PoseStack pose = guiGraphics.pose();
-            BakedModel bakedmodel = _MC.MC.getItemRenderer().getModel(stack, null, null, 0);
+            BakedModel bakedmodel = Minecraft.getInstance().getItemRenderer().getModel(stack, null, null, 0);
             pose.pushPose();
             pose.translate((float)(startX + 8), (float)(startY + 8), -100F);
 
@@ -135,7 +135,7 @@ public class HotBarGui extends HotBarConfig{
                     Lighting.setupForFlatItems();
                 }
 
-                _MC.MC.getItemRenderer().render(stack, ItemDisplayContext.GUI, false, pose, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
+                Minecraft.getInstance().getItemRenderer().render(stack, ItemDisplayContext.GUI, false, pose, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
                 guiGraphics.flush();
                 if (flag) {
                     Lighting.setupFor3DItems();

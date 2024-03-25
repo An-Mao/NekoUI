@@ -4,12 +4,15 @@ import anmao.mc.nekoui.NekoUI;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.logging.LogUtils;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class HideGuiConfig {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String configFile = NekoUI.ConfigDir +"hide-gui.json";

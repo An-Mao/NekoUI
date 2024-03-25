@@ -3,9 +3,9 @@ package anmao.mc.nekoui.gui;
 import anmao.mc.amlib.component.ComponentStyle;
 import anmao.mc.amlib.format._FormatToString;
 import anmao.mc.nekoui.config.screen$element.ScreenElementConfig;
-import anmao.mc.nekoui.constant._MC;
 import anmao.mc.nekoui.lib.player.PlayerInfo;
 import com.google.gson.JsonObject;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -23,8 +23,8 @@ public class ScreenElementGui extends ScreenElementConfig {
             }
         }
          */
-        Level clientLevel = _MC.MC.level;
-        LocalPlayer localPlayer = _MC.MC.player;
+        Level clientLevel = Minecraft.getInstance().level;
+        LocalPlayer localPlayer = Minecraft.getInstance().player;
         if (clientLevel != null && clientLevel.isClientSide && localPlayer != null) {
             screenElements.forEach((s, screenJsonData) -> {
                 int startX = switch (screenJsonData.getX()) {
@@ -57,11 +57,11 @@ public class ScreenElementGui extends ScreenElementConfig {
                                         case 2 -> PlayerInfo.getPlayerDat(key);
                                         case 3 -> _FormatToString.numberToString(PlayerInfo.getPlayerAttribute(key));
                                     };
-                                    key = p.get("color").getAsString();
-                                    if (key.equals("rainbow")){
-                                        guiGraphics.drawString(_MC.FONT, ComponentStyle.Flash(str,clientLevel.getDayTime()),dx,dy,0);
+                                    String color = p.get("color").getAsString();
+                                    if (color.equals("rainbow")){
+                                        guiGraphics.drawString(Minecraft.getInstance().font, ComponentStyle.Flash(str,clientLevel.getDayTime()),dx,dy,0);
                                     }else {
-                                        guiGraphics.drawString(_MC.FONT, str, dx, dy, Integer.parseInt(key, 16));
+                                        guiGraphics.drawString(Minecraft.getInstance().font, str, dx, dy, Integer.parseInt(color, 16));
                                     }
                                 }
                             }

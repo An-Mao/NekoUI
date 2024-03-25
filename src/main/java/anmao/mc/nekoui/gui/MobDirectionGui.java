@@ -1,27 +1,23 @@
 package anmao.mc.nekoui.gui;
 
 import anmao.mc.amlib.math._MathCDT;
-import anmao.mc.amlib.render.DrawImage;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
-import anmao.mc.nekoui.constant._MC;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
-import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.common.Tags;
 import org.joml.AxisAngle4d;
 import org.joml.Quaternionf;
 
@@ -42,8 +38,8 @@ public class MobDirectionGui extends MobDirectionConfig{
 
     }
     public static final IGuiOverlay GUI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
-        Level olevel = _MC.MC.level;
-        LocalPlayer localPlayer = _MC.MC.player;
+        Level olevel = Minecraft.getInstance().level;
+        LocalPlayer localPlayer = Minecraft.getInstance().player;
         if (olevel != null && localPlayer != null){
             if (olevel.isClientSide){
                 int startX = screenWidth / 2;
@@ -80,8 +76,18 @@ public class MobDirectionGui extends MobDirectionConfig{
                         pose.pushPose();
                         pose.translate(startX + oz, startY - ox,0);
                         pose.mulPose(new Quaternionf(new AxisAngle4d(g,0,0,1)));
-                        //RenderSystem.setShaderColor(255,0,0,1.0F);
                         setRenderColor(mob);
+                        /*
+                        LivingEntity target = mob.getTarget();
+                        if (target != null){
+                            System.out.println("target UUID::"+target.getUUID());
+                            System.out.println("localPlayer UUID::"+localPlayer.getUUID());
+                            if (mob.getTarget().getUUID() == localPlayer.getUUID()){
+                                RenderSystem.setShaderColor(255,0,0,1.0F);
+                            }
+                        }else {
+                            setRenderColor(mob);
+                        }
                         /*
                         if (mob instanceof Animal){
                             drawPoint(guiGraphics,MOB_POI,imageSize);
