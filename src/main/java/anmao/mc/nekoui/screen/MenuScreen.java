@@ -6,8 +6,11 @@ import anmao.mc.amlib.system._System;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +19,7 @@ import org.slf4j.Logger;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -42,6 +46,8 @@ public class MenuScreen extends Screen {
         MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.getName()),s,this::run)));
         circularMenu = new CircularMenu(width / 2 , height / 2,width,height,9,25,90,Component.empty(),data);
         circularMenu.setFlipMode(CircularMenu.FlipMode.button);
+        circularMenu.setBgSelectColor(0x50ffffff);
+        circularMenu.setBgUsualColor(0x70000000);
         addRenderableWidget(circularMenu);
     }
     public void run(Object v){
@@ -54,7 +60,15 @@ public class MenuScreen extends Screen {
                     switch (type){
                         case 0 -> sendChat(menuData.getValue());
                         case 1 -> sendCommand(menuData.getValue());
-                        case 2 -> simulateKey(Integer.parseInt(menuData.getValue()));
+                        case 2 -> {
+                            String[] keyA = menuData.getValue().split(" ");
+                            int[] keys = new int[keyA.length];
+                            System.out.println(menuData.getValue()+ "  KeyA:"+Arrays.toString(keyA));
+                            for (int i = 0; i < keyA.length;i++){
+                                keys[i] = Integer.parseInt(keyA[i]);
+                            }
+                            simulateKey(keys);
+                        }
                     }
                 }
             }
@@ -72,15 +86,23 @@ public class MenuScreen extends Screen {
             player.connection.sendCommand(command);
         }
     }
-    public static void simulateKey(int keyCode) {
+    public static void simulateKey(int[] keyCode) {
         if (_System.isWindows){
-            KeySimulate.simulateKeyPress(keyCode);
-            KeySimulate.simulateKeyRelease(keyCode);
+            for (int key : keyCode) {
+                KeySimulate.simulateKeyPress(key);
+            }
+            for (int i = keyCode.length - 1 ; i >= 0 ;i--) {
+                KeySimulate.simulateKeyRelease(keyCode[i]);
+            }
         }else {
             try {
                 Robot robot = new Robot();
-                robot.keyPress(keyCode);
-                robot.keyRelease(keyCode);
+                for (int key : keyCode) {
+                    robot.keyPress(key);
+                }
+                for (int i = keyCode.length - 1 ; i >= 0 ;i--) {
+                    robot.keyRelease(keyCode[i]);
+                }
             } catch (AWTException e) {
                 LOGGER.error(e.getMessage());
             }

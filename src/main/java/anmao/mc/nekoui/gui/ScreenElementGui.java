@@ -9,8 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+@OnlyIn(Dist.CLIENT)
 public class ScreenElementGui extends ScreenElementConfig {
     public static final String id = "screen_element";
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)-> {

@@ -2,7 +2,6 @@ package anmao.mc.nekoui.gui;
 
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.hotbar.HotBarConfig;
-import anmao.mc.nekoui.lib.am._Sys;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.CrashReport;
@@ -19,9 +18,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Matrix4f;
 
+@OnlyIn(Dist.CLIENT)
 public class HotBarGui extends HotBarConfig{
     public static final String id = "hot_bar";
 
@@ -41,6 +43,7 @@ public class HotBarGui extends HotBarConfig{
     private static final int imageHeight = 16;
     private static final int imageWidth = 16;
     private static int startX,startY;
+    private static boolean show = true;
     private static void addSpace(){
         switch (HotBarConfig.hotBarData.getDirection()){
             case "horizontal" -> startX += hotBarData.getSpace();
@@ -49,7 +52,7 @@ public class HotBarGui extends HotBarConfig{
     }
 
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
-        if (_Sys.isOutTime() && hotBarData.isDynamicDisplay()) {
+        if (HotBarSys.isOutTime() && hotBarData.isDynamicDisplay()) {
             return;
         }
         Level clientLevel = Minecraft.getInstance().level;
@@ -108,15 +111,19 @@ public class HotBarGui extends HotBarConfig{
         itemSelectIndex = tick / 40;
     }
     private static void renderItemCountAndDamage(GuiGraphics guiGraphics,ItemStack itemStack){
-        int count = itemStack.getCount();
-        if (count >1 && count < 10) {
-            guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 10, startY+8, color);
-        }else if (count >= 10) {
-            guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 8, startY+8, color);
+        if (show){
+            guiGraphics.renderItemDecorations(Minecraft.getInstance().font, itemStack,startX,startY);
         }else {
-            if (itemStack.getDamageValue() > 0) {
-                float d = (1 - (float) itemStack.getDamageValue() / itemStack.getMaxDamage()) * 100F;
-                guiGraphics.drawString(Minecraft.getInstance().font, String.format("%.0f", d) + "%", startX + 1 , startY+8, color);
+            int count = itemStack.getCount();
+            if (count > 1 && count < 10) {
+                guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 10, startY + 8, color);
+            } else if (count >= 10) {
+                guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 8, startY + 8, color);
+            } else {
+                if (itemStack.getDamageValue() > 0) {
+                    float d = (1 - (float) itemStack.getDamageValue() / itemStack.getMaxDamage()) * 100F;
+                    guiGraphics.drawString(Minecraft.getInstance().font, String.format("%.0f", d) + "%", startX + 1, startY + 8, color);
+                }
             }
         }
     }

@@ -1,7 +1,6 @@
 package anmao.mc.nekoui.screen;
 
 import anmao.mc.amlib.screen.widget.Labels;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 

@@ -2,12 +2,13 @@ package anmao.mc.nekoui.lib.player;
 
 import anmao.mc.amlib.attribute.AttributeHelper;
 import anmao.mc.amlib.format._FormatToString;
-import anmao.mc.nekoui.lib.FormattedData;
-import anmao.mc.nekoui.lib.dat.CustomDataTypes_InfoConfig_Key_AK;
+import anmao.mc.amlib.javascript.EasyJS;
+import anmao.mc.nekoui.config.Configs;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,63 +16,24 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 
 public class PlayerInfo {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static Player clientPlayer = Minecraft.getInstance().player;
-    public static String getPlayerNbtDat(CustomDataTypes_InfoConfig_Key_AK[] caks){
-        if (clientPlayer != null) {
-            String dat = clientPlayer.serializeNBT().toString();
+    public static JsonObject getPlayerNbtDat(LocalPlayer player){
+        if (player != null) {
+            String dat = player.serializeNBT().toString();
             try {
                 Gson gson = new Gson();
-                JsonObject jsonObject = gson.fromJson(dat, JsonObject.class);
-                JsonElement jsonElement = null;
-                for (CustomDataTypes_InfoConfig_Key_AK cak : caks) {
-                    if (cak.getType() == 0) {
-                        if (jsonElement == null) {
-                            jsonElement = jsonObject.get(cak.getKey());
-                        } else {
-                            if (jsonElement.isJsonObject()) {
-                                JsonObject object = jsonElement.getAsJsonObject();
-                                jsonElement = object.get(cak.getKey());
-                            }
-                        }
-                    } else if (cak.getType() == 1) {
-                        if (jsonElement != null) {
-                            if (jsonElement.isJsonArray()) {
-                                JsonArray array = jsonElement.getAsJsonArray();
-                                for (JsonElement element : array) {
-                                    JsonObject o = element.getAsJsonObject();
-                                    if (cak.getNeedValue().equals(o.get(cak.getNeedKey()).getAsString())) {
-                                        jsonElement = o.get(cak.getKey());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (jsonElement != null) {
-                    return FormattedData.numberToString(jsonElement.getAsString());
-                }
+                return gson.fromJson(dat, JsonObject.class);
             }catch(Exception e){
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
-        return "Invalid index";
-    }
-    public static String getPlayerNbtDat(String str){
-        if (clientPlayer != null) {
-            String dat = clientPlayer.serializeNBT().toString();
-            try {
-                Gson gson = new Gson();
-                JsonObject jsonObject = gson.fromJson(dat, JsonObject.class);
-                return FormattedData.numberToString(jsonObject.get(str).getAsString());
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return "error";
+        return null;
     }
     public static String getPlayerDat(int type, String[] str){
         if (clientPlayer != null) {
@@ -113,13 +75,21 @@ public class PlayerInfo {
                     }
                 }
             }catch(Exception e){
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
         return "Invalid index";
     }
     public static String getPlayerDat(String s){
-        return _FormatToString.numberToString(getPlayerData(s));
+        if (s.endsWith(".js")) {
+            LocalPlayer localPlayer = Minecraft.getInstance().player;
+            return EasyJS.creat()
+                    .addParameter("player",localPlayer)
+                    .addParameter("playerData",getPlayerNbtDat(localPlayer))
+                    .runFile(Configs.ConfigDir_JS+s).toString();
+        } else {
+            return _FormatToString.numberToString(getPlayerData(s));
+        }
     }
     private static Number getPlayerData(String string) {
         LocalPlayer player = Minecraft.getInstance().player;

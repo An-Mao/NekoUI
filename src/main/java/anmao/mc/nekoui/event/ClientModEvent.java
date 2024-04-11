@@ -18,7 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientModEvent {
     @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent event){
-        if (Config.configData.isRenderScreenElement()){
+        if (Config.INSTANCE.getDatas().isRenderScreenElement()){
             event.registerAboveAll(ScreenElementGui.id, ScreenElementGui.UI);
         }
         if (HotBarConfig.hotBarData.isEnable()){
@@ -34,7 +34,9 @@ public class ClientModEvent {
     }
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event){
-        event.register(KeyBinding.OPEN_MENU);
-        event.register(KeyBinding.OPEN_SET_MENU);
+        if (Config.INSTANCE.getDatas().isMenu()){
+            event.register(KeyBinding.OPEN_MENU);
+            event.register(KeyBinding.OPEN_SET_MENU);
+        }
     }
 }

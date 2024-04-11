@@ -17,12 +17,15 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.AxisAngle4d;
 import org.joml.Quaternionf;
 
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class MobDirectionGui extends MobDirectionConfig{
     public static final String id = "mob_direction";
     private static final double additionalAngle = -135.0 * Math.PI / 180.0;

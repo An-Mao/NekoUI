@@ -3,7 +3,7 @@ package anmao.mc.nekoui.event;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.Config;
 import anmao.mc.nekoui.config.hide$hud.HideGuiConfig;
-import anmao.mc.nekoui.lib.am._Sys;
+import anmao.mc.nekoui.gui.HotBarSys;
 import anmao.mc.nekoui.screen.MenuScreen;
 import anmao.mc.nekoui.screen.SetMenuScreen;
 import anmao.mc.nekoui.util.KeyBinding;
@@ -24,7 +24,7 @@ public class ClientEvent {
     private static final Logger LOGGER = LogUtils.getLogger();
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Pre event) {
-        if (Config.configData.isOutputGuiId()) {
+        if (Config.INSTANCE.getDatas().isOutputGuiId()) {
             LOGGER.info("Render Gui => " + event.getOverlay().id().toString());
         }
         if (HideGuiConfig.guiList.contains(event.getOverlay().id().toString())) {
@@ -43,7 +43,7 @@ public class ClientEvent {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             if (player.isAlive()) {
-                _Sys.setNowTime();
+                HotBarSys.setNowTime();
             }
         }
     }
@@ -55,25 +55,27 @@ public class ClientEvent {
             if (player.isAlive()) {
                 //GLFW.GLFW_KEY_1
                 if (event.getKey() >= 49 && event.getKey() <= 57) {
-                    _Sys.setNowTime();
+                    HotBarSys.setNowTime();
                 }
-                if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()){
-                    Screen screen = Minecraft.getInstance().screen;
-                    if (event.getAction() == 0){
-                        if (screen instanceof MenuScreen menuScreen){
-                            menuScreen.onClose();
-                        }
-                    }else if (event.getAction() == 1){
-                        if (screen == null) {
-                            Minecraft.getInstance().setScreen(new MenuScreen());
+                if (Config.INSTANCE.getDatas().isMenu()) {
+                    if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
+                        Screen screen = Minecraft.getInstance().screen;
+                        if (event.getAction() == 0) {
+                            if (screen instanceof MenuScreen menuScreen) {
+                                menuScreen.onClose();
+                            }
+                        } else if (event.getAction() == 1) {
+                            if (screen == null) {
+                                Minecraft.getInstance().setScreen(new MenuScreen());
+                            }
                         }
                     }
-                }
-                if (event.getKey() == KeyBinding.OPEN_SET_MENU.getKey().getValue()){
-                    Screen screen = Minecraft.getInstance().screen;
-                    if (event.getAction() == 1){
-                        if (screen == null) {
-                            Minecraft.getInstance().setScreen(new SetMenuScreen());
+                    if (event.getKey() == KeyBinding.OPEN_SET_MENU.getKey().getValue()) {
+                        Screen screen = Minecraft.getInstance().screen;
+                        if (event.getAction() == 1) {
+                            if (screen == null) {
+                                Minecraft.getInstance().setScreen(new SetMenuScreen());
+                            }
                         }
                     }
                 }

@@ -1,6 +1,9 @@
 package anmao.mc.nekoui.screen;
 
-import anmao.mc.amlib.screen.widget.*;
+import anmao.mc.amlib.screen.widget.DT_ListBoxData;
+import anmao.mc.amlib.screen.widget.DT_XYWH;
+import anmao.mc.amlib.screen.widget.DropDownListBox;
+import anmao.mc.amlib.screen.widget.SquareImageButton;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
 import com.google.gson.Gson;
@@ -127,13 +130,16 @@ public class SetMenuScreen extends Screen {
     }
     public void saveChange(){
         Gson gson = new Gson();
+        /*
         Map<Integer, MenuData> resultMap = new HashMap<>();
         int index = 1;
         for (Map.Entry<String, MenuData> entry : md.entrySet()) {
             resultMap.put(index, entry.getValue());
             index++;
         }
-        String jsonString = gson.toJson(resultMap);
+
+         */
+        String jsonString = gson.toJson(md);
         try {
             FileWriter writer = new FileWriter(MenuConfig.file);
 
@@ -156,13 +162,17 @@ public class SetMenuScreen extends Screen {
         }
     }
     public void setKeyListen(){
-        this.KeyListen = true;
+        this.KeyListen = !this.KeyListen;
     }
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
         if (KeyListen){
             this.KeyListen = false;
-            this.valueEditBox.setValue(String.valueOf(pKeyCode));
+            String old = this.valueEditBox.getValue();
+            if (!old.isEmpty()){
+                old += " ";
+            }
+            this.valueEditBox.setValue(old+pKeyCode);
             return true;
         }
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);

@@ -16,7 +16,7 @@
   "screen.nekoui.set_menu.types.message": "message",
   "screen.nekoui.set_menu.types.command": "command",
   "screen.nekoui.set_menu.types.button": "button",
-  "screen.nekoui.set_menu.label.select": "button",
+  "screen.nekoui.set_menu.label.select": "select",
   "screen.nekoui.set_menu.label.id": "id",
   "screen.nekoui.set_menu.label.name": "name",
   "screen.nekoui.set_menu.label.type": "type",

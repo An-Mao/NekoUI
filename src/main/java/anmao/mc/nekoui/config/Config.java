@@ -1,41 +1,22 @@
 package anmao.mc.nekoui.config;
 
+import anmao.mc.amlib.json.JsonConfig;
 import anmao.mc.nekoui.NekoUI;
-import com.google.gson.Gson;
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
-
-import java.io.*;
-
-public class Config {
-    private static final Logger LOGGER = LogUtils.getLogger();
+import com.google.gson.reflect.TypeToken;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+@OnlyIn(Dist.CLIENT)
+public class Config extends JsonConfig<ConfigData> {
     private static final String configFile = NekoUI.ConfigDir +"config.json";
 
-    public static ConfigData configData;
-    public static void init(){
-        File file = new File(configFile);
-        if (!file.exists()){
-            reset();
-        }
-        load();
-    }
-    private static void reset(){
-        try (FileWriter writer = new FileWriter(configFile)) {
-            writer.write("""
-                    {
-                      "renderScreenElement": true,
-                      "outputGuiId": false
-                    }""");
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        }
-    }
-    private static void load(){
-        Gson gson = new Gson();
-        try (Reader reader = new FileReader(configFile)) {
-            configData = gson.fromJson(reader, ConfigData.class);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-        }
+    public static final Config INSTANCE = new Config();
+
+    public Config() {
+        super(configFile, """
+                {
+                  "renderScreenElement": true,
+                  "outputGuiId": false,
+                  "menu":true
+                }""", new TypeToken<>(){});
     }
 }

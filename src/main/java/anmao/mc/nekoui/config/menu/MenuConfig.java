@@ -15,59 +15,64 @@ public class MenuConfig extends JsonConfig<Map<String, MenuData>> {
         super(file, """
                 {
                   "1": {
-                    "name": "快速切换1",
+                    "name": "slot?0",
                     "type": 2,
                     "value": "49"
                   },
                   "2": {
-                    "name": "快速切换2",
+                    "name": "slot?1",
                     "type": 2,
                     "value": "50"
                   },
                   "3": {
-                    "name": "快速切换3",
+                    "name": "slot?2",
                     "type": 2,
                     "value": "51"
                   },
                   "4": {
-                    "name": "快速切换4",
+                    "name": "slot?3",
                     "type": 2,
                     "value": "52"
                   },
                   "5": {
-                    "name": "快速切换5",
+                    "name": "slot?4",
                     "type": 2,
                     "value": "53"
                   },
                   "6": {
-                    "name": "快速切换6",
+                    "name": "slot?5",
                     "type": 2,
                     "value": "54"
                   },
                   "7": {
-                    "name": "快速切换7",
+                    "name": "slot?6",
                     "type": 2,
                     "value": "55"
                   },
                   "8": {
-                    "name": "快速切换8",
+                    "name": "slot?7",
                     "type": 2,
                     "value": "56"
                   },
                   "9": {
-                    "name": "快速切换9",
+                    "name": "slot?8",
                     "type": 2,
                     "value": "57"
                   },
                   "10": {
-                    "name": "发送普通消息",
+                    "name": "send message",
                     "type": 0,
                     "value": "test"
                   },
                   "11": {
-                    "name": "发送指令消息",
+                    "name": "send command",
                     "type": 1,
                     "value": "time set day"
+                  },
+                  "12": {
+                    "name": "item?minecraft:apple",
+                    "type": 1,
+                    "value": "time set night"
                   }
                 }""", new TypeToken<>(){});
     }
