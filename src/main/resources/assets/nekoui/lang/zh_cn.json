@@ -1,0 +1,23 @@
+{
+  "key.category.nekoui.mc": "Neko UI",
+  "key.nekoui.open_menu": "打开菜单",
+  "key.nekoui.open_set_menu": "打开菜单设置",
+  "screen.nekoui.menu.title": "菜单",
+  "screen.nekoui.set_menu.title": "菜单设置",
+  "screen.nekoui.set_menu.select_id": "选择一个ID",
+  "screen.nekoui.set_menu.id_input": "输入ID",
+  "screen.nekoui.set_menu.name_input": "输入名称",
+  "screen.nekoui.set_menu.value_input": "输入值",
+  "screen.nekoui.set_menu.type": "类型",
+  "screen.nekoui.set_menu.key": "按键",
+  "screen.nekoui.set_menu.save": "保存",
+  "screen.nekoui.set_menu.delete": "删除",
+  "screen.nekoui.set_menu.types.message": "消息",
+  "screen.nekoui.set_menu.types.command": "指令",
+  "screen.nekoui.set_menu.types.button": "按键",
+  "screen.nekoui.set_menu.label.select": "选择",
+  "screen.nekoui.set_menu.label.id": "唯一ID",
+  "screen.nekoui.set_menu.label.name": "显示名称",
+  "screen.nekoui.set_menu.label.type": "操作类型",
+  "screen.nekoui.set_menu.label.value": "操作变量"
+}

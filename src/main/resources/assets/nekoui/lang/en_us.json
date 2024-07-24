@@ -1,0 +1,25 @@
+{
+
+  "key.category.nekoui.mc": "Neko UI",
+  "key.nekoui.open_menu": "Open Menu",
+  "key.nekoui.open_set_menu": "Open Set Menu",
+  "screen.nekoui.menu.title": "menu",
+  "screen.nekoui.set_menu.title": "Set Menu",
+  "screen.nekoui.set_menu.select_id": "select id",
+  "screen.nekoui.set_menu.id_input": "input id",
+  "screen.nekoui.set_menu.name_input": "input name",
+  "screen.nekoui.set_menu.value_input": "input value",
+  "screen.nekoui.set_menu.type": "type",
+  "screen.nekoui.set_menu.key": "key",
+  "screen.nekoui.set_menu.save": "save",
+  "screen.nekoui.set_menu.delete": "delete",
+  "screen.nekoui.set_menu.types.message": "message",
+  "screen.nekoui.set_menu.types.command": "command",
+  "screen.nekoui.set_menu.types.button": "button",
+  "screen.nekoui.set_menu.label.select": "select",
+  "screen.nekoui.set_menu.label.id": "id",
+  "screen.nekoui.set_menu.label.name": "name",
+  "screen.nekoui.set_menu.label.type": "type",
+  "screen.nekoui.set_menu.label.value": "value",
+  "screen.nekoui.setting.title": "Setting"
+}
