@@ -3,7 +3,8 @@ package anmao.mc.nekoui.event;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.Config;
 import anmao.mc.nekoui.config.hide$hud.HideGuiConfig;
-import anmao.mc.nekoui.gui.HotBarSys;
+import anmao.mc.nekoui.gui.hot$bar.HotBarSys;
+import anmao.mc.nekoui.render.MobHealthBar;
 import anmao.mc.nekoui.screen.MenuScreen;
 import anmao.mc.nekoui.screen.SetMenuScreen;
 import anmao.mc.nekoui.util.KeyBinding;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -82,5 +84,8 @@ public class ClientEvent {
             }
         }
     }
-
+    @SubscribeEvent
+    public static void onNameTagRender(RenderNameTagEvent event){
+        MobHealthBar.render(event.getEntity(),event.getPoseStack(),event.getPackedLight());
+    }
 }

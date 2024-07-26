@@ -4,7 +4,7 @@ import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.Config;
 import anmao.mc.nekoui.config.hotbar.HotBarConfig;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
-import anmao.mc.nekoui.gui.HotBarGui;
+import anmao.mc.nekoui.gui.hot$bar.HotBarGui;
 import anmao.mc.nekoui.gui.MobDirectionGui;
 import anmao.mc.nekoui.gui.ScreenElementGui;
 import anmao.mc.nekoui.util.KeyBinding;
@@ -21,10 +21,10 @@ public class ClientModEvent {
         if (Config.INSTANCE.getDatas().isRenderScreenElement()){
             event.registerAboveAll(ScreenElementGui.id, ScreenElementGui.UI);
         }
-        if (HotBarConfig.hotBarData.isEnable()){
+        if (HotBarConfig.INSTANCE.getDatas().isEnable()){
             event.registerAboveAll(HotBarGui.id, HotBarGui.UI);
         }
-        if (MobDirectionConfig.mobDirectionConfig.isEnable()) {
+        if (MobDirectionConfig.I.getDatas().isEnable()) {
             event.registerAboveAll(MobDirectionGui.id, MobDirectionGui.GUI);
         }
     }

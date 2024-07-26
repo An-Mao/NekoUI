@@ -1,4 +1,4 @@
-package anmao.mc.nekoui.gui;
+package anmao.mc.nekoui.gui.hot$bar;
 
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.hotbar.HotBarConfig;
@@ -43,16 +43,15 @@ public class HotBarGui extends HotBarConfig{
     private static final int imageHeight = 16;
     private static final int imageWidth = 16;
     private static int startX,startY;
-    private static boolean show = true;
     private static void addSpace(){
-        switch (HotBarConfig.hotBarData.getDirection()){
-            case "horizontal" -> startX += hotBarData.getSpace();
-            case "vertical" -> startY += hotBarData.getSpace();
+        switch (INSTANCE.getDatas().getDirection()){
+            case "horizontal" -> startX += INSTANCE.getDatas().getSpace();
+            case "vertical" -> startY += INSTANCE.getDatas().getSpace();
         }
     }
 
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)->{
-        if (HotBarSys.isOutTime() && hotBarData.isDynamicDisplay()) {
+        if (HotBarSys.isOutTime() && INSTANCE.getDatas().isDynamicDisplay()) {
             return;
         }
         Level clientLevel = Minecraft.getInstance().level;
@@ -60,18 +59,18 @@ public class HotBarGui extends HotBarConfig{
         if (clientLevel != null && localPlayer != null) {
             if (clientLevel.isClientSide){
 
-                startX = switch (hotBarData.getStartX()) {
+                startX = switch (INSTANCE.getDatas().getStartX()) {
                     default -> 0;
                     case "center" -> screenWidth / 2;
                     case "right" -> screenWidth;
                 };
-                startX += hotBarData.getX();
-                startY = switch (hotBarData.getStartY()) {
+                startX += INSTANCE.getDatas().getX();
+                startY = switch (INSTANCE.getDatas().getStartY()) {
                     default -> 0;
                     case "center" -> screenHeight / 2;
                     case "bottom" -> screenHeight;
                 };
-                startY += hotBarData.getY();
+                startY += INSTANCE.getDatas().getY();
 
                 Inventory opi = localPlayer.getInventory();
                 NonNullList<ItemStack> oItems = opi.items;
@@ -92,7 +91,8 @@ public class HotBarGui extends HotBarConfig{
                         }else {
                             guiGraphics.blit(itemSlot,startX,startY,0,0, imageWidth, imageHeight, imageWidth, imageHeight);
                         }
-                        ri(guiGraphics,itemStack);
+                        //ri(guiGraphics,itemStack);
+                        guiGraphics.renderItem(itemStack,startX,startY);
                         renderItemCountAndDamage(guiGraphics,itemStack);
                         i++;
                     }else {
@@ -111,21 +111,7 @@ public class HotBarGui extends HotBarConfig{
         itemSelectIndex = tick / 40;
     }
     private static void renderItemCountAndDamage(GuiGraphics guiGraphics,ItemStack itemStack){
-        if (show){
-            guiGraphics.renderItemDecorations(Minecraft.getInstance().font, itemStack,startX,startY);
-        }else {
-            int count = itemStack.getCount();
-            if (count > 1 && count < 10) {
-                guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 10, startY + 8, color);
-            } else if (count >= 10) {
-                guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(count), startX + 8, startY + 8, color);
-            } else {
-                if (itemStack.getDamageValue() > 0) {
-                    float d = (1 - (float) itemStack.getDamageValue() / itemStack.getMaxDamage()) * 100F;
-                    guiGraphics.drawString(Minecraft.getInstance().font, String.format("%.0f", d) + "%", startX + 1, startY + 8, color);
-                }
-            }
-        }
+        guiGraphics.renderItemDecorations(Minecraft.getInstance().font, itemStack,startX,startY);
     }
     private static void ri(GuiGraphics guiGraphics, ItemStack stack) {
         if (!stack.isEmpty()) {

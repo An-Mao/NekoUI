@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "anmao.mc.nekoui.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.nekoui.refmap.json",
+  "mixins": [
+    "MinecraftMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

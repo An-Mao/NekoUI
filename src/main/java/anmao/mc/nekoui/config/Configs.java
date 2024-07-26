@@ -1,6 +1,10 @@
 package anmao.mc.nekoui.config;
 
 import anmao.mc.amlib.system._File;
+import anmao.mc.nekoui.config.hide$hud.HideGuiConfig;
+import anmao.mc.nekoui.config.hotbar.HotBarConfig;
+import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
+import anmao.mc.nekoui.config.screen$element.ScreenElementConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -11,5 +15,6 @@ public class Configs {
     static {
         _File.checkAndCreateDir(ConfigDir);
         _File.checkAndCreateDir(ConfigDir_JS);
+        HideGuiConfig.init();
     }
 }

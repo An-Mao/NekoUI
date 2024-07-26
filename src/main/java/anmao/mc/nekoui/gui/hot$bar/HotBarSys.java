@@ -1,4 +1,4 @@
-package anmao.mc.nekoui.gui;
+package anmao.mc.nekoui.gui.hot$bar;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

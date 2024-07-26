@@ -5,6 +5,7 @@ import anmao.mc.amlib.system.KeySimulate;
 import anmao.mc.amlib.system._System;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
+import anmao.mc.nekoui.config.menu.MenuScreenConfig;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.KeyboardHandler;
@@ -44,10 +45,10 @@ public class MenuScreen extends Screen {
     private void addMenu(){
         List<DT_ListBoxData> data = new ArrayList<>();
         MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.getName()),s,this::run)));
-        circularMenu = new CircularMenu(width / 2 , height / 2,width,height,9,25,90,Component.empty(),data);
+        circularMenu = new CircularMenu(width / 2 , height / 2,width,height, MenuScreenConfig.INSTANCE.getDatas().sectors,MenuScreenConfig.INSTANCE.getDatas().innerRadius,MenuScreenConfig.INSTANCE.getDatas().outerRadius,Component.empty(),data);
         circularMenu.setFlipMode(CircularMenu.FlipMode.button);
-        circularMenu.setBgSelectColor(0x50ffffff);
-        circularMenu.setBgUsualColor(0x70000000);
+        circularMenu.setBgSelectColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
+        circularMenu.setBgUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
         addRenderableWidget(circularMenu);
     }
     public void run(Object v){
@@ -63,7 +64,7 @@ public class MenuScreen extends Screen {
                         case 2 -> {
                             String[] keyA = menuData.getValue().split(" ");
                             int[] keys = new int[keyA.length];
-                            System.out.println(menuData.getValue()+ "  KeyA:"+Arrays.toString(keyA));
+                            //System.out.println(menuData.getValue()+ "  KeyA:"+Arrays.toString(keyA));
                             for (int i = 0; i < keyA.length;i++){
                                 keys[i] = Integer.parseInt(keyA[i]);
                             }

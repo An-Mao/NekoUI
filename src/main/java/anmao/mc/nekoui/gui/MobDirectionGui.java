@@ -30,10 +30,6 @@ public class MobDirectionGui extends MobDirectionConfig{
     public static final String id = "mob_direction";
     private static final double additionalAngle = -135.0 * Math.PI / 180.0;
     private static final ResourceLocation MOB_POI = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/poi.png");
-    private static final ResourceLocation MOB_PLAYER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/player.png");
-    private static final ResourceLocation MOB_ANIMAL = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/animal.png");
-    private static final ResourceLocation MOB_MONSTER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/monster.png");
-    private static final ResourceLocation MOB_OTHER = new ResourceLocation(NekoUI.MOD_ID,"textures/ui/info/other.png");
 
     public static Vec3 v(Vec3 pos,Vec3 focus, double r){
         Vec3 v = pos.subtract(focus);
@@ -47,7 +43,7 @@ public class MobDirectionGui extends MobDirectionConfig{
             if (olevel.isClientSide){
                 int startX = screenWidth / 2;
                 int startY = screenHeight / 2;
-                List<Mob> mobs = olevel.getEntities(EntityTypeTest.forClass(Mob.class), localPlayer.getBoundingBox().inflate(mobDirectionConfig.getPoiRadius()), Entity::isAlive);
+                List<Mob> mobs = olevel.getEntities(EntityTypeTest.forClass(Mob.class), localPlayer.getBoundingBox().inflate(I.getDatas().getPoiRadius()), Entity::isAlive);
                 Vec3 playerForward = localPlayer.getForward();
                 Vec3 playerPosition = localPlayer.position();
                 for (Mob mob : mobs){
@@ -62,18 +58,18 @@ public class MobDirectionGui extends MobDirectionConfig{
                         if (g < -Math.PI){
                             g = g + _MathCDT.TWICE_PI;
                         }
-                        int ox = (int) ( mobDirectionConfig.getPoiShowRadius() * Math.cos(g));
-                        int oz = (int) ( mobDirectionConfig.getPoiShowRadius() * Math.sin(g));
+                        int ox = (int) ( I.getDatas().getPoiShowRadius() * Math.cos(g));
+                        int oz = (int) ( I.getDatas().getPoiShowRadius() * Math.sin(g));
 
                         g += additionalAngle;
                         int imageSize;
-                        if (mobDirectionConfig.isDynamicDisplay()) {
+                        if (I.getDatas().isDynamicDisplay()) {
                             double distance = playerPosition.distanceTo(mobPosition);
-                            distance *= mobDirectionConfig.getRatio();
-                            imageSize = (int) (mobDirectionConfig.getPoiSize() + distance);
-                            imageSize = Mth.clamp(imageSize,mobDirectionConfig.getPoiMinSize(), mobDirectionConfig.getPoiMaxSize());
+                            distance *= I.getDatas().getRatio();
+                            imageSize = (int) (I.getDatas().getPoiSize() + distance);
+                            imageSize = Mth.clamp(imageSize,I.getDatas().getPoiMinSize(), I.getDatas().getPoiMaxSize());
                         }else {
-                            imageSize = mobDirectionConfig.getPoiSize();
+                            imageSize = I.getDatas().getPoiSize();
                         }
                         PoseStack pose = guiGraphics.pose();
                         pose.pushPose();

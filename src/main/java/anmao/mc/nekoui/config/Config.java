@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class Config extends JsonConfig<ConfigData> {
-    private static final String configFile = NekoUI.ConfigDir +"config.json";
+    private static final String configFile = Configs.ConfigDir +"config.json";
 
     public static final Config INSTANCE = new Config();
 
@@ -16,6 +16,7 @@ public class Config extends JsonConfig<ConfigData> {
                 {
                   "renderScreenElement": true,
                   "outputGuiId": false,
+                  "outputScreenPathName": false,
                   "menu":true
                 }""", new TypeToken<>(){});
     }

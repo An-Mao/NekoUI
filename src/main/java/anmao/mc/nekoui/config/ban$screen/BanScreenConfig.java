@@ -1,6 +1,5 @@
-package anmao.mc.nekoui.config.hide$hud;
+package anmao.mc.nekoui.config.ban$screen;
 
-import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,10 +13,13 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class HideGuiConfig {
+public class BanScreenConfig  {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String configFile = Configs.ConfigDir +"hide-gui.json";
-    public static List<String> guiList;
+    private static final String configFile = Configs.ConfigDir +"ban-screen.json";
+    public static List<String> screens;
+    static {
+        init();
+    }
     public static void init(){
         File file = new File(configFile);
         if (!file.exists()){
@@ -29,12 +31,7 @@ public class HideGuiConfig {
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write("""
                     [
-                      "minecraft:experience_bar",
-                      "minecraft:hotbar",
-                      "minecraft:player_health",
-                      "minecraft:food_level",
-                      "minecraft:armor_level",
-                      "minecraft:air_level"
+                      "something"
                     ]""");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
@@ -44,9 +41,12 @@ public class HideGuiConfig {
         Gson gson = new Gson();
         try (Reader reader = new FileReader(configFile)) {
             Type listType = new TypeToken<List<String>>(){}.getType();
-            guiList = gson.fromJson(reader, listType);
+            screens = gson.fromJson(reader, listType);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
+    }
+    public static boolean isBan(String s){
+        return screens != null && screens.contains(s);
     }
 }

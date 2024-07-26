@@ -3,7 +3,7 @@ package anmao.mc.nekoui.gui;
 import anmao.mc.amlib.component.ComponentStyle;
 import anmao.mc.amlib.format._FormatToString;
 import anmao.mc.nekoui.config.screen$element.ScreenElementConfig;
-import anmao.mc.nekoui.lib.player.PlayerInfo;
+import anmao.mc.nekoui.player.PlayerInfo;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,19 +17,10 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 public class ScreenElementGui extends ScreenElementConfig {
     public static final String id = "screen_element";
     public static final IGuiOverlay UI = ((gui, guiGraphics, partialTick, screenWidth, screenHeight)-> {
-        /*
-        startX = CC.hudInfoX;
-        startY = screenHeight - CC.hudInfoY;
-        if (CC.hudItemMode && CC.hudItemDynamicDisplay){
-            if (_Sys.isOutTime() ){
-                startY += CC.hudItemY;
-            }
-        }
-         */
         Level clientLevel = Minecraft.getInstance().level;
         LocalPlayer localPlayer = Minecraft.getInstance().player;
         if (clientLevel != null && clientLevel.isClientSide && localPlayer != null) {
-            screenElements.forEach((s, screenJsonData) -> {
+            I.getDatas().forEach((s, screenJsonData) -> {
                 int startX = switch (screenJsonData.getX()) {
                     default -> 0;
                     case "center" -> screenWidth / 2;
