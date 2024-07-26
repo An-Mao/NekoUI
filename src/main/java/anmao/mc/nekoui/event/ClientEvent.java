@@ -5,7 +5,7 @@ import anmao.mc.nekoui.config.Config;
 import anmao.mc.nekoui.gui.hot$bar.HotBarSys;
 import anmao.mc.nekoui.render.MobHealthBar;
 import anmao.mc.nekoui.screen.MenuScreen;
-import anmao.mc.nekoui.screen.SetMenuScreen;
+import anmao.mc.nekoui.screen.SettingScreen;
 import anmao.mc.nekoui.util.KeyBinding;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -59,7 +59,7 @@ public class ClientEvent {
                         Screen screen = Minecraft.getInstance().screen;
                         if (event.getAction() == 1) {
                             if (screen == null) {
-                                Minecraft.getInstance().setScreen(new SetMenuScreen());
+                                Minecraft.getInstance().setScreen(new SettingScreen());
                             }
                         }
                     }

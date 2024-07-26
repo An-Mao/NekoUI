@@ -1,18 +1,47 @@
 package anmao.mc.nekoui.config.menu;
 
-import anmao.dev.easy_json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.reflect.TypeToken;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class MenuConfig extends JsonConfig<Map<String, MenuData>> {
-    public static final String file = Configs.ConfigDir+"menu.json";
+    public static final String oldfile = Configs.ConfigDir+"menu.json";
+    public static final String file = Configs.ConfigDir+"projects.json";
     public static final MenuConfig INSTANCE = new MenuConfig();
     public MenuConfig() {
-        super(file, """
+        super(file, defaultConfig(), new TypeToken<>(){});
+    }
+    public void setData(Map<String, MenuData> data){
+        this.datas = data;
+    }
+
+    public static String defaultConfig() {
+        File file = new File(oldfile);
+        if (file.exists()) {
+            Path path = Paths.get(oldfile);
+            String content;
+            try {
+                content = new String(Files.readAllBytes(path));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (!file.renameTo(new File( Configs.ConfigDir+"menu.del.json"))){
+                if (!file.delete()){
+                    throw new RuntimeException("delete old file error");
+                }
+            }
+            return content;
+        }
+        return """
                 {
                   "1": {
                     "name": "slot?0",
@@ -74,9 +103,6 @@ public class MenuConfig extends JsonConfig<Map<String, MenuData>> {
                     "type": 1,
                     "value": "time set night"
                   }
-                }""", new TypeToken<>(){});
-    }
-    public void setData(Map<String, MenuData> data){
-        this.datas = data;
+                }""";
     }
 }

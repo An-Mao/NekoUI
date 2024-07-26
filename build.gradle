@@ -131,7 +131,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     //jarJar(group:'anmao.dev', name:'easy_json', version:'[1.0.0,)')
-    jarJar(group:'anmao.mc', name: 'amlib', version: '[0.1.1,)')
+    jarJar(group:'anmao.mc', name: 'amlib', version: '[0.1.5,)')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

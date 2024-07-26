@@ -1,4 +1,4 @@
-package anmao.mc.nekoui.screen;
+package anmao.mc.nekoui.screen.widget;
 
 import anmao.mc.amlib.screen.widget.CircularWidget;
 import anmao.mc.amlib.screen.widget.DT_ListBoxData;
@@ -42,6 +42,12 @@ public class CircularMenu extends CircularWidget {
         super(x, y, w, h, sectors, innerRadius, outerRadius, highlightColor, normalColor, message, data);
     }
 
+    public void setData(List<DT_ListBoxData> data){
+        this.data = data;
+    }
+
+
+
     @Override
     protected void drawName(GuiGraphics guiGraphics, double rad, String name, int color, float size) {
         PoseStack pose = guiGraphics.pose();
@@ -65,8 +71,7 @@ public class CircularMenu extends CircularWidget {
                 }
                 case "item" -> {
                     Item item = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(parts[1]));
-                    guiGraphics.renderItem(new ItemStack(item),-8,-8);
-
+                    guiGraphics.renderItem(new ItemStack(item), -8, -8);
                 }
                 case "image" -> {
                     ResourceLocation res = ResourceLocation.tryParse(parts[1]);

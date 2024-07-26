@@ -1,11 +1,17 @@
 package anmao.mc.nekoui.screen;
 
+import anmao.dev.core.array.Array3D;
+import anmao.dev.core.system.KeySimulate;
+import anmao.dev.core.system._System;
 import anmao.mc.amlib.screen.widget.DT_ListBoxData;
-import anmao.mc.amlib.system.KeySimulate;
-import anmao.mc.amlib.system._System;
+import anmao.mc.nekoui.config.Config;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
 import anmao.mc.nekoui.config.menu.MenuScreenConfig;
+import anmao.mc.nekoui.config.page.PageConfig;
+import anmao.mc.nekoui.config.page.PageData;
+import anmao.mc.nekoui.screen.widget.CircularMenu;
+import anmao.mc.nekoui.screen.widget.CircularNewMenu;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,36 +23,53 @@ import org.slf4j.Logger;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class MenuScreen extends Screen {
     protected static final Logger LOGGER = LogUtils.getLogger();
     private CircularMenu circularMenu;
+    private CircularNewMenu circularNewMenu;
     public MenuScreen() {
         super(Component.translatable("screen.nekoui.menu.title"));
     }
-
     @Override
     protected void init() {
         super.init();
         addMenu();
     }
-
-    @Override
-    public void resize(Minecraft pMinecraft, int pWidth, int pHeight) {
-        super.resize(pMinecraft, pWidth, pHeight);
-    }
-
     private void addMenu(){
-        List<DT_ListBoxData> data = new ArrayList<>();
+        if (Config.INSTANCE.getDatas().isAutoPage()) {
+            List<DT_ListBoxData> data = new ArrayList<>();
+            MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.getName()), s, this::run)));
+            circularMenu = new CircularMenu(width / 2, height / 2, width, height, MenuScreenConfig.INSTANCE.getDatas().sectors, MenuScreenConfig.INSTANCE.getDatas().innerRadius, MenuScreenConfig.INSTANCE.getDatas().outerRadius, Component.empty(), data);
+            circularMenu.setFlipMode(CircularMenu.FlipMode.button);
+            circularMenu.setBgSelectColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
+            circularMenu.setBgUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
+            addRenderableWidget(circularMenu);
+        }else {
+            Array3D<String, PageData,Map<String,DT_ListBoxData>> array3D = new Array3D<>();
 
-        MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.getName()),s,this::run)));
-        circularMenu = new CircularMenu(width / 2 , height / 2,width,height, MenuScreenConfig.INSTANCE.getDatas().sectors,MenuScreenConfig.INSTANCE.getDatas().innerRadius,MenuScreenConfig.INSTANCE.getDatas().outerRadius,Component.empty(),data);
-        circularMenu.setFlipMode(CircularMenu.FlipMode.button);
-        circularMenu.setBgSelectColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
-        circularMenu.setBgUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
-        addRenderableWidget(circularMenu);
+            PageConfig.INSTANCE.getDatas().forEach((s, pageData) -> {
+                Map<String,DT_ListBoxData> data = new HashMap<>();
+                pageData.getProjects().forEach((s1, projectData) -> {
+                    MenuData menuData = MenuConfig.INSTANCE.getDatas().get(projectData.key);
+                    String name = "";
+                    if (menuData != null) {
+                        name = menuData.getName();
+                    }
+                    data.put(s1,new DT_ListBoxData(Component.literal(name), projectData.key, this::run));
+                });
+                array3D.add(s,pageData,data);
+            });
+
+            circularNewMenu = new CircularNewMenu(width / 2, height / 2, width, height, Component.empty(),array3D);
+            circularNewMenu.setFlipMode(CircularNewMenu.FlipMode.button);
+            addRenderableWidget(circularNewMenu);
+
+        }
     }
     public void run(Object v){
         if (v instanceof String s){
@@ -108,9 +131,16 @@ public class MenuScreen extends Screen {
     }
     @Override
     public void onClose() {
-        DT_ListBoxData dtListBoxData = circularMenu.getData();
-        if (dtListBoxData != null){
-            dtListBoxData.OnPress(dtListBoxData.getValue());
+        if (Config.INSTANCE.getDatas().isAutoPage()) {
+            DT_ListBoxData dtListBoxData = circularMenu.getData();
+            if (dtListBoxData != null) {
+                dtListBoxData.OnPress(dtListBoxData.getValue());
+            }
+        }else {
+            DT_ListBoxData dtListBoxData = circularNewMenu.getData();
+            if (dtListBoxData != null) {
+                dtListBoxData.OnPress(dtListBoxData.getValue());
+            }
         }
         super.onClose();
     }

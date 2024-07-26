@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config;
 
-import anmao.mc.amlib.system._File;
+import anmao.dev.core.system._File;
 import anmao.mc.nekoui.config.hide$hud.HideGuiConfig;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;

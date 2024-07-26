@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.gui;
 
-import anmao.mc.amlib.math._MathCDT;
+import anmao.dev.core.math._MathCDT;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
 import com.mojang.blaze3d.vertex.PoseStack;

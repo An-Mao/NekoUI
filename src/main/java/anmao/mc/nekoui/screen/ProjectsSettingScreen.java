@@ -6,12 +6,12 @@ import anmao.mc.amlib.screen.widget.DropDownListBox;
 import anmao.mc.amlib.screen.widget.SquareImageButton;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
+import anmao.mc.nekoui.screen.widget.Label;
 import com.google.gson.Gson;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class SetMenuScreen extends Screen {
+public class ProjectsSettingScreen extends ScreenCore {
     protected final Logger LOGGER = LogUtils.getLogger();
     protected Map<String,MenuData> md = null;
     public boolean KeyListen;
     public EditBox idEditBox,nameEditBox,valueEditBox;
     public DropDownListBox runType;
-    public SetMenuScreen() {
-        super(Component.translatable("screen.nekoui.set_menu.title"));
+    public ProjectsSettingScreen() {
+        super("screen.nekoui.projects_setting");
     }
 
     @Override
@@ -90,10 +90,6 @@ public class SetMenuScreen extends Screen {
         delete.setTextUsualColor(lt);
         addRenderableWidget(delete);
     }
-    public Component getComponent(String s){
-
-        return Component.translatable("screen.nekoui.set_menu."+s);
-    }
     public void delete(){
         String id = idEditBox.getValue();
         if (!id.isEmpty()){
@@ -101,7 +97,7 @@ public class SetMenuScreen extends Screen {
                 md.remove(id);
             }
         }
-        Minecraft.getInstance().setScreen(new SetMenuScreen());
+        Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
     }
     public void saveConfig(){
         String id = idEditBox.getValue();
@@ -119,7 +115,7 @@ public class SetMenuScreen extends Screen {
         menuData.setType(index);
         menuData.setValue(valueEditBox.getValue());
         md.put(id,menuData);
-        Minecraft.getInstance().setScreen(new SetMenuScreen());
+        Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
     }
 
     @Override
