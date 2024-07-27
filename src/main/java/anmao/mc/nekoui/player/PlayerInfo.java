@@ -1,9 +1,9 @@
 package anmao.mc.nekoui.player;
 
-import anmao.mc.amlib.mc.attribute.AttributeHelper;
-import anmao.mc.amlib.format._FormatToString;
-import anmao.mc.amlib.mc.item.ItemHelper;
-import anmao.mc.amlib.javascript.EasyJS;
+import anmao.dev.core.format._FormatToString;
+import anmao.dev.core.javascript.EasyJS;
+import anmao.mc.amlib.attribute.AttributeHelper;
+import anmao.mc.amlib.item.ItemHelper;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -11,7 +11,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;

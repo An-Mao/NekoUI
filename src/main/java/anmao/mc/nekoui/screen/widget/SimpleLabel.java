@@ -1,13 +1,15 @@
 package anmao.mc.nekoui.screen.widget;
 
-import anmao.mc.amlib.mc.screen.widget.Labels;
+import anmao.mc.amlib.screen.widget.Labels;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class SimpleLabel extends Labels {
     private final int bgc;
     private final int tc;

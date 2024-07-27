@@ -1,8 +1,8 @@
 package anmao.mc.nekoui.render;
 
-import anmao.mc.amlib.format._FormatToString;
-import anmao.mc.amlib.math._Math;
-import anmao.mc.amlib.mc.render.DrawImage;
+import anmao.dev.core.format._FormatToString;
+import anmao.dev.core.math._Math;
+import anmao.mc.amlib.render.DrawImage;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.health$bar.HealthBarConfig;
 import com.mojang.blaze3d.systems.RenderSystem;

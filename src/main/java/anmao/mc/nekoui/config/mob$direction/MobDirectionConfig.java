@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config.mob$direction;
 
-import anmao.dev.easy_json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.logging.LogUtils;
@@ -24,7 +24,10 @@ public class MobDirectionConfig extends JsonConfig<MobDirectionData> {
                                       "poiSize":11,
                                       "poiMaxSize": 9,
                                       "poiMinSize": 2,
-                                      "ratio":-0.5
+                                      "ratio":-0.5,
+                                      "entityColors":{
+                                          "slime": "0xFF0000"
+                                      }
                                     }""", new TypeToken<>(){});
     }
 }

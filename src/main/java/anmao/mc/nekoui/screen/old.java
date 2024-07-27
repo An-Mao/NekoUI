@@ -1,9 +1,5 @@
 package anmao.mc.nekoui.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.GameRenderer;
-
 public class old {
 /*
     private void drawRoundedRect(int e,int x, int y, int width, int height, int radius, int borderColor, int fillColor) {

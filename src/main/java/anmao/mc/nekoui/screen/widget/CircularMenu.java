@@ -1,7 +1,7 @@
 package anmao.mc.nekoui.screen.widget;
 
-import anmao.mc.amlib.mc.screen.widget.CircularWidget;
-import anmao.mc.amlib.mc.screen.widget.DT_ListBoxData;
+import anmao.mc.amlib.screen.widget.CircularWidget;
+import anmao.mc.amlib.screen.widget.DT_ListBoxData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -41,6 +41,12 @@ public class CircularMenu extends CircularWidget {
     public CircularMenu(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, int highlightColor, int normalColor, Component message, List<DT_ListBoxData> data) {
         super(x, y, w, h, sectors, innerRadius, outerRadius, highlightColor, normalColor, message, data);
     }
+
+    public void setData(List<DT_ListBoxData> data){
+        this.data = data;
+    }
+
+
 
     @Override
     protected void drawName(GuiGraphics guiGraphics, double rad, String name, int color, float size) {

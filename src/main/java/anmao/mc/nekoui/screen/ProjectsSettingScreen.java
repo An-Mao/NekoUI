@@ -1,9 +1,9 @@
 package anmao.mc.nekoui.screen;
 
-import anmao.mc.amlib.mc.screen.widget.DT_ListBoxData;
-import anmao.mc.amlib.mc.screen.widget.DT_XYWH;
-import anmao.mc.amlib.mc.screen.widget.DropDownListBox;
-import anmao.mc.amlib.mc.screen.widget.SquareImageButton;
+import anmao.mc.amlib.screen.widget.DT_ListBoxData;
+import anmao.mc.amlib.screen.widget.DT_XYWH;
+import anmao.mc.amlib.screen.widget.DropDownListBox;
+import anmao.mc.amlib.screen.widget.SquareImageButton;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
 import anmao.mc.nekoui.screen.widget.Label;
@@ -12,7 +12,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,14 +25,14 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class ProjectsSettingScreen extends Screen {
+public class ProjectsSettingScreen extends ScreenCore {
     protected final Logger LOGGER = LogUtils.getLogger();
     protected Map<String,MenuData> md = null;
     public boolean KeyListen;
     public EditBox idEditBox,nameEditBox,valueEditBox;
     public DropDownListBox runType;
     public ProjectsSettingScreen() {
-        super(Component.translatable("screen.nekoui.set_menu.title"));
+        super("screen.nekoui.projects_setting");
     }
 
     @Override
@@ -90,9 +89,6 @@ public class ProjectsSettingScreen extends Screen {
         delete.setTextSelectColor(ts);
         delete.setTextUsualColor(lt);
         addRenderableWidget(delete);
-    }
-    public Component getComponent(String s){
-        return Component.translatable("screen.nekoui.set_menu."+s);
     }
     public void delete(){
         String id = idEditBox.getValue();

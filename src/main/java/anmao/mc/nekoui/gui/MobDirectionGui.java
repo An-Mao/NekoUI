@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.gui;
 
-import anmao.mc.amlib.math._MathCDT;
+import anmao.dev.core.math._MathCDT;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -114,11 +114,18 @@ public class MobDirectionGui extends MobDirectionConfig{
             }
         }
     }
-    private static void setRenderColor(LivingEntity livingEntity,GuiGraphics guiGraphics){
-        if (livingEntity instanceof AgeableMob || livingEntity instanceof WaterAnimal){
+
+    /**
+     * 设置实体颜色
+     * @param entity 待检测实体
+     * @param guiGraphics 画图工具
+     */
+    private static void setRenderColor(Entity entity,GuiGraphics guiGraphics){
+
+        if (entity instanceof AgeableMob || entity instanceof WaterAnimal){
             guiGraphics.setColor(0,255,0,255);
             //RenderSystem.setShaderColor(0,255,0,255);
-        } else if (livingEntity instanceof Monster || livingEntity instanceof FlyingMob || livingEntity instanceof Slime) {
+        } else if (entity instanceof Monster || entity instanceof FlyingMob || entity instanceof Slime) {
             guiGraphics.setColor(255,0,0,255);
             //RenderSystem.setShaderColor(255,0,0,255);
         }else {

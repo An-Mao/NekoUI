@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config.hotbar;
 
-import anmao.dev.easy_json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.logging.LogUtils;

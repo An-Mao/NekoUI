@@ -5,6 +5,7 @@ public class ConfigData {
     private boolean outputGuiId;
     private boolean outputScreenPathName;
     private boolean menu;
+    private boolean autoPage;
 
     public void setMenu(boolean menu) {
         this.menu = menu;
@@ -36,5 +37,13 @@ public class ConfigData {
 
     public boolean isOutputScreenPathName() {
         return outputScreenPathName;
+    }
+
+    public void setAutoPage(boolean autoPage) {
+        this.autoPage = autoPage;
+    }
+
+    public boolean isAutoPage() {
+        return autoPage;
     }
 }
