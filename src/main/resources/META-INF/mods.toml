@@ -68,7 +68,7 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
 modId="amlib"
 mandatory=true
-versionRange="${amlib_version_range}"
+versionRange="[${amlib_version},)"
 ordering="AFTER"
 side="CLIENT"
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

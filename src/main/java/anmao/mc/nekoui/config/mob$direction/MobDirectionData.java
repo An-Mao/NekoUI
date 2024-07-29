@@ -13,6 +13,12 @@ public class MobDirectionData {
     private int poiMaxSize;
     private int poiMinSize;
     private double ratio;
+    private boolean onlyLivingEntity;
+    private boolean notInListMode;
+    private Map<String,Boolean> entityList;
+    private String defaultColor;
+    private boolean useEggColor;
+    private int eggLayerIndex;
     private Map<String,String> entityColors;
 
     public void setEnable(boolean enable) {
@@ -79,6 +85,30 @@ public class MobDirectionData {
         return ratio;
     }
 
+    public String getDefaultColor() {
+        return defaultColor;
+    }
+
+    public void setDefaultColor(String defaultColor) {
+        this.defaultColor = defaultColor;
+    }
+
+    public void setUseEggColor(boolean useEggColor) {
+        this.useEggColor = useEggColor;
+    }
+
+    public boolean isUseEggColor() {
+        return useEggColor;
+    }
+
+    public void setEggLayerIndex(int eggLayerIndex) {
+        this.eggLayerIndex = eggLayerIndex;
+    }
+
+    public int getEggLayerIndex() {
+        return  Math.clamp(eggLayerIndex,0,1);
+    }
+
     public Map<String, String> getEntityColors() {
         return entityColors;
     }
@@ -88,9 +118,32 @@ public class MobDirectionData {
     }
 
     public int getColor(String name){
-        return ColorHelper.HexToColor(entityColors.get(name));
+        return ColorHelper.HexToColor(entityColors.getOrDefault(name,getDefaultColor()));
     }
 
+    public void setEntityList(Map<String, Boolean> entityList) {
+        this.entityList = entityList;
+    }
 
+    public void setOnlyLivingEntity(boolean onlyLivingEntity) {
+        this.onlyLivingEntity = onlyLivingEntity;
+    }
 
+    public void setNotInListMode(boolean notInListMode) {
+        this.notInListMode = notInListMode;
+    }
+
+    public boolean isNotInListMode() {
+        return notInListMode;
+    }
+
+    public boolean isOnlyLivingEntity() {
+        return onlyLivingEntity;
+    }
+    public Map<String, Boolean> getEntityList() {
+        return entityList;
+    }
+    public boolean isShow(String name){
+        return entityList.getOrDefault(name,false);
+    }
 }

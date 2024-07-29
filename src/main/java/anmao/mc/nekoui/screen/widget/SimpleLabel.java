@@ -1,5 +1,7 @@
 package anmao.mc.nekoui.screen.widget;
 
+import anmao.dev.core.math._Math;
+import anmao.mc.amlib.render.Draw;
 import anmao.mc.amlib.screen.widget.Labels;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -20,9 +22,7 @@ public class SimpleLabel extends Labels {
         this.bgc = color;
         this.tc = textColor;
     }
-    private static final int RECT_WIDTH = 100;
-    private static final int RECT_HEIGHT = 100;
-    private static final int BORDER_RADIUS = 2;
+    private static final int radius = 2;
     private static final int SEGMENTS = 5; // Number of segments to approximate a quarter circle
 
     private static final int BORDER_COLOR = 0xFF000000; // Black
@@ -30,14 +30,15 @@ public class SimpleLabel extends Labels {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
-        render(100,100);
+        render(guiGraphics);
         guiGraphics.setColor(1.0f,1.0f,1.0f,1.0f);
         guiGraphics.drawCenteredString(font,getMessage(),dx,dy,tc);
     }
     public void render(GuiGraphics guiGraphics, int x, int y) {
-        drawRoundedRect(guiGraphics, x, y, RECT_WIDTH, RECT_HEIGHT, BORDER_RADIUS, BORDER_COLOR, FILL_COLOR);
+        drawRoundedRect(guiGraphics, x, y, getWidth(), getHeight(), radius, BORDER_COLOR, FILL_COLOR);
     }
 
+    /*
     private void drawRoundedRect(GuiGraphics guiGraphics, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
         // Draw the four corners
         guiGraphics.fill(x, y, x + radius, y + radius, borderColor);
@@ -55,29 +56,33 @@ public class SimpleLabel extends Labels {
         guiGraphics.fill(x + radius, y + radius, x + width - radius, y + height - radius, fillColor);
     }
 
+     */
 
 
 
 
-    public void render(int x, int y) {
-        drawRoundedRect(x, y, RECT_WIDTH, RECT_HEIGHT, BORDER_RADIUS, BORDER_COLOR, FILL_COLOR);
+
+    public void render(GuiGraphics guiGraphics) {
+        drawRoundedRect(guiGraphics,getX(), getY(), getWidth(), getHeight(), radius, BORDER_COLOR, FILL_COLOR);
     }
     private void addVertex(BufferBuilder buffer, int x, int y, int color) {
         buffer.addVertex(x, y, 0).setColor((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF);//.endVertex();
     }
 
-    public void render(int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
-        drawRoundedRect(x, y, width, height, radius, borderColor, fillColor);
+    public void render(GuiGraphics guiGraphics, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
+        drawRoundedRect(guiGraphics,x, y, width, height, radius, borderColor, fillColor);
     }
 
 
-    private void drawRoundedRect(int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
+    private void drawRoundedRect(GuiGraphics guiGraphics, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
         // Setup render state
         Tesselator tessellator = Tesselator.getInstance();
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         BufferBuilder buffer = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+
+
         addVertex(buffer, x + radius, y + radius, fillColor);
         addVertex(buffer, x + width - radius, y + radius, fillColor);
         addVertex(buffer, x + width - radius, y + height - radius, fillColor);
@@ -89,8 +94,7 @@ public class SimpleLabel extends Labels {
         buffer = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         drawBorder(buffer, x, y, width, height, radius, borderColor);
         BufferUploader.drawWithShader(buffer.buildOrThrow());
-
-        drawCorners(tessellator, x, y, width, height, radius, borderColor);
+        drawCorners(guiGraphics, x, y, width, height, radius, borderColor);
 
         RenderSystem.disableBlend();
     }
@@ -118,15 +122,23 @@ public class SimpleLabel extends Labels {
         addVertex(buffer, x + width - radius, y + height - radius, borderColor);
     }
 
-    private void drawCorners(Tesselator tessellator, int x, int y, int width, int height, int radius, int color) {
-        drawArc(tessellator, x + radius, y + radius, radius, 180, 270, color); // Top-left corner
-        drawArc(tessellator, x + width - radius, y + radius, radius, 270, 360, color); // Top-right corner
-        drawArc(tessellator, x + width - radius, y + height - radius, radius, 0, 90, color); // Bottom-right corner
-        drawArc(tessellator, x + radius, y + height - radius, radius, 90, 180, color); // Bottom-left corner
+    private void drawCorners(GuiGraphics guiGraphics, int x, int y, int width, int height, int radius, int color) {
+        PoseStack poseStack = guiGraphics.pose();
+        poseStack.pushPose();
+        poseStack.translate(getX(),getY(),0);
+        poseStack.translate(radius, radius, 0);
+        Draw.drawSector(poseStack.last().pose(),0,radius, _Math.ARC_180,_Math.ARC_270,color);
+        poseStack.translate(width-2*radius, 0, 0);
+        Draw.drawSector(poseStack.last().pose(),0,radius,_Math.ARC_270,_Math.ARC_360,color);
+        poseStack.translate(0, height-2 * radius, 0);
+        Draw.drawSector(poseStack.last().pose(),0,radius,0,_Math.ARC_90,color);
+        poseStack.translate(-(width-2*radius), 0, 0);
+        Draw.drawSector(poseStack.last().pose(),0,radius,_Math.ARC_90,_Math.ARC_180,color);
+        poseStack.popPose();
     }
 
     private void drawArc(Tesselator tessellator, int cx, int cy, int radius, int startAngle, int endAngle, int color) {
-        int segments = Math.max(100, radius * 2); // Increase segments for smoother arcs
+        int segments = Math.max(20, radius * 2); // Increase segments for smoother arcs
         double angleIncrement = Math.PI / 180.0 * (endAngle - startAngle) / segments;
 
         BufferBuilder buffer = tessellator.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);

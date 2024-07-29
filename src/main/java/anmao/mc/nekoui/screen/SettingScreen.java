@@ -57,6 +57,14 @@ public class SettingScreen extends ScreenCore {
         openProjectsSetting.setTextSelectColor(ts);
         openProjectsSetting.setTextUsualColor(lt);
         addRenderableWidget(openProjectsSetting);
+
+        py += 20;
+        SquareImageButton openTestSetting = new SquareImageButton(new DT_XYWH(centerX + px,centerY + py,128,16),getComponent("open_test"),()-> Minecraft.getInstance().setScreen(new TestScreen()));
+        openTestSetting.setBgUsualColor(lbg);
+        openTestSetting.setBgSelectColor(lsc);
+        openTestSetting.setTextSelectColor(ts);
+        openTestSetting.setTextUsualColor(lt);
+        addRenderableWidget(openTestSetting);
     }
 
     private String getAutoPageState() {
