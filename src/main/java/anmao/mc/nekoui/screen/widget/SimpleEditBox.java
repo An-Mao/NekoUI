@@ -25,7 +25,6 @@ import java.util.function.Predicate;
 public class SimpleEditBox extends SimpleWidgetCore<SimpleEditBox>{
     private String value = "";
     private int maxLength = 32;
-    private boolean bordered = true;
     private boolean canLoseFocus = true;
     private boolean isEditable = true;
     private int displayPos;
@@ -384,14 +383,6 @@ public class SimpleEditBox extends SimpleWidgetCore<SimpleEditBox>{
 
         if (flag1) {
             guiGraphics.fill(RenderType.guiOverlay(), j1, k - 1, j1 + 1, k + 1 + 9, -3092272);
-            /*
-            if (flag2) {
-                guiGraphics.fill(RenderType.guiOverlay(), j1, k - 1, j1 + 1, k + 1 + 9, -3092272);
-            } else {
-                guiGraphics.drawString(this.font, "_", j1, k, textColor);
-            }
-
-             */
         }
 
         if (i1 != pos) {
@@ -460,9 +451,6 @@ public class SimpleEditBox extends SimpleWidgetCore<SimpleEditBox>{
     }
 
     public int getInnerWidth() {
-        if (isEditable()){
-            return getContentW() - 4 ;
-        }
         return  getContentW() - 4 ; //this.width - 8 ;
     }
 

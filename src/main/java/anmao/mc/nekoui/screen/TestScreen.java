@@ -1,6 +1,8 @@
 package anmao.mc.nekoui.screen;
 
+import anmao.mc.amlib.screen.widget.DT_ListBoxData;
 import anmao.mc.nekoui.screen.widget.SimpleButton;
+import anmao.mc.nekoui.screen.widget.SimpleDropDownSelectBox;
 import anmao.mc.nekoui.screen.widget.SimpleEditBox;
 import anmao.mc.nekoui.screen.widget.SimpleLabel;
 import net.minecraft.network.chat.Component;
@@ -30,5 +32,8 @@ public class TestScreen extends ScreenCore {
                 .setBackgroundHoverColor(0x55000000).setBackgroundUsualColor(0x55000000);
 
         addRenderableWidget(simpleEditBox);
+        addRenderableWidget(new SimpleDropDownSelectBox(100,15,32,17, Component.literal("test"),new DT_ListBoxData(Component.literal("test"),"test"))
+                .setBorderHoverColor(0x77000000).setBorderUsualColor(0x55000000)
+                .setBackgroundHoverColor(0x55000000).setBackgroundUsualColor(0x55000000));
     }
 }
