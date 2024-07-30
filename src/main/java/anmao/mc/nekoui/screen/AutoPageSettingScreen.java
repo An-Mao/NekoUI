@@ -54,9 +54,9 @@ public class AutoPageSettingScreen extends ScreenCore{
         usualColorEditBox.setValue(MenuScreenConfig.INSTANCE.getDatas().UsualColor);
 
         py += 24;
-        SquareImageButton save = new SquareImageButton(new DT_XYWH(cx,py,32,16),getComponent("save"),this::saveConfig);
-        save.setBgUsualColor(lbg);
-        save.setBgSelectColor(lsc);
+        SquareImageButton save = new SquareImageButton(cx,py,32,16,getComponent("save"),this::saveConfig);
+        save.setBackgroundUsualColor(lbg);
+        save.setBackgroundHoverColor(lsc);
         save.setTextSelectColor(ts);
         save.setTextUsualColor(lt);
         addRenderableWidget(save);

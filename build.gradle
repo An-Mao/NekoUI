@@ -70,6 +70,7 @@ dependencies {
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "anmao.dev:core:$core_version"
+
     implementation "anmao.mc:amlib-${minecraft_version}:${amlib_version}-all"
     //minecraftLibrary 'anmao.dev:easy_json:1.0.0'
     jarJar(group:'amlib', name:'amlib', version: "[$amlib_version,)")

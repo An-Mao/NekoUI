@@ -103,17 +103,17 @@ public class PageSettingScreen extends ScreenCore {
 
 
         py += 30;
-        SquareImageButton save = new SquareImageButton(new DT_XYWH(rx,py,32,16),getComponent("save"),this::saveConfig);
-        save.setBgUsualColor(lbg);
-        save.setBgSelectColor(lsc);
+        SquareImageButton save = new SquareImageButton(rx,py,32,16,getComponent("save"),this::saveConfig);
+        save.setBackgroundUsualColor(lbg);
+        save.setBackgroundHoverColor(lsc);
         save.setTextSelectColor(ts);
         save.setTextUsualColor(lt);
         addRenderableWidget(save);
 
-        SquareImageButton delete =new SquareImageButton(new DT_XYWH(rx +save.getWidth() + 12,py,32,16),getComponent("delete_page"),this::delete);
+        SquareImageButton delete =new SquareImageButton(rx +save.getWidth() + 12,py,32,16,getComponent("delete_page"),this::delete);
 
-        delete.setBgUsualColor(lbg);
-        delete.setBgSelectColor(lsc);
+        delete.setBackgroundUsualColor(lbg);
+        delete.setBackgroundHoverColor(lsc);
         delete.setTextSelectColor(ts);
         delete.setTextUsualColor(lt);
         addRenderableWidget(delete);

@@ -25,43 +25,43 @@ public class SettingScreen extends ScreenCore {
         int lsc = 0x83838383;
         int lt = 0xffffffff;
         int ts = Color.RED.getRGB();
-        SquareImageButton changeAutoPage = new SquareImageButton(new DT_XYWH(centerX + px,centerY + py,128,16),getComponent("change_auto_page."+getAutoPageState()),()-> {
+        SquareImageButton changeAutoPage = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("change_auto_page."+getAutoPageState()),()-> {
             Config.INSTANCE.getDatas().setAutoPage(!Config.INSTANCE.getDatas().isAutoPage());
             Config.INSTANCE.save();
             Minecraft.getInstance().setScreen(new SettingScreen());
         });
-        changeAutoPage.setBgUsualColor(lbg);
-        changeAutoPage.setBgSelectColor(lsc);
+        changeAutoPage.setBackgroundUsualColor(lbg);
+        changeAutoPage.setBackgroundHoverColor(lsc);
         changeAutoPage.setTextSelectColor(ts);
         changeAutoPage.setTextUsualColor(lt);
         addRenderableWidget(changeAutoPage);
 
         py += 20;
 
-        SquareImageButton openPageSetting = new SquareImageButton(new DT_XYWH(centerX + px,centerY + py,128,16),getComponent("open_page_setting"),()->{
+        SquareImageButton openPageSetting = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("open_page_setting"),()->{
             if (Config.INSTANCE.getDatas().isAutoPage()){
                 Minecraft.getInstance().setScreen(new AutoPageSettingScreen());
             }else {
                 Minecraft.getInstance().setScreen(new PageSettingScreen());
             }
         });
-        openPageSetting.setBgUsualColor(lbg);
-        openPageSetting.setBgSelectColor(lsc);
+        openPageSetting.setBackgroundUsualColor(lbg);
+        openPageSetting.setBackgroundHoverColor(lsc);
         openPageSetting.setTextSelectColor(ts);
         openPageSetting.setTextUsualColor(lt);
         addRenderableWidget(openPageSetting);
         py += 20;
-        SquareImageButton openProjectsSetting = new SquareImageButton(new DT_XYWH(centerX + px,centerY + py,128,16),getComponent("open_projects_setting"),()-> Minecraft.getInstance().setScreen(new ProjectsSettingScreen()));
-        openProjectsSetting.setBgUsualColor(lbg);
-        openProjectsSetting.setBgSelectColor(lsc);
+        SquareImageButton openProjectsSetting = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("open_projects_setting"),()-> Minecraft.getInstance().setScreen(new ProjectsSettingScreen()));
+        openProjectsSetting.setBackgroundUsualColor(lbg);
+        openProjectsSetting.setBackgroundHoverColor(lsc);
         openProjectsSetting.setTextSelectColor(ts);
         openProjectsSetting.setTextUsualColor(lt);
         addRenderableWidget(openProjectsSetting);
 
         py += 20;
-        SquareImageButton openTestSetting = new SquareImageButton(new DT_XYWH(centerX + px,centerY + py,128,16),getComponent("open_test"),()-> Minecraft.getInstance().setScreen(new TestScreen()));
-        openTestSetting.setBgUsualColor(lbg);
-        openTestSetting.setBgSelectColor(lsc);
+        SquareImageButton openTestSetting = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("open_test"),()-> Minecraft.getInstance().setScreen(new TestScreen()));
+        openTestSetting.setBackgroundUsualColor(lbg);
+        openTestSetting.setBackgroundHoverColor(lsc);
         openTestSetting.setTextSelectColor(ts);
         openTestSetting.setTextUsualColor(lt);
         addRenderableWidget(openTestSetting);

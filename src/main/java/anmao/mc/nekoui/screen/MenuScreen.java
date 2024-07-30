@@ -54,8 +54,8 @@ public class MenuScreen extends Screen {
             MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.getName()), s, this::run)));
             circularMenu = new CircularMenu(width / 2, height / 2, width, height, MenuScreenConfig.INSTANCE.getDatas().sectors, MenuScreenConfig.INSTANCE.getDatas().innerRadius, MenuScreenConfig.INSTANCE.getDatas().outerRadius, Component.empty(), data);
             circularMenu.setFlipMode(CircularMenu.FlipMode.button);
-            circularMenu.setBgSelectColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
-            circularMenu.setBgUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
+            circularMenu.setBackgroundHoverColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
+            circularMenu.setBackgroundUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
             addRenderableWidget(circularMenu);
         }else {
             Array3D<String, PageData,Map<String,DT_ListBoxData>> array3D = new Array3D<>();

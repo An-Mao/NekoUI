@@ -1,9 +1,11 @@
 package anmao.mc.nekoui.config.mob$direction;
 
 import anmao.dev.core.color.ColorHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
-
+@OnlyIn(Dist.CLIENT)
 public class MobDirectionData {
     private boolean enable;
     private boolean dynamicDisplay;

@@ -67,25 +67,25 @@ public class ProjectsSettingScreen extends ScreenCore {
         addRenderableWidget(new Label(px,py,50,12,getComponent("label.value"),lbg,lt));
         valueEditBox = new EditBox(font,px+ 50,py,100,12,getComponent("value_input"));
         addRenderableWidget(valueEditBox);
-        SquareImageButton b = new SquareImageButton(new DT_XYWH(px + 50,py+13,16,16),getComponent("key"),this::setKeyListen);
-        b.setBgUsualColor(lbg);
-        b.setBgSelectColor(lsc);
+        SquareImageButton b = new SquareImageButton(px + 50,py+13,16,16,getComponent("key"),this::setKeyListen);
+        b.setBackgroundUsualColor(lbg);
+        b.setBackgroundHoverColor(lsc);
         b.setTextSelectColor(ts);
         b.setTextUsualColor(lt);
         addRenderableWidget(b);
 
 
         py += 40;
-        SquareImageButton save = new SquareImageButton(new DT_XYWH(px,py,32,16),getComponent("save"),this::saveConfig);
-        save.setBgUsualColor(lbg);
-        save.setBgSelectColor(lsc);
+        SquareImageButton save = new SquareImageButton(px,py,32,16,getComponent("save"),this::saveConfig);
+        save.setBackgroundUsualColor(lbg);
+        save.setBackgroundHoverColor(lsc);
         save.setTextSelectColor(ts);
         save.setTextUsualColor(lt);
         addRenderableWidget(save);
-        SquareImageButton delete =new SquareImageButton(new DT_XYWH(px + 64,py,32,16),getComponent("delete"),this::delete);
+        SquareImageButton delete =new SquareImageButton(px + 64,py,32,16,getComponent("delete"),this::delete);
 
-        delete.setBgUsualColor(lbg);
-        delete.setBgSelectColor(lsc);
+        delete.setBackgroundUsualColor(lbg);
+        delete.setBackgroundHoverColor(lsc);
         delete.setTextSelectColor(ts);
         delete.setTextUsualColor(lt);
         addRenderableWidget(delete);
