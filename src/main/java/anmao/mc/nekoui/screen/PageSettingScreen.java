@@ -1,31 +1,30 @@
 package anmao.mc.nekoui.screen;
 
 import anmao.mc.amlib.screen.widget.DT_ListBoxData;
-import anmao.mc.amlib.screen.widget.DT_XYWH;
-import anmao.mc.amlib.screen.widget.DropDownListBox;
-import anmao.mc.amlib.screen.widget.SquareImageButton;
+import anmao.mc.amlib.screen.widget.simple.SimpleButton;
+import anmao.mc.amlib.screen.widget.simple.SimpleDropDownSelectBox;
+import anmao.mc.amlib.screen.widget.simple.SimpleEditBox;
+import anmao.mc.amlib.screen.widget.simple.SimpleLabel;
 import anmao.mc.nekoui.config.page.PageConfig;
 import anmao.mc.nekoui.config.page.PageData;
-import anmao.mc.nekoui.screen.widget.Label;
+import anmao.mc.nekoui.screen.widget.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class PageSettingScreen extends ScreenCore {
-    protected final int lineHeight = 28;
+    protected final int lineHeight = 30;
     protected final Logger LOGGER = LogUtils.getLogger();
-    public EditBox idEditBox,nameEditBox,projectNumberEditBox, innerRadiusEditBox, outerRadiusEditBox, keyEditBox,textNormalColorEditBox,textHighlightColorEditBox,backgroundNormalColorEditBox,backgroundHighlightColorEditBox;
-    public DropDownListBox projectId;
+    public SimpleEditBox idEditBox,nameEditBox,projectNumberEditBox, innerRadiusEditBox, outerRadiusEditBox, keyEditBox,textNormalColorEditBox,textHighlightColorEditBox,backgroundNormalColorEditBox,backgroundHighlightColorEditBox;
+    public SimpleDropDownSelectBox projectId;
     public PageSettingScreen() {
         super("screen.nekoui.page_setting");
     }
@@ -36,86 +35,84 @@ public class PageSettingScreen extends ScreenCore {
         int lx = 16;
         int rx = width/2 + 16;
         int py = 16;
-        int lbg = 0x55646464;
-        int lsc = 0x83838383;
-        int lt = 0xffffffff;
-        int ts = Color.RED.getRGB();
-
-        Label tmpLabel = addRenderableWidget(new Label(lx,py,-2,12,getComponent("label.select"),lbg,lt));
-        addRenderableWidget(new DropDownListBox(new DT_XYWH(lx,py + tmpLabel.getHeight(),100,12),getComponent("select_page"),getConfigData()));
+        SimpleLabel tmpLabel = addRenderableWidget(createNewLabel(lx,py,-2,12,getComponent("label.select")));
+        tmpLabel.setAutoWidth(true);
+        addRenderableWidget(createNewSelectBox(lx,py + tmpLabel.getHeight(),100,16,getComponent("select_page"),getConfigData()));
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(lx,py,-2,12,getComponent("label.id"), lbg,lt));
-        idEditBox = new EditBox(font,lx,py + tmpLabel.getHeight(),90,12,getComponent("id_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(lx,py,-2,12,getComponent("label.id")));
+        tmpLabel.setAutoWidth(true);
+        idEditBox = createNewEditBox(lx,py + tmpLabel.getHeight(),90,16,idEditBox,getComponent("id_input"));
         addRenderableWidget(idEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(lx,py,-2,12,getComponent("label.name"),lbg,lt));
-        nameEditBox = new EditBox(font,lx,py + tmpLabel.getHeight(),90,12,getComponent("name_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(lx,py,-2,12,getComponent("label.name")));
+        tmpLabel.setAutoWidth(true);
+        nameEditBox = createNewEditBox(lx,py + tmpLabel.getHeight(),90,16,nameEditBox,getComponent("name_input"));
         addRenderableWidget(nameEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(lx,py,-2,12,getComponent("label.number"),lbg,lt));
-        projectNumberEditBox = new EditBox(font,lx,py+tmpLabel.getHeight(),24,12,getComponent("number_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(lx,py,-2,12,getComponent("label.number")));
+        tmpLabel.setAutoWidth(true);
+        projectNumberEditBox = createNewEditBox(lx,py+tmpLabel.getHeight(),24,16,projectNumberEditBox,getComponent("number_input"));
         addRenderableWidget(projectNumberEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(lx,py,-2,12,getComponent("label.inner_radius"),lbg,lt));
-        innerRadiusEditBox = new EditBox(font,lx,py+tmpLabel.getHeight(),24,12,getComponent("inner_radius_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(lx,py,-2,12,getComponent("label.inner_radius")));
+        tmpLabel.setAutoWidth(true);
+        innerRadiusEditBox = createNewEditBox(lx,py+tmpLabel.getHeight(),24,16,innerRadiusEditBox,getComponent("inner_radius_input"));
         addRenderableWidget(innerRadiusEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(lx,py,-2,12,getComponent("label.outer_radius"),lbg,lt));
-        outerRadiusEditBox = new EditBox(font,lx,py + tmpLabel.getHeight(),24,12,getComponent("outer_radius_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(lx,py,-2,12,getComponent("label.outer_radius")));
+        tmpLabel.setAutoWidth(true);
+        outerRadiusEditBox = createNewEditBox(lx,py + tmpLabel.getHeight(),24,16,outerRadiusEditBox,getComponent("outer_radius_input"));
         addRenderableWidget(outerRadiusEditBox);
 
 
         py = 16;
-        tmpLabel = addRenderableWidget(new Label(rx,py,-2,12,getComponent("label.project"),lbg,lt));
-        projectId = new DropDownListBox(new DT_XYWH(rx,py + tmpLabel.getHeight(),64,12),getComponent("project"), getProjects());
+        tmpLabel = addRenderableWidget(createNewLabel(rx,py,-2,12,getComponent("label.project")));
+        tmpLabel.setAutoWidth(true);
+        projectId = createNewSelectBox(rx,py + tmpLabel.getHeight(),64,16,getComponent("project"), getProjects());
         projectId.setLine(7);
         addRenderableWidget(projectId);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(rx,py,-2,12,getComponent("label.key"),lbg,lt));
-        keyEditBox = new EditBox(font,rx,py + tmpLabel.getHeight(),100,12,getComponent("key_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(rx,py,-2,12,getComponent("label.key")));
+        tmpLabel.setAutoWidth(true);
+        keyEditBox = createNewEditBox(rx,py + tmpLabel.getHeight(),100,16,keyEditBox,getComponent("key_input"));
         addRenderableWidget(keyEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(rx,py,-2,12,getComponent("label.text_normal_color"),lbg,lt));
-        textNormalColorEditBox = new EditBox(font,rx,py + tmpLabel.getHeight(),100,12,getComponent("text_normal_color_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(rx,py,-2,12,getComponent("label.text_normal_color")));
+        tmpLabel.setAutoWidth(true);
+        textNormalColorEditBox = createNewEditBox(rx,py + tmpLabel.getHeight(),100,16,textNormalColorEditBox,getComponent("text_normal_color_input"));
         addRenderableWidget(textNormalColorEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(rx,py,-2,12,getComponent("label.text_highlight_color"),lbg,lt));
-        textHighlightColorEditBox = new EditBox(font,rx,py+ tmpLabel.getHeight(),100,12,getComponent("text_highlight_color_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(rx,py,-2,12,getComponent("label.text_highlight_color")));
+        tmpLabel.setAutoWidth(true);
+        textHighlightColorEditBox = createNewEditBox(rx,py+ tmpLabel.getHeight(),100,16,textHighlightColorEditBox,getComponent("text_highlight_color_input"));
         addRenderableWidget(textHighlightColorEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(rx,py,-2,12,getComponent("label.background_normal_color"),lbg,lt));
-        backgroundNormalColorEditBox = new EditBox(font,rx,py+ tmpLabel.getHeight(),100,12,getComponent("background_normal_color_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(rx,py,-2,12,getComponent("label.background_normal_color")));
+        tmpLabel.setAutoWidth(true);
+        backgroundNormalColorEditBox = createNewEditBox(rx,py+ tmpLabel.getHeight(),100,16,backgroundNormalColorEditBox,getComponent("background_normal_color_input"));
         addRenderableWidget(backgroundNormalColorEditBox);
 
         py += lineHeight;
-        tmpLabel = addRenderableWidget(new Label(rx,py,-2,12,getComponent("label.background_highlight_color"),lbg,lt));
-        backgroundHighlightColorEditBox = new EditBox(font,rx,py+ tmpLabel.getHeight(),100,12,getComponent("background_highlight_color_input"));
+        tmpLabel = addRenderableWidget(createNewLabel(rx,py,-2,12,getComponent("label.background_highlight_color")));
+        tmpLabel.setAutoWidth(true);
+        backgroundHighlightColorEditBox = createNewEditBox(rx,py+ tmpLabel.getHeight(),100,16,backgroundHighlightColorEditBox,getComponent("background_highlight_color_input"));
         addRenderableWidget(backgroundHighlightColorEditBox);
 
 
         py += 30;
-        SquareImageButton save = new SquareImageButton(rx,py,32,16,getComponent("save"),this::saveConfig);
-        save.setBackgroundUsualColor(lbg);
-        save.setBackgroundHoverColor(lsc);
-        save.setTextSelectColor(ts);
-        save.setTextUsualColor(lt);
+        SimpleButton save = createNewButton(rx,py,32,16,getComponent("save"),this::saveConfig);
         addRenderableWidget(save);
 
-        SquareImageButton delete =new SquareImageButton(rx +save.getWidth() + 12,py,32,16,getComponent("delete_page"),this::delete);
-
-        delete.setBackgroundUsualColor(lbg);
-        delete.setBackgroundHoverColor(lsc);
-        delete.setTextSelectColor(ts);
-        delete.setTextUsualColor(lt);
+        SimpleButton delete =createNewButton(rx +save.getWidth() + 12,py,32,16,getComponent("delete_page"),this::delete);
         addRenderableWidget(delete);
     }
     public List<DT_ListBoxData> getConfigData(){

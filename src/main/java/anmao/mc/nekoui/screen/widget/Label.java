@@ -1,13 +1,13 @@
 package anmao.mc.nekoui.screen.widget;
 
-import anmao.mc.amlib.screen.widget.Labels;
+import anmao.mc.amlib.screen.widget.square.SquareLabels;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class Label extends Labels {
+public class Label extends SquareLabels {
     private final int bgc;
     private final int tc;
     private final int dx;

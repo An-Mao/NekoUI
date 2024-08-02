@@ -1,23 +1,20 @@
 package anmao.mc.nekoui.screen;
 
-import anmao.mc.amlib.screen.widget.DT_ListBoxData;
-import anmao.mc.amlib.screen.widget.DT_XYWH;
-import anmao.mc.amlib.screen.widget.DropDownListBox;
-import anmao.mc.amlib.screen.widget.SquareImageButton;
+import anmao.mc.amlib.screen.widget.*;
+import anmao.mc.amlib.screen.widget.simple.SimpleButton;
+import anmao.mc.amlib.screen.widget.simple.SimpleDropDownSelectBox;
+import anmao.mc.amlib.screen.widget.simple.SimpleEditBox;
 import anmao.mc.nekoui.config.menu.MenuConfig;
 import anmao.mc.nekoui.config.menu.MenuData;
-import anmao.mc.nekoui.screen.widget.Label;
 import com.google.gson.Gson;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
-import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,8 +26,8 @@ public class ProjectsSettingScreen extends ScreenCore {
     protected final Logger LOGGER = LogUtils.getLogger();
     protected Map<String,MenuData> md = null;
     public boolean KeyListen;
-    public EditBox idEditBox,nameEditBox,valueEditBox;
-    public DropDownListBox runType;
+    public SimpleEditBox idEditBox,nameEditBox,valueEditBox;
+    public SimpleDropDownSelectBox runType;
     public ProjectsSettingScreen() {
         super("screen.nekoui.projects_setting");
     }
@@ -40,54 +37,38 @@ public class ProjectsSettingScreen extends ScreenCore {
         super.init();
         int px = width/2 - 75;
         int py = 32;
-        int lbg = 0x55646464;
-        int lsc = 0x83838383;
-        int lt = 0xffffffff;
-        int ts = Color.RED.getRGB();
-        addRenderableWidget(new Label(px,py,50,12,getComponent("label.select"),lbg,lt));
-        addRenderableWidget(new DropDownListBox(new DT_XYWH(px + 50,py,100,12),getComponent("select_id"),getConfigData()));
+        addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.select")));
+        addRenderableWidget(createNewSelectBox(px + 50,py,100,16,getComponent("select_id"),getConfigData()));
 
-        py += 20;
-        addRenderableWidget(new Label(px,py,50,12,getComponent("label.id"), lbg,lt));
-        idEditBox = new EditBox(font,px+ 50,py,100,12,getComponent("id_input"));
+        py += 23;
+        addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.id")));
+        idEditBox = createNewEditBox(px+ 50,py,100,16,idEditBox,getComponent("id_input"));
         addRenderableWidget(idEditBox);
 
-        py += 20;
-        addRenderableWidget(new Label(px,py,50,12,getComponent("label.name"),lbg,lt));
-        nameEditBox = new EditBox(font,px+ 50,py,100,12,getComponent("name_input"));
+        py += 23;
+        addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.name")));
+        nameEditBox = createNewEditBox(px+ 50,py,100,16,nameEditBox,getComponent("name_input"));
         addRenderableWidget(nameEditBox);
 
-        py += 20;
-        addRenderableWidget(new Label(px,py,50,12,getComponent("label.type"),lbg,lt));
-        runType = new DropDownListBox(new DT_XYWH(px + 50,py,50,12),getComponent("type"),getTypes());
+        py += 23;
+        addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.type")));
+        runType = createNewSelectBox(px + 50,py,50,16,getComponent("type"),getTypes());
         runType.setLine(3);
         addRenderableWidget(runType);
 
-        py += 20;
-        addRenderableWidget(new Label(px,py,50,12,getComponent("label.value"),lbg,lt));
-        valueEditBox = new EditBox(font,px+ 50,py,100,12,getComponent("value_input"));
+        py += 23;
+        addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.value")));
+        valueEditBox = createNewEditBox(px+ 50,py,100,16,valueEditBox,getComponent("value_input"));
         addRenderableWidget(valueEditBox);
-        SquareImageButton b = new SquareImageButton(px + 50,py+13,16,16,getComponent("key"),this::setKeyListen);
-        b.setBackgroundUsualColor(lbg);
-        b.setBackgroundHoverColor(lsc);
-        b.setTextSelectColor(ts);
-        b.setTextUsualColor(lt);
+        SimpleButton b = createNewButton(px + 50,py+13,16,16,getComponent("key"),this::setKeyListen);
         addRenderableWidget(b);
 
 
-        py += 40;
-        SquareImageButton save = new SquareImageButton(px,py,32,16,getComponent("save"),this::saveConfig);
-        save.setBackgroundUsualColor(lbg);
-        save.setBackgroundHoverColor(lsc);
-        save.setTextSelectColor(ts);
-        save.setTextUsualColor(lt);
+        py += 52;
+        SimpleButton save = createNewButton(px,py,32,16,getComponent("save"),this::saveConfig);
         addRenderableWidget(save);
-        SquareImageButton delete =new SquareImageButton(px + 64,py,32,16,getComponent("delete"),this::delete);
+        SimpleButton delete =createNewButton(px + 64,py,32,16,getComponent("delete"),this::delete);
 
-        delete.setBackgroundUsualColor(lbg);
-        delete.setBackgroundHoverColor(lsc);
-        delete.setTextSelectColor(ts);
-        delete.setTextUsualColor(lt);
         addRenderableWidget(delete);
     }
     public void delete(){

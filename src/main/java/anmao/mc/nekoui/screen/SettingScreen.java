@@ -1,13 +1,11 @@
 package anmao.mc.nekoui.screen;
 
-import anmao.mc.amlib.screen.widget.DT_XYWH;
-import anmao.mc.amlib.screen.widget.SquareImageButton;
+import anmao.mc.amlib.screen.widget.simple.SimpleButton;
 import anmao.mc.nekoui.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.awt.*;
 @OnlyIn(Dist.CLIENT)
 public class SettingScreen extends ScreenCore {
     public SettingScreen() {
@@ -21,49 +19,37 @@ public class SettingScreen extends ScreenCore {
         int centerY = height / 2;
         int px = -64;
         int py = -32;
-        int lbg = 0x55646464;
-        int lsc = 0x83838383;
-        int lt = 0xffffffff;
-        int ts = Color.RED.getRGB();
-        SquareImageButton changeAutoPage = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("change_auto_page."+getAutoPageState()),()-> {
+        SimpleButton changeAutoPage = new SimpleButton(centerX + px,centerY + py,128,16,getComponent("change_auto_page."+getAutoPageState()),()-> {
             Config.INSTANCE.getDatas().setAutoPage(!Config.INSTANCE.getDatas().isAutoPage());
             Config.INSTANCE.save();
             Minecraft.getInstance().setScreen(new SettingScreen());
         });
-        changeAutoPage.setBackgroundUsualColor(lbg);
-        changeAutoPage.setBackgroundHoverColor(lsc);
-        changeAutoPage.setTextSelectColor(ts);
-        changeAutoPage.setTextUsualColor(lt);
+        changeAutoPage.setAutoWidth(false).setWidth(128);
+        changeAutoPage.setCenterText(true);
         addRenderableWidget(changeAutoPage);
 
         py += 20;
 
-        SquareImageButton openPageSetting = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("open_page_setting"),()->{
+        SimpleButton openPageSetting = new SimpleButton(centerX + px,centerY + py,128,16,getComponent("open_page_setting"),()->{
             if (Config.INSTANCE.getDatas().isAutoPage()){
                 Minecraft.getInstance().setScreen(new AutoPageSettingScreen());
             }else {
                 Minecraft.getInstance().setScreen(new PageSettingScreen());
             }
         });
-        openPageSetting.setBackgroundUsualColor(lbg);
-        openPageSetting.setBackgroundHoverColor(lsc);
-        openPageSetting.setTextSelectColor(ts);
-        openPageSetting.setTextUsualColor(lt);
+        openPageSetting.setAutoWidth(false).setWidth(128);
+        openPageSetting.setCenterText(true);
         addRenderableWidget(openPageSetting);
         py += 20;
-        SquareImageButton openProjectsSetting = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("open_projects_setting"),()-> Minecraft.getInstance().setScreen(new ProjectsSettingScreen()));
-        openProjectsSetting.setBackgroundUsualColor(lbg);
-        openProjectsSetting.setBackgroundHoverColor(lsc);
-        openProjectsSetting.setTextSelectColor(ts);
-        openProjectsSetting.setTextUsualColor(lt);
+        SimpleButton openProjectsSetting = new SimpleButton(centerX + px,centerY + py,128,16,getComponent("open_projects_setting"),()-> Minecraft.getInstance().setScreen(new ProjectsSettingScreen()));
+        openProjectsSetting.setAutoWidth(false).setWidth(128);
+        openProjectsSetting.setCenterText(true);
         addRenderableWidget(openProjectsSetting);
 
         py += 20;
-        SquareImageButton openTestSetting = new SquareImageButton(centerX + px,centerY + py,128,16,getComponent("open_test"),()-> Minecraft.getInstance().setScreen(new TestScreen()));
-        openTestSetting.setBackgroundUsualColor(lbg);
-        openTestSetting.setBackgroundHoverColor(lsc);
-        openTestSetting.setTextSelectColor(ts);
-        openTestSetting.setTextUsualColor(lt);
+        SimpleButton openTestSetting = new SimpleButton(centerX + px,centerY + py,128,16,getComponent("open_test"),()-> Minecraft.getInstance().setScreen(new TestScreen()));
+        openTestSetting.setAutoWidth(false).setWidth(128);
+        openTestSetting.setCenterText(true);
         addRenderableWidget(openTestSetting);
     }
 

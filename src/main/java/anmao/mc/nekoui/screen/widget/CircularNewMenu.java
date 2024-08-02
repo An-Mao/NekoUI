@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 @OnlyIn(Dist.CLIENT)
-public class CircularNewMenu extends RenderWidgetCore {
+public class CircularNewMenu extends RenderWidgetCore<CircularNewMenu> {
     protected final Array3D<String, PageData,Map<String,DT_ListBoxData>> pageDatas;
     protected CircularNewMenu.FlipMode flipMode;
     protected int sectors;
