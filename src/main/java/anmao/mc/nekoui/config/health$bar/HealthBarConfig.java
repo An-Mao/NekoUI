@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config.health$bar;
 
-import anmao.mc.amlib.json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,7 +17,8 @@ public class HealthBarConfig extends JsonConfig<HealthBarData> {
                   "renderHealthBarText": true,
                   "renderEffect": true,
                   "effectRenderImage": true,
-                  "effectImageRotationAngle":10000
+                  "effectImageRotationAngle":10000,
+                  "renderOnlyView": true
                 }""", new TypeToken<>(){});
     }
 }

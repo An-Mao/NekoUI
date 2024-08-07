@@ -1,7 +1,7 @@
 package anmao.mc.nekoui.render;
 
-import anmao.mc.amlib.format._FormatToString;
-import anmao.mc.amlib.math._Math;
+import anmao.dev.core.format._FormatToString;
+import anmao.dev.core.math._Math;
 import anmao.mc.amlib.render.DrawImage;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.health$bar.HealthBarConfig;
@@ -17,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Quaternionf;
 
@@ -30,7 +31,7 @@ public class MobHealthBar {
     public static void render(Entity entity, PoseStack poseStack,int packedLight){
         if (HealthBarConfig.I.getDatas().enable && entity instanceof LivingEntity livingEntity) {
             Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.player != null) {
+            if (minecraft.player != null  && (HealthBarConfig.I.getDatas().renderOnlyView && checkView(minecraft,livingEntity))) {
                 if (livingEntity.distanceTo(minecraft.player) > HealthBarConfig.I.getDatas().renderDistance)return;
                 Quaternionf camera = minecraft.getEntityRenderDispatcher().cameraOrientation();
                 if (HealthBarConfig.I.getDatas().renderHealthBar) {
@@ -65,6 +66,12 @@ public class MobHealthBar {
 
     }
 
+    public static boolean checkView(Minecraft minecraft, LivingEntity entity){
+        if (minecraft.player != null) {
+            return ForgeHooksClient.isNameplateInRenderDistance(entity,minecraft.getEntityRenderDispatcher().distanceToSqr(entity)) && minecraft.player.hasLineOfSight(entity) && entity == minecraft.getEntityRenderDispatcher().crosshairPickEntity;
+        }
+        return false;
+    }
     private static double rotationAngle = 0;
     public static double getAngle(){
         if (HealthBarConfig.I.getDatas().effectImageRotationAngle == 0){

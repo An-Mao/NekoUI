@@ -1,7 +1,7 @@
 package anmao.mc.nekoui.gui;
 
 import anmao.mc.amlib.component.ComponentStyle;
-import anmao.mc.amlib.format._FormatToString;
+import anmao.dev.core.format._FormatToString;
 import anmao.mc.nekoui.config.screen$element.ScreenElementConfig;
 import anmao.mc.nekoui.player.PlayerInfo;
 import com.google.gson.JsonObject;

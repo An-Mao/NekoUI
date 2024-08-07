@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config.hotbar;
 
-import anmao.mc.amlib.json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.Configs;
 import anmao.mc.nekoui.config.menu.MenuConfig;

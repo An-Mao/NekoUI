@@ -1,11 +1,11 @@
 package anmao.mc.nekoui.config.menu;
 
-import anmao.mc.amlib.json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.reflect.TypeToken;
 
 public class MenuScreenConfig extends JsonConfig<MenuScreenData> {
-    public static final String file = Configs.ConfigDir+"menu.json";
+    public static final String file = Configs.ConfigDir+"menu-config.json";
     public static final MenuScreenConfig INSTANCE = new MenuScreenConfig();
     public MenuScreenConfig() {
         super(file, """

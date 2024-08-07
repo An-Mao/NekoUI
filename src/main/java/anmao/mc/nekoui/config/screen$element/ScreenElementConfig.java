@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config.screen$element;
 
-import anmao.mc.amlib.json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.NekoUI;
 import anmao.mc.nekoui.config.Configs;
 import anmao.mc.nekoui.gui.ScreenElementGui;

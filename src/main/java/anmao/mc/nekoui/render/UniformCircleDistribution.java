@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.render;
 
-import anmao.mc.amlib.math._Math;
+import anmao.dev.core.math._Math;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

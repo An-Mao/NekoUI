@@ -1,8 +1,8 @@
 package anmao.mc.nekoui.player;
 
 import anmao.mc.amlib.attribute.AttributeHelper;
-import anmao.mc.amlib.format._FormatToString;
-import anmao.mc.amlib.javascript.EasyJS;
+import anmao.dev.core.format._FormatToString;
+import anmao.dev.core.javascript.EasyJS;
 import anmao.mc.nekoui.config.Configs;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

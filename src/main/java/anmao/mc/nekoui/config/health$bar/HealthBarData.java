@@ -9,4 +9,5 @@ public class HealthBarData {
     public boolean renderEffect;
     public boolean effectRenderImage;
     public int effectImageRotationAngle;
+    public boolean renderOnlyView;
 }

@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config;
 
-import anmao.mc.amlib.system._File;
+import anmao.dev.core.system._File;
 import anmao.mc.nekoui.config.hide$hud.HideGuiConfig;
 import anmao.mc.nekoui.config.hotbar.HotBarConfig;
 import anmao.mc.nekoui.config.mob$direction.MobDirectionConfig;

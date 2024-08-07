@@ -1,6 +1,6 @@
 package anmao.mc.nekoui.config;
 
-import anmao.mc.amlib.json.JsonConfig;
+import anmao.dev.core.json.JsonConfig;
 import anmao.mc.nekoui.NekoUI;
 import com.google.gson.reflect.TypeToken;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,7 +17,8 @@ public class Config extends JsonConfig<ConfigData> {
                   "renderScreenElement": true,
                   "outputGuiId": false,
                   "outputScreenPathName": false,
-                  "menu":true
+                  "menu":true,
+                  "autoPage":false
                 }""", new TypeToken<>(){});
     }
 }
