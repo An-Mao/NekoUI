@@ -1,9 +1,11 @@
 package anmao.mc.nekoui.config.page;
 
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
+
 @OnlyIn(Dist.CLIENT)
 public class PageData {
     public String title;
@@ -56,20 +58,12 @@ public class PageData {
         return projects;
     }
 
-    public static class ProjectData {
-        public String key;
-        public String textNormalColor;
-        public String textHighlightColor;
-        public String backgroundNormalColor;
-        public String backgroundHighlightColor;
-        public ProjectData() {
-
-        }
+    public record ProjectData(String key, String textNormalColor, String textHighlightColor, String backgroundNormalColor, String backgroundHighlightColor) {
         public ProjectData(String key) {
-            this(key,"0xff00ffff","0xff00ff00");
+            this(key,"auto","auto");
         }
         public ProjectData(String key, String textNormalColor,String textHighlightColor) {
-            this(key, textNormalColor,textHighlightColor,"0x70000000","0x50ffffff");
+            this(key, textNormalColor,textHighlightColor,"auto","auto");
         }
         public ProjectData(String key, String textNormalColor,String textHighlightColor, String backgroundNormalColor, String backgroundHighlightColor) {
             this.key = key;
@@ -77,22 +71,6 @@ public class PageData {
             this.textHighlightColor = textHighlightColor;
             this.backgroundNormalColor = backgroundNormalColor;
             this.backgroundHighlightColor = backgroundHighlightColor;
-        }
-        public String getKey() {
-            return key;
-        }
-
-        public int getTextNormalColor() {
-            return toInt(textNormalColor);
-        }
-        public int getTextHighlightColor() {
-            return toInt(textHighlightColor);
-        }
-        public int getBackgroundNormalColor() {
-            return toInt(backgroundNormalColor);
-        }
-        public int getBackgroundHighlightColor() {
-            return toInt(backgroundHighlightColor);
         }
 
         private int toInt(String s) {

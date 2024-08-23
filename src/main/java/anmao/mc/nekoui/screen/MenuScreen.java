@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @OnlyIn(Dist.CLIENT)
 public class MenuScreen extends Screen {
     protected static final Logger LOGGER = LogUtils.getLogger();
@@ -40,22 +39,15 @@ public class MenuScreen extends Screen {
         super.init();
         addMenu();
     }
-    /*
-    @Override
-    public void resize(Minecraft pMinecraft, int pWidth, int pHeight) {
-        super.resize(pMinecraft, pWidth, pHeight);
-    }
-
-     */
-
     private void addMenu(){
         if (Config.INSTANCE.getDatas().isAutoPage()) {
             List<DT_ListBoxData> data = new ArrayList<>();
             MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.getName()), s, this::run)));
             circularMenu = new CircularMenu(width / 2, height / 2, width, height, MenuScreenConfig.INSTANCE.getDatas().sectors, MenuScreenConfig.INSTANCE.getDatas().innerRadius, MenuScreenConfig.INSTANCE.getDatas().outerRadius, Component.empty(), data);
             circularMenu.setFlipMode(CircularMenu.FlipMode.button);
-            circularMenu.setBgSelectColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
-            circularMenu.setBgUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
+
+            //circularMenu.setBackgroundHoverColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().SelectColor, 16));
+            //circularMenu.setBackgroundUsualColor(Integer.parseInt(MenuScreenConfig.INSTANCE.getDatas().UsualColor, 16));
             addRenderableWidget(circularMenu);
         }else {
             Array3D<String, PageData,Map<String,DT_ListBoxData>> array3D = new Array3D<>();
@@ -63,12 +55,12 @@ public class MenuScreen extends Screen {
             PageConfig.INSTANCE.getDatas().forEach((s, pageData) -> {
                 Map<String,DT_ListBoxData> data = new HashMap<>();
                 pageData.getProjects().forEach((s1, projectData) -> {
-                    MenuData menuData = MenuConfig.INSTANCE.getDatas().get(projectData.key);
+                    MenuData menuData = MenuConfig.INSTANCE.getDatas().get(projectData.key());
                     String name = "";
                     if (menuData != null) {
                         name = menuData.getName();
                     }
-                    data.put(s1,new DT_ListBoxData(Component.literal(name), projectData.key, this::run));
+                    data.put(s1,new DT_ListBoxData(Component.literal(name), projectData.key(), this::run));
                 });
                 array3D.add(s,pageData,data);
             });

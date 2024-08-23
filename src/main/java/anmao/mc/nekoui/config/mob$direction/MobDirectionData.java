@@ -1,5 +1,11 @@
 package anmao.mc.nekoui.config.mob$direction;
 
+import anmao.dev.core.color.ColorHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Map;
+@OnlyIn(Dist.CLIENT)
 public class MobDirectionData {
     private boolean enable;
     private boolean dynamicDisplay;
@@ -9,6 +15,13 @@ public class MobDirectionData {
     private int poiMaxSize;
     private int poiMinSize;
     private double ratio;
+    private boolean onlyLivingEntity;
+    private boolean notInListMode;
+    private Map<String,Boolean> entityList;
+    private String defaultColor;
+    private boolean useEggColor;
+    private int eggLayerIndex;
+    private Map<String,String> entityColors;
 
     public void setEnable(boolean enable) {
         this.enable = enable;
@@ -72,5 +85,68 @@ public class MobDirectionData {
 
     public double getRatio() {
         return ratio;
+    }
+
+    public String getDefaultColor() {
+        return defaultColor;
+    }
+
+    public void setDefaultColor(String defaultColor) {
+        this.defaultColor = defaultColor;
+    }
+
+    public void setUseEggColor(boolean useEggColor) {
+        this.useEggColor = useEggColor;
+    }
+
+    public boolean isUseEggColor() {
+        return useEggColor;
+    }
+
+    public void setEggLayerIndex(int eggLayerIndex) {
+        this.eggLayerIndex = eggLayerIndex;
+    }
+
+    public int getEggLayerIndex() {
+        if (eggLayerIndex < 0) return 0;
+        return Math.min(eggLayerIndex, 1);
+    }
+
+    public Map<String, String> getEntityColors() {
+        return entityColors;
+    }
+
+    public void setEntityColors(Map<String, String> entityColors) {
+        this.entityColors = entityColors;
+    }
+
+    public int getColor(String name){
+        return ColorHelper.HexToColor(entityColors.getOrDefault(name,getDefaultColor()));
+    }
+
+    public void setEntityList(Map<String, Boolean> entityList) {
+        this.entityList = entityList;
+    }
+
+    public void setOnlyLivingEntity(boolean onlyLivingEntity) {
+        this.onlyLivingEntity = onlyLivingEntity;
+    }
+
+    public void setNotInListMode(boolean notInListMode) {
+        this.notInListMode = notInListMode;
+    }
+
+    public boolean isNotInListMode() {
+        return notInListMode;
+    }
+
+    public boolean isOnlyLivingEntity() {
+        return onlyLivingEntity;
+    }
+    public Map<String, Boolean> getEntityList() {
+        return entityList;
+    }
+    public boolean isShow(String name){
+        return entityList.getOrDefault(name,false);
     }
 }

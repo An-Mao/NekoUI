@@ -1,6 +1,7 @@
 package anmao.mc.nekoui.screen.widget;
 
 import anmao.dev.core.array.Array3D;
+import anmao.dev.core.color.ColorHelper;
 import anmao.dev.core.math._Math;
 import anmao.mc.amlib.render.Draw;
 import anmao.mc.amlib.screen.widget.DT_ListBoxData;
@@ -11,17 +12,18 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
+
 @OnlyIn(Dist.CLIENT)
-public class CircularNewMenu extends RenderWidgetCore {
+public class CircularNewMenu extends RenderWidgetCore<CircularNewMenu> {
     protected final Array3D<String, PageData,Map<String,DT_ListBoxData>> pageDatas;
     protected FlipMode flipMode;
     protected int sectors;
@@ -166,13 +168,16 @@ public class CircularNewMenu extends RenderWidgetCore {
         super.onClick(pMouseX, pMouseY);
     }
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY,  double pScrollY) {
         if (this.flipMode == FlipMode.tire){
-            changePage(!(pDelta > 0));
+            changePage(!(pScrollY > 0));
             return true ;
         }
-        return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+        return super.mouseScrolled(pMouseX, pMouseY, pScrollY);
     }
+
+
+
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float v) {
@@ -184,7 +189,7 @@ public class CircularNewMenu extends RenderWidgetCore {
             }
 
             if (getNowPageData() == null) return;
-            guiGraphics.drawString(this.font,getNowPageData().getTitle(), centerX - this.font.width(getNowPageData().getTitle())/2, 6, 0xFFFFFFFF, false);
+            guiGraphics.drawString(this.font,getNowPageData().getTitle(), centerX - this.font.width(getNowPageData().getTitle())/2, 6, getTextUsualColor(), false);
             for (int i = 0; i < sectors; i++) {
                 double startAngle = i * fanArc;
                 double endAngle = (i + 1) * fanArc;
@@ -195,11 +200,21 @@ public class CircularNewMenu extends RenderWidgetCore {
                     }
                     continue;
                 }
-                int bgc = projectData.getBackgroundNormalColor() , tc = projectData.getTextNormalColor();
+                String tColor = projectData.backgroundNormalColor().isEmpty()?"auto":projectData.backgroundNormalColor();
+                int bgc = tColor.equals("auto") ? getBackgroundUsualColor() : ColorHelper.HexToColor(tColor);
+
+                tColor = projectData.textNormalColor().isEmpty()?"auto":projectData.textNormalColor();
+                int tc = tColor.equals("auto") ? getTextUsualColor() : ColorHelper.HexToColor(tColor);
                 float size = 1;
                 if (angle >= startAngle  && angle < endAngle) {
-                    bgc = projectData.getBackgroundHighlightColor();
-                    tc = projectData.getTextHighlightColor();
+
+                    tColor = projectData.backgroundHighlightColor().isEmpty()?"auto":projectData.backgroundHighlightColor();
+                    bgc = tColor.equals("auto") ? getBackgroundHoverColor() : ColorHelper.HexToColor(tColor);
+
+                    tColor = projectData.textHighlightColor().isEmpty()?"auto":projectData.textHighlightColor();
+                    tc = tColor.equals("auto") ? getTextHoverColor() : ColorHelper.HexToColor(tColor);
+                    //bgc = projectData.getBackgroundHighlightColor();
+                    //tc = projectData.getTextHighlightColor();
                     size = 1.3f;
                     this.index = i;
                 }
@@ -247,10 +262,8 @@ public class CircularNewMenu extends RenderWidgetCore {
                     }
                 }
                 case "item" -> {
-                    Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(parts[1]));
-                    if (item != null){
-                        guiGraphics.renderItem(new ItemStack(item),-8,-8);
-                    }
+                    Item item = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(parts[1]));
+                    guiGraphics.renderItem(new ItemStack(item), -8, -8);
                 }
                 case "image" -> {
                     ResourceLocation res = ResourceLocation.tryParse(parts[1]);

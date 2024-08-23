@@ -33,69 +33,69 @@ public class PageConfig extends JsonConfig<Map<String, PageData>> {
                 "projects": {
                   "1": {
                     "key": "2",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff",
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto",
                     "textColor": "project1",
                     "normalColor": "project1",
                     "HighlightColor": "project1"
                   },
                   "0": {
                     "key": "1",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "2": {
                     "key": "3",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "3": {
                     "key": "4",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "4": {
                     "key": "5",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "5": {
                     "key": "6",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "8": {
                     "key": "9",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "6": {
                     "key": "7",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   },
                   "7": {
                     "key": "8",
-                    "textNormalColor": "0xff00ffff",
-                    "textHighlightColor": "0xff00ff00",
-                    "backgroundNormalColor": "0x70000000",
-                    "backgroundHighlightColor": "0x50ffffff"
+                    "textNormalColor": "auto",
+                    "textHighlightColor": "auto",
+                    "backgroundNormalColor": "auto",
+                    "backgroundHighlightColor": "auto"
                   }
                 }
               },
