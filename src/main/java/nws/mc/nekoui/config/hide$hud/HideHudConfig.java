@@ -16,7 +16,7 @@ public class HideHudConfig extends _JsonConfig<ArrayList<String>> {
                     [
                       "minecraft:experience_level",
                       "minecraft:experience_bar",
-                      "minecraft:hotbar",
+                      "-minecraft:hotbar",
                       "minecraft:player_health",
                       "minecraft:food_level",
                       "minecraft:armor_level",

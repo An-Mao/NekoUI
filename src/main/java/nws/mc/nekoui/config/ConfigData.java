@@ -1,11 +1,16 @@
 package nws.mc.nekoui.config;
 
 public class ConfigData {
+    private boolean putDefault;
     private boolean renderScreenElement;
     private boolean outputGuiId;
     private boolean outputScreenPathName;
     private boolean menu;
     private boolean autoPage;
+
+    public boolean isPutDefault() {
+        return putDefault;
+    }
 
     public void setMenu(boolean menu) {
         this.menu = menu;
@@ -44,5 +49,9 @@ public class ConfigData {
 
     public boolean isAutoPage() {
         return autoPage;
+    }
+
+    public void setPutDefault(boolean b) {
+        this.putDefault = b;
     }
 }

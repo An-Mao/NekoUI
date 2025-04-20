@@ -1,0 +1,1 @@
+{"x":"center","y":"bottom","pos":{"x":-10,"y":-62,"z":0},"elements":[{"pos":{"x":0,"y":0,"z":0},"type":"Image","key":"minecraft:textures/mob_effect/strength.png","color":"FFFFFF","width":10,"height":10},{"pos":{"x":11,"y":1,"z":0},"type":"Custom","key":"atkWithItem","color":"rainbow","width":0,"height":0}]}

@@ -10,6 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import nws.mc.nekoui.NekoUI;
@@ -90,4 +91,12 @@ public class ClientEvent {
     public static void onNameTagRender(RenderNameTagEvent event){
         MobHealthBar.render(event.getEntity(),event.getPoseStack(),event.getPackedLight());
     }
+    /*
+    @SubscribeEvent
+    public static void onLivingRender(RenderLivingEvent.Pre event){
+        MobHealthBar.render(event.getEntity(),event.getPoseStack(),event.getPackedLight());
+
+    }
+
+     */
 }

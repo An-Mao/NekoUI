@@ -1,6 +1,5 @@
 package nws.mc.nekoui.gui;
 
-import com.google.gson.JsonObject;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,14 +14,19 @@ import nws.dev.core.javascript._EasyJS;
 import nws.mc.cores.helper.component.ComponentStyle;
 import nws.mc.nekoui.NekoUI;
 import nws.mc.nekoui.config.Configs;
-import nws.mc.nekoui.config.screen$element.ScreenElementConfig;
-import nws.mc.nekoui.config.screen$element.ScreenElementDataElement;
 import nws.mc.nekoui.player.PlayerInfo;
+import org.joml.Vector3i;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
-public class ScreenElementGui extends ScreenElementConfig {
+public class ScreenElementGui {
     public static final String id = "screen_element";
     public static final ResourceLocation RESOURCE_LOCATION =  ResourceLocation.fromNamespaceAndPath(NekoUI.MOD_ID,id);
+    public static final HashMap<String,ResourceLocation> Resources = new HashMap<>();
     public static void render (GuiGraphics guiGraphics, DeltaTracker pPartialTick){
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.options.hideGui)return;
@@ -31,69 +35,71 @@ public class ScreenElementGui extends ScreenElementConfig {
         if (clientLevel != null && clientLevel.isClientSide && localPlayer != null) {
             int screenHeight = minecraft.getWindow().getGuiScaledHeight();
             int screenWidth = minecraft.getWindow().getGuiScaledWidth();
-            I.getDatas().forEach((s, screenJsonData) -> {
-                int startX = switch (screenJsonData.getX()) {
+            Configs.ScreenRenders.forEach(screenRender -> {
+                int startX = switch (screenRender.x()) {
                     case "center" -> screenWidth / 2;
                     case "right" -> screenWidth;
                     default -> 0;
                 };
-                int startY = switch (screenJsonData.getY()) {
+                int startY = switch (screenRender.y()) {
                     case "center" -> screenHeight / 2;
                     case "bottom" -> screenHeight;
                     default -> 0;
                 };
-                int[] pos = screenJsonData.getPos();
-                if (pos.length == 3) {
-                    int x = startX + pos[0], y = startY + pos[1], z = pos[2];
-                    screenJsonData.getElements().forEach(screenElement -> {
-                        int[] ePos = screenElement.getPos();
-                        if (ePos.length == 2) {
-                            int dx = x + ePos[0], dy = y + ePos[1];
-                            int type = Integer.parseInt(screenElement.getType());
-                            JsonObject p = screenElement.getParameter().getAsJsonObject();
-
-                            ScreenElementDataElement.Type t = screenElement.getTypeEnum();
-                            String tmpS = "";
-                            switch (t){
-                                case Image ->
-                                        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(p.get("mod").getAsString(), p.get("path").getAsString()), dx, dy, 0, 0, p.get("width").getAsInt(), p.get("height").getAsInt(), p.get("width").getAsInt(), p.get("height").getAsInt());
-                                case Self ->
-                                        tmpS = p.get("key").getAsString();
-                                case Custom ->
-                                        tmpS = PlayerInfo.getPlayerDat(p.get("key").getAsString());
-                                case PlayerData ->
-                                        tmpS = _FormatToString.formatValue(PlayerInfo.getPlayerAttribute(p.get("key").getAsString()), 2);
-                                case Js ->
-                                {
-                                    String key = p.get("key").getAsString();
-                                    tmpS = _EasyJS.creat()
-                                            .addParameter("x", dx)
-                                            .addParameter("y", dy)
-                                            .addParameter("screenWidth", screenWidth)
-                                            .addParameter("screenHeight", screenHeight)
-                                            .addParameter("server", Minecraft.getInstance().getCurrentServer())
-                                            .addParameter("player", localPlayer)
-                                            .addParameter("playerNbt", localPlayer.getPersistentData())
-                                            .addParameter("guiGraphics", guiGraphics)
-                                            .addParameter("minecraft", Minecraft.getInstance())
-                                            .runFile(Configs.ConfigDir_JS + key).toString();
-                                }
-                                case Slot ->
-                                        guiGraphics.renderItem(localPlayer.getInventory().getItem(Integer.parseInt(p.get("key").getAsString())),dx,dy);
-                            }
-                            if (!tmpS.isEmpty()) {
-                                String color = p.get("color").getAsString();
-                                if (color.equals("rainbow")){
-                                    guiGraphics.drawString(Minecraft.getInstance().font, ComponentStyle.Flash(tmpS,clientLevel.getDayTime()),dx,dy,0);
-                                }else {
-                                    guiGraphics.drawString(Minecraft.getInstance().font, tmpS, dx, dy, _ColorSupport.HexToColor(color));
-                                }
-                            }
+                Vector3i pos = screenRender.pos();
+                int x = startX + pos.x, y = startY + pos.y, z = pos.z;
+                screenRender.elements().forEach(element -> {
+                    Vector3i ePos = element.pos();
+                    int dx = x + ePos.x, dy = y + ePos.y, dz = z + ePos.z;
+                    guiGraphics.pose().pushPose();
+                    guiGraphics.pose().translate(0, 0, dz);
+                    String tmpS = "";
+                    switch (element.type()) {
+                        case Image ->{
+                            ResourceLocation res = Resources.getOrDefault(element.key(),ResourceLocation.tryParse(element.key()));
+                            if (res != null)
+                                guiGraphics.blit(res, dx, dy, 0, 0, element.width(), element.height(), element.width(), element.height());
                         }
-                    });
-                }
+                        case Self -> tmpS = element.key();
+                        case Custom -> tmpS = PlayerInfo.getPlayerDat(element.key());
+                        case PlayerData ->
+                                tmpS = _FormatToString.formatValue(PlayerInfo.getPlayerAttribute(element.key()), 2);
+                        case Js -> {
+                            String key = element.key();
+                            tmpS = _EasyJS.creat()
+                                    .addParameter("x", dx)
+                                    .addParameter("y", dy)
+                                    .addParameter("z", dz)
+                                    .addParameter("screenWidth", screenWidth)
+                                    .addParameter("screenHeight", screenHeight)
+                                    .addParameter("server", Minecraft.getInstance().getCurrentServer())
+                                    .addParameter("player", localPlayer)
+                                    .addParameter("playerNbt", localPlayer.getPersistentData())
+                                    .addParameter("guiGraphics", guiGraphics)
+                                    .addParameter("minecraft", Minecraft.getInstance())
+                                    .runFile(Configs.ConfigDir_JS + key).toString();
+                        }
+                        case Slot ->
+                                guiGraphics.renderItem(localPlayer.getInventory().getItem(Integer.parseInt(element.key())), dx, dy);
+                    }
+                    if (!tmpS.isEmpty()) {
+                        String color = element.color();
+                        if (color.equals("rainbow")) {
+                            guiGraphics.drawString(Minecraft.getInstance().font, ComponentStyle.Flash(tmpS, clientLevel.getDayTime()), dx, dy, 0);
+                        } else {
+                            guiGraphics.drawString(Minecraft.getInstance().font, tmpS, dx, dy, _ColorSupport.HexToColor(color));
+                        }
+                    }
+                    guiGraphics.pose().popPose();
+                });
+
             });
         }
+    }
+    private static final HashMap<String,Reader> fileTemp = new HashMap<>();
+    public static Reader getJsFile(String name) throws FileNotFoundException {
+        if (!fileTemp.containsKey(name)) fileTemp.put(name,new FileReader(Configs.ConfigDir_JS + name));
+        return fileTemp.get(name);
     }
 
 }

@@ -14,6 +14,7 @@ public class Config extends _JsonConfig<ConfigData> {
     public Config() {
         super(configFile, """
                 {
+                  "putDefault": true,
                   "renderScreenElement": true,
                   "outputGuiId": false,
                   "outputScreenPathName": false,

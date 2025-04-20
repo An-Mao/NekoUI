@@ -43,6 +43,8 @@ public class HotBarGui extends HotBarConfig{
     }
 
     public static void render(GuiGraphics guiGraphics, DeltaTracker partialTick){
+        if (!INSTANCE.getDatas().isEnable()) return;
+
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.options.hideGui)return;
         if (HotBarSys.isOutTime() && INSTANCE.getDatas().isDynamicDisplay()) return;
@@ -50,9 +52,13 @@ public class HotBarGui extends HotBarConfig{
         LocalPlayer localPlayer = minecraft.player;
         if (clientLevel != null && localPlayer != null) {
             if (clientLevel.isClientSide){
+
+
+
+
+
                 int screenWidth = minecraft.getWindow().getGuiScaledWidth();
                 int screenHeight = minecraft.getWindow().getGuiScaledHeight();
-
                 startX = switch (INSTANCE.getDatas().getStartX()) {
                     case "center" -> screenWidth / 2;
                     case "right" -> screenWidth;
@@ -106,5 +112,4 @@ public class HotBarGui extends HotBarConfig{
     private static void renderItemCountAndDamage(GuiGraphics guiGraphics,ItemStack itemStack){
         guiGraphics.renderItemDecorations(Minecraft.getInstance().font, itemStack,startX,startY);
     }
-
 }

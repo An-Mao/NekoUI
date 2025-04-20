@@ -16,7 +16,7 @@ public class HotBarConfig extends _JsonConfig<HotBarData> {
     public HotBarConfig() {
         super(filePath, """
                     {
-                      "enable": true,
+                      "enable": false,
                       "dynamicDisplay": false,
                       "startX": "center",
                       "startY": "bottom",

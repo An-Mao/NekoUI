@@ -47,9 +47,13 @@ public class MobHealthBar {
                     poseStack.translate(0, y, 0);
                     poseStack.mulPose(camera);
                     poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    //poseStack.mulPose(Axis.YP.rotationDegrees(30));
                     poseStack.scale(-0.0125F, -0.005F, 0.0125F);
+                    //RenderSupport.renderWarpedImage(poseStack, ResourceLocation.fromNamespaceAndPath(NekoUI.MOD_ID, "textures/hud/mob/hb1.png"), -64, 0, 128, 32, -45);
+                    //RenderSupport.renderWarpedImage(poseStack, ResourceLocation.fromNamespaceAndPath(NekoUI.MOD_ID, "textures/hud/mob/hb2.png"), -62, 0,  Math.min(h, 128), 32, -45);
                     DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 0, 128, 32, 128, 128);
                     DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 32, Math.min(h, 121), 32, 128, 128);
+
                     if (HealthBarConfig.I.getDatas().renderHealthBarText) {
                         String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
                         minecraft.font.drawInBatch(txt, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, 0x0000000, false, poseStack.last().pose(), minecraft.renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, packedLight);

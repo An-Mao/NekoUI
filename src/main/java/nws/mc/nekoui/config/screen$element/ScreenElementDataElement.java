@@ -46,6 +46,8 @@ public class ScreenElementDataElement {
     public void setParameter(JsonObject parameter) {
         this.parameter = parameter;
     }
+
+
     public enum Type {
         Image(0),
         Self(1),

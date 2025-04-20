@@ -8,6 +8,7 @@ import nws.dev.core.json._JsonConfig;
 import nws.mc.nekoui.config.Configs;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -24,7 +25,7 @@ public class BanScreenConfig extends _JsonConfig<List<String>> {
 
     @Override
     public List<String> getDatas() {
-        if (datas == null)  return List.of();
+        if (datas == null)  return new ArrayList<>();
         return super.getDatas();
     }
 
