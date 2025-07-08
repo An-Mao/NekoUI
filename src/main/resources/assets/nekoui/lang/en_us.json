@@ -16,6 +16,7 @@
   "screen.nekoui.projects_setting.types.message": "message",
   "screen.nekoui.projects_setting.types.command": "command",
   "screen.nekoui.projects_setting.types.button": "button",
+  "screen.nekoui.projects_setting.types.js": "js",
   "screen.nekoui.projects_setting.label.select": "select",
   "screen.nekoui.projects_setting.label.id": "id",
   "screen.nekoui.projects_setting.label.name": "name",

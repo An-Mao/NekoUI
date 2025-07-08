@@ -15,6 +15,7 @@
   "screen.nekoui.projects_setting.types.message": "消息",
   "screen.nekoui.projects_setting.types.command": "指令",
   "screen.nekoui.projects_setting.types.button": "按键",
+  "screen.nekoui.projects_setting.types.js": "js脚本",
   "screen.nekoui.projects_setting.label.select": "选择",
   "screen.nekoui.projects_setting.label.id": "唯一ID",
   "screen.nekoui.projects_setting.label.name": "显示名称",
