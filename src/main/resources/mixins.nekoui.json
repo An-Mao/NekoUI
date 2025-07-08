@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "anmao.mc.nekoui.mixin",
+  "package": "dev.anye.mc.nekoui.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "refmap.nekoui.json",
   "mixins": [

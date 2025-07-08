@@ -51,6 +51,7 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
+    mavenLocal()
     flatDir {
         dirs 'libs'
     }
@@ -59,12 +60,12 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    compileOnly "anmao.dev:core:$core_version"
+    compileOnly "dev.anye:core:$core_version"
 
 
-    implementation  fg.deobf( "anmao.mc:amlib:${minecraft_version}-${amlib_version}:all")
+    implementation fg.deobf( "dev.anye.mc:cores:${minecraft_version}-${amlib_version}:all")
     //minecraftLibrary 'anmao.dev:easy_json:1.0.0'
-    jarJar(group:'amlib', name:'amlib', version: "[${minecraft_version}-${amlib_version}:all,)")
+    jarJar(group:'dev.anye.mc', name:'cores', version: "[${minecraft_version}-${amlib_version}:all,)")
 }
 mixin{
     add sourceSets.main, "refmap.${mod_id}.json"
