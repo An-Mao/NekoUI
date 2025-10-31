@@ -1,0 +1,71 @@
+{
+  "title": "Item Page",
+  "projectNumber": 9,
+  "innerRadius": 15,
+  "outerRadius": 70,
+  "projects": [
+    {
+      "key": "SwitchItemSlot0",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot1",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot2",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot3",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot4",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot5",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot6",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot7",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "SwitchItemSlot8",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    }
+  ]
+}
