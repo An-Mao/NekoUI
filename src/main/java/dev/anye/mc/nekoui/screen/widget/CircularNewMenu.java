@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.anye.core.color._ColorSupport;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.Draw;
+import dev.anye.mc.cores.render.DrawSector;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
 import dev.anye.mc.nekoui.config.Configs;
@@ -226,7 +226,7 @@ public class CircularNewMenu extends RenderWidgetCore<CircularNewMenu> {
                 poseStack.pushPose();
                 poseStack.translate(centerX,centerY,0);
                 poseStack.mulPose(Axis.ZP.rotation((float) (startAngle)));
-                Draw.drawSector(poseStack.last().pose(),innerRadius,outerRadius,-halfFanArc,halfFanArc,bgc);
+                DrawSector.draw(poseStack.last().pose(),innerRadius,outerRadius,-halfFanArc,halfFanArc,bgc);
                 if (isValidIndex(i)) {
                     DT_ListBoxData boxData = getData(i);
                     String name = "";

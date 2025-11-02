@@ -1,16 +1,18 @@
 package dev.anye.mc.nekoui.screen;
 
 import com.mojang.logging.LogUtils;
-import dev.anye.core.javascript._EasyJS;
 import dev.anye.core.system._KeySimulate;
 import dev.anye.core.system._System;
+import dev.anye.mc.cores.js.Js;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
+import dev.anye.mc.graaljs.javascript.EasyJS;
 import dev.anye.mc.nekoui.config.Config;
 import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.config.menu.MenuScreenConfig;
 import dev.anye.mc.nekoui.dat$type.MenuProjectData;
 import dev.anye.mc.nekoui.screen.widget.CircularMenu;
 import dev.anye.mc.nekoui.screen.widget.CircularNewMenu;
+import dev.anye.mc.nekoui.util.HotKeyHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -74,9 +76,13 @@ public class MenuScreen extends Screen {
                             }
                             simulateKey(keys);
                         }
-                        case js -> _EasyJS.NotSafe()
-                                .addParameter("minecraft", Minecraft.getInstance())
-                                .runFile(Configs.ConfigDir_JS + menuData.value());
+                        case js -> {
+                            if (Js.CanRun) EasyJS.NotSafe()
+                                    .addParameter("minecraft", Minecraft.getInstance())
+                                    .runFile(Configs.ConfigDir_JS + menuData.value());
+                            else LOGGER.error("GraalJS not install can't run js code");
+                        }
+                        //case hotkey -> HotKeyHelper.I.check(menuData.value());
                     }
                 }
             }

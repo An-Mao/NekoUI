@@ -12,16 +12,18 @@ import dev.anye.mc.nekoui.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
-@EventBusSubscriber(modid = NekoUI.MOD_ID,bus = EventBusSubscriber.Bus.GAME ,value = Dist.CLIENT)
+@EventBusSubscriber(modid = NekoUI.MOD_ID,value = Dist.CLIENT)
 public class ClientEvent {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -86,16 +88,16 @@ public class ClientEvent {
             }
         }
     }
+    /*
     @SubscribeEvent
     public static void onNameTagRender(RenderNameTagEvent event){
         MobHealthBar.render(event.getEntity(),event.getPoseStack(),event.getPackedLight());
     }
-    /*
-    @SubscribeEvent
-    public static void onLivingRender(RenderLivingEvent.Pre event){
-        MobHealthBar.render(event.getEntity(),event.getPoseStack(),event.getPackedLight());
-
-    }
 
      */
+
+    @SubscribeEvent
+    public static void onLivingRender(RenderLivingEvent.Pre<LivingEntity,?> event){
+        MobHealthBar.render(event.getEntity(),event.getPoseStack(),event.getPackedLight());
+    }
 }

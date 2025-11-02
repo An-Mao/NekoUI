@@ -14,7 +14,7 @@ public class HealthBarConfig extends _JsonConfig<HealthBarData> {
                   "renderDistance":30,
                   "renderTop":0.5,
                   "renderHealthBar": true,
-                  "renderHealthBarText": true,
+                  "renderHealthBarText": false,
                   "renderEffect": true,
                   "effectRenderImage": true,
                   "effectImageRotationAngle":10000,

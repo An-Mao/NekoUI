@@ -17,6 +17,7 @@ public record MenuProjectData(String name, Type type, String value) {
         command(1),
         button(2),
         js(3);
+        //hotkey(4);
         private final int v;
         Type(int v){
             this.v = v;

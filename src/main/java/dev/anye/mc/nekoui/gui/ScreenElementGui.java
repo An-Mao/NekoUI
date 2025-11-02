@@ -2,8 +2,9 @@ package dev.anye.mc.nekoui.gui;
 
 import dev.anye.core.color._ColorSupport;
 import dev.anye.core.format._FormatToString;
-import dev.anye.core.javascript._EasyJS;
 import dev.anye.mc.cores.helper.component.ComponentStyle;
+import dev.anye.mc.cores.js.Js;
+import dev.anye.mc.graaljs.javascript.EasyJS;
 import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.player.PlayerInfo;
@@ -66,7 +67,8 @@ public class ScreenElementGui {
                                 tmpS = _FormatToString.formatValue(PlayerInfo.getPlayerAttribute(element.key()), 2);
                         case Js -> {
                             String key = element.key();
-                            tmpS = _EasyJS.NotSafe()
+
+                            if (Js.CanRun) tmpS = EasyJS.NotSafe()
                                     .addParameter("x", dx)
                                     .addParameter("y", dy)
                                     .addParameter("z", dz)
@@ -78,6 +80,7 @@ public class ScreenElementGui {
                                     .addParameter("guiGraphics", guiGraphics)
                                     .addParameter("minecraft", Minecraft.getInstance())
                                     .runFile(Configs.ConfigDir_JS + key).toString();
+                            else tmpS = "GraalJS not install can't run js code";
                         }
                         case Slot ->
                                 guiGraphics.renderItem(localPlayer.getInventory().getItem(Integer.parseInt(element.key())), dx, dy);

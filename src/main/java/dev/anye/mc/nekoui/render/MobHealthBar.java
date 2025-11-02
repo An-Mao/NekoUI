@@ -30,9 +30,11 @@ import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public class MobHealthBar {
-    private static final ResourceLocation HealthBar = ResourceLocation.tryBuild(NekoUI.MOD_ID,"textures/hud/mob/health_bar.png");
-    public static void render(Entity entity, PoseStack poseStack,int packedLight){
-        if (HealthBarConfig.I.getDatas().enable && entity instanceof LivingEntity livingEntity) {
+    //private static final ResourceLocation HealthBar = ResourceLocation.tryBuild(NekoUI.MOD_ID,"textures/hud/mob/health_bar.png");
+    private static final ResourceLocation HealthBar_B = ResourceLocation.tryBuild(NekoUI.MOD_ID,"textures/hud/mob/hb_b.png");
+    private static final ResourceLocation HealthBar_F = ResourceLocation.tryBuild(NekoUI.MOD_ID,"textures/hud/mob/hb_f.png");
+    public static void render(LivingEntity livingEntity, PoseStack poseStack,int packedLight){
+        if (HealthBarConfig.I.getDatas().enable) {
             Minecraft minecraft = Minecraft.getInstance();
             if (minecraft.player != null
                     && (HealthBarConfig.I.getDatas().renderOnlyView
@@ -42,7 +44,7 @@ public class MobHealthBar {
                 Quaternionf camera = minecraft.getEntityRenderDispatcher().cameraOrientation();
                 if (HealthBarConfig.I.getDatas().renderHealthBar) {
                     float y = livingEntity.getBbHeight() + HealthBarConfig.I.getDatas().renderTop;
-                    int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 121), 0);
+                    int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 128), 0);
                     poseStack.pushPose();
                     poseStack.translate(0, y, 0);
                     poseStack.mulPose(camera);
@@ -51,12 +53,32 @@ public class MobHealthBar {
                     poseStack.scale(-0.0125F, -0.005F, 0.0125F);
                     //RenderSupport.renderWarpedImage(poseStack, ResourceLocation.fromNamespaceAndPath(NekoUI.MOD_ID, "textures/hud/mob/hb1.png"), -64, 0, 128, 32, -45);
                     //RenderSupport.renderWarpedImage(poseStack, ResourceLocation.fromNamespaceAndPath(NekoUI.MOD_ID, "textures/hud/mob/hb2.png"), -62, 0,  Math.min(h, 128), 32, -45);
-                    DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 0, 128, 32, 128, 128);
-                    DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 32, Math.min(h, 121), 32, 128, 128);
+                    DrawImage.blit(poseStack,
+                            HealthBar_B,
+                            -64,
+                            0,
+                            0,
+                            0,
+                            0,
+                            128,
+                            16,
+                            128,
+                            16);
+                    DrawImage.blit(poseStack,
+                            HealthBar_F,
+                            -64,
+                            0,
+                            0,
+                            0,
+                            0,
+                            Math.min(h, 128),
+                            16,
+                            128,
+                            16);
 
                     if (HealthBarConfig.I.getDatas().renderHealthBarText) {
                         String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
-                        minecraft.font.drawInBatch(txt, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, 0x0000000, false, poseStack.last().pose(), minecraft.renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, packedLight);
+                        minecraft.font.drawInBatch(txt, -(float) minecraft.font.width(txt) / 2, 9 - (float) minecraft.font.lineHeight / 2, 0x0000000, false, poseStack.last().pose(), minecraft.renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, packedLight);
                     }
                     poseStack.popPose();
                 }

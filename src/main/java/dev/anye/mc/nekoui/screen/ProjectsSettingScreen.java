@@ -2,6 +2,9 @@ package dev.anye.mc.nekoui.screen;
 
 import com.mojang.logging.LogUtils;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
+import dev.anye.mc.cores.screen.widget.c.CWidgetButton;
+import dev.anye.mc.cores.screen.widget.c.CWidgetDropDownSelectBox;
+import dev.anye.mc.cores.screen.widget.c.CWidgetEditBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
 import dev.anye.mc.cores.screen.widget.simple.SimpleDropDownSelectBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
@@ -24,8 +27,8 @@ public class ProjectsSettingScreen extends ScreenCore {
     public static final String ID = "screen."+ NekoUI.MOD_ID +".projects_setting";
     private static final Logger LOGGER = LogUtils.getLogger();
     public boolean KeyListen;
-    public SimpleEditBox idEditBox,nameEditBox,valueEditBox;
-    public SimpleDropDownSelectBox runType;
+    public CWidgetEditBox idEditBox,nameEditBox,valueEditBox;
+    public CWidgetDropDownSelectBox runType;
     public ProjectsSettingScreen() {
         super(ID);
     }
@@ -51,21 +54,20 @@ public class ProjectsSettingScreen extends ScreenCore {
         py += 23;
         addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.type")));
         runType = createNewSelectBox(px + 50,py,50,16,getComponent("type"),getTypes());
-        runType.setLine(4);
         addRenderableWidget(runType);
 
         py += 23;
         addRenderableWidget(createNewLabel(px,py,50,16,getComponent("label.value")));
         valueEditBox = createNewEditBox(px+ 50,py,100,16,valueEditBox,getComponent("value_input"));
         addRenderableWidget(valueEditBox);
-        SimpleButton b = createNewButton(px + 50,py+16,16,16,getComponent("key"),this::setKeyListen);
+        CWidgetButton b = createNewButton(px + 50,py+16,16,16,getComponent("key"),this::setKeyListen);
         addRenderableWidget(b);
 
 
         py += 52;
-        SimpleButton save = createNewButton(px,py,32,16,getComponent("save"),this::saveConfig);
+        CWidgetButton save = createNewButton(px,py,32,16,getComponent("save"),this::saveConfig);
         addRenderableWidget(save);
-        SimpleButton delete =createNewButton(px + 64,py,32,16,getComponent("delete"),this::delete);
+        CWidgetButton delete =createNewButton(px + 64,py,32,16,getComponent("delete"),this::delete);
 
         addRenderableWidget(delete);
     }
@@ -84,7 +86,7 @@ public class ProjectsSettingScreen extends ScreenCore {
     public void saveConfig(){
         String id = idEditBox.getValue();
         if (id.isEmpty()) return;
-        MenuProjectData menuProjectData = new MenuProjectData(id,runType.getNowSelectIndex(),valueEditBox.getValue());
+        MenuProjectData menuProjectData = new MenuProjectData(nameEditBox.getValue(), runType.getNowSelectIndex(),valueEditBox.getValue());
         Configs.MenuProjects.put(id,menuProjectData);
         new MenuProjectIO(id+".json").setData(menuProjectData).save();
         Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
@@ -113,8 +115,9 @@ public class ProjectsSettingScreen extends ScreenCore {
     }
     public List<DT_ListBoxData> getTypes(){
         List<DT_ListBoxData> data = new ArrayList<>();
-        for (RunType type : RunType.values()){
-            data.add(new DT_ListBoxData(getComponent("types."+type.name()),type.v));
+        for (MenuProjectData.Type type : MenuProjectData.Type.values()){
+            //System.out.println(type.name());
+            data.add(new DT_ListBoxData(getComponent("types."+type.name()),type.v()));
         }
         return data;
     }
@@ -127,24 +130,6 @@ public class ProjectsSettingScreen extends ScreenCore {
                 runType.setSelect(menuData.type().v());
                 valueEditBox.setValue(menuData.value());
             }
-        }
-    }
-    public enum RunType{
-        message(0),
-        command(1),
-        button(2),
-        js(3);
-        private final int v;
-        RunType(int v){
-            this.v = v;
-        }
-        public static RunType fromInt(int type) {
-            for (RunType t : RunType.values()) {
-                if (t.v== type) {
-                    return t;
-                }
-            }
-            throw new IllegalArgumentException("No enum constant with value " + type);
         }
     }
 }

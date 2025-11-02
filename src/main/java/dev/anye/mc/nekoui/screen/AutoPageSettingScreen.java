@@ -1,5 +1,7 @@
 package dev.anye.mc.nekoui.screen;
 
+import dev.anye.mc.cores.screen.widget.c.CWidgetEditBox;
+import dev.anye.mc.cores.screen.widget.c.CWidgetLabel;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
 import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleLabel;
@@ -9,7 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class AutoPageSettingScreen extends ScreenCore{
-    SimpleEditBox sectorsEditBox,innerRadiusEditBox,outerRadiusEditBox,selectColorEditBox,usualColorEditBox;
+    CWidgetEditBox sectorsEditBox,innerRadiusEditBox,outerRadiusEditBox,selectColorEditBox,usualColorEditBox;
     public AutoPageSettingScreen() {
         super("screen.nekoui.auto_page_setting");
     }
@@ -21,8 +23,7 @@ public class AutoPageSettingScreen extends ScreenCore{
         int cx = width/4;
         int py = 50;
 
-        SimpleLabel simpleLabel = createNewLabel(cx,py,12,16,getComponent("label.sectors"));
-        simpleLabel.setAutoWidth(true);
+        CWidgetLabel simpleLabel = createNewLabel(cx,py,12,16,getComponent("label.sectors"));
         addRenderableWidget(simpleLabel);
 
         sectorsEditBox = createNewEditBox(simpleLabel.getX()+simpleLabel.getWidth(),py,24,16,sectorsEditBox,getComponent("sectors_input"));
@@ -32,7 +33,6 @@ public class AutoPageSettingScreen extends ScreenCore{
 
         py += 20;
         simpleLabel = createNewLabel(cx,py,12,16,getComponent("label.inner_radius"));
-        simpleLabel.setAutoWidth(true);
         addRenderableWidget(simpleLabel);
         innerRadiusEditBox = createNewEditBox(simpleLabel.getX()+simpleLabel.getWidth(),py,32,16,innerRadiusEditBox,getComponent("inner_radius_input"));
         addRenderableWidget(innerRadiusEditBox);
@@ -41,7 +41,6 @@ public class AutoPageSettingScreen extends ScreenCore{
 
         py += 20;
         simpleLabel = createNewLabel(cx,py,12,16,getComponent("label.outer_radius"));
-        simpleLabel.setAutoWidth(true);
         addRenderableWidget(simpleLabel);
         outerRadiusEditBox = createNewEditBox(simpleLabel.getX()+simpleLabel.getWidth(),py,32,16,outerRadiusEditBox,getComponent("outer_radius_input"));
         addRenderableWidget(outerRadiusEditBox);
@@ -50,7 +49,6 @@ public class AutoPageSettingScreen extends ScreenCore{
 
         py += 20;
         simpleLabel = createNewLabel(cx,py,12,16,getComponent("label.select_color"));
-        simpleLabel.setAutoWidth(true);
         addRenderableWidget(simpleLabel);
         selectColorEditBox = createNewEditBox(simpleLabel.getX()+simpleLabel.getWidth(),py,90,16,selectColorEditBox,getComponent("select_color_input"));
         addRenderableWidget(selectColorEditBox);
@@ -58,14 +56,13 @@ public class AutoPageSettingScreen extends ScreenCore{
 
         py += 20;
         simpleLabel = createNewLabel(cx,py,12,16,getComponent("label.usual_color"));
-        simpleLabel.setAutoWidth(true);
         addRenderableWidget(simpleLabel);
         usualColorEditBox = createNewEditBox(simpleLabel.getX()+simpleLabel.getWidth(),py,90,16,usualColorEditBox,getComponent("usual_color_input"));
         addRenderableWidget(usualColorEditBox);
         usualColorEditBox.setValue(MenuScreenConfig.INSTANCE.getDatas().UsualColor);
 
         py += 24;
-        SimpleButton save = createNewButton(cx,py,32,16,getComponent("save"),this::saveConfig);
+        CWidgetLabel save = createNewButton(cx,py,32,16,getComponent("save"),this::saveConfig);
         addRenderableWidget(save);
     }
 
