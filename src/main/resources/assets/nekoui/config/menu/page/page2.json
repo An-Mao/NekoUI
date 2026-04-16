@@ -1,0 +1,22 @@
+{
+  "title": "Command",
+  "projectNumber": 7,
+  "innerRadius": 20,
+  "outerRadius": 80,
+  "projects": [
+    {
+      "key": "TestCommand",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    },
+    {
+      "key": "TestCommand1",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    }
+  ]
+}
