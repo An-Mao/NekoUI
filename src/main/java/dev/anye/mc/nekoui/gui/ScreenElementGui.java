@@ -28,7 +28,7 @@ public class ScreenElementGui {
     public static final HashMap<String,               Identifier> Resources = new HashMap<>();
     public static void render (GuiGraphicsExtractor guiGraphics, DeltaTracker pPartialTick){
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.hideGui)return;
+        if (minecraft.options.hideGui) return;
         Level clientLevel = minecraft.level;
         LocalPlayer localPlayer = minecraft.player;
         if (clientLevel != null && clientLevel.isClientSide() && localPlayer != null) {
