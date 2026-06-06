@@ -7,7 +7,9 @@ import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
 import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.dat$type.MenuPageData;
-import dev.anye.mc.nekoui.dat$type.MenuProjectData;
+import dev.anye.mc.nekoui.register.menu_page.MenuPage;
+import dev.anye.mc.nekoui.register.menu_project.MenuProject;
+import dev.anye.mc.nekoui.register.menu_project.MenuProjectRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -309,12 +311,14 @@ public class CircularNewMenu extends RenderWidgetCore<CircularNewMenu> {
         public static RenderPageData creat(MenuPageData pageData, DT_ListBoxData.OnPress func){
             List<DT_ListBoxData> data = new ArrayList<>();
             pageData.projects().forEach(( projectData) -> {
-                MenuProjectData menuData = Configs.MenuProjects.get(projectData.key());
-                String name = "";
+                MenuProject menuData = Configs.MenuProjects.get(projectData.key());
                 if (menuData != null) {
-                    name = menuData.name();
-                }
-                data.add(new DT_ListBoxData(Component.literal(name), projectData.key(), func));
+					data.add(new DT_ListBoxData(Component.literal(menuData.name()), projectData.key(), func));
+                }else {
+					MenuProjectRegister.REGISTRY.get(Identifier.tryParse(projectData.key())).ifPresent(holder -> {
+						data.add(new DT_ListBoxData(Component.literal(holder.value().name()), projectData.key(), func));
+					});
+				}
             });
             return new RenderPageData(pageData,data);
         }

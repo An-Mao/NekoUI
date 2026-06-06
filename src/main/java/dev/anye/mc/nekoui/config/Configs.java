@@ -16,6 +16,9 @@ import dev.anye.mc.nekoui.config.screen$element.ScreenRenderIO;
 import dev.anye.mc.nekoui.dat$type.MenuPageData;
 import dev.anye.mc.nekoui.dat$type.MenuProjectData;
 import dev.anye.mc.nekoui.dat$type.ScreenRender;
+import dev.anye.mc.nekoui.register.menu_project.MenuProject;
+import dev.anye.mc.nekoui.register.screen_element.ScreenElement;
+
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -33,8 +36,8 @@ public class Configs {
     public static final String ConfigDir_MenuPage = _File.getFilePath(ConfigDir_Menu,"Page");
     private static boolean isInit = true;
 
-    public static final List<ScreenRender> ScreenRenders = new ArrayList<>();
-    public static final HashMap<String, MenuProjectData> MenuProjects = new HashMap<>();
+    public static final List<ScreenElement> ScreenRenders = new ArrayList<>();
+    public static final HashMap<String, MenuProject> MenuProjects = new HashMap<>();
     public static final List<MenuPageData> MenuPage = new ArrayList<>();
 
     static {
@@ -68,20 +71,17 @@ public class Configs {
         HotBarConfig.INSTANCE.init();
         MenuScreenConfig.INSTANCE.init();
 
-        //MenuConfig.INSTANCE.init();
-
         MobDirectionConfig.I.init();
-        //PageConfig.INSTANCE.init();
+        
         LoadScreenRender();
         LoadMenuProject();
         LoadMenuPage();
     }
-
     public static void LoadScreenRender() {
         ScreenRenders.clear();
         _File.getFiles(ConfigDir_ScreenElement,".json").forEach(path -> {
             ScreenRender screenRender = new ScreenRenderIO(path.getFileName().toString()).getDatas();
-            if (screenRender != null) ScreenRenders.add(screenRender);
+            if (screenRender != null) ScreenRenders.add(new ScreenElement(screenRender));
         });
     }
 
@@ -89,7 +89,7 @@ public class Configs {
         MenuProjects.clear();
         _File.getFiles(ConfigDir_MenuProject,".json").forEach(path -> {
             MenuProjectData menuProjectData = new MenuProjectIO(path.getFileName().toString()).getDatas();
-            if (menuProjectData != null) MenuProjects.put(getFileNameWithoutExtension(path.getFileName().toString()), menuProjectData);
+            if (menuProjectData != null) MenuProjects.put(getFileNameWithoutExtension(path.getFileName().toString()), new MenuProject(menuProjectData));
         });
     }
     public static void LoadMenuPage() {

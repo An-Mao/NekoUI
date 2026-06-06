@@ -16,6 +16,7 @@ public class CommandList {
         this.dispatcher = dispatcher;
         commands = new ArrayList<>();
         commands.add(CommandData.create(CommandData.Permission_Player,Command::reloadAll,root,"reload"));
+		commands.add(CommandData.create(CommandData.Permission_Player,Command::reloadScreenElement,root,"reload","screen_element"));
 
 
     }

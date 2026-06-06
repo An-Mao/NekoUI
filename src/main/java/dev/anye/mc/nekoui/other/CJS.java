@@ -1,7 +1,7 @@
 package dev.anye.mc.nekoui.other;
 
-import dev.anye.core.javascript._JavaScript;
 import dev.anye.core.javascript._GraalJS;
+import dev.anye.core.javascript._JavaScript;
 import dev.anye.core.javascript._NashornJS;
 import dev.anye.mc.cores.js.Js;
 

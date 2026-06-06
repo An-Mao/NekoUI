@@ -1,11 +1,6 @@
-package dev.anye.mc.nekoui.register.screen_element;
+package dev.anye.mc.nekoui.register.menu_project;
 
-import dev.anye.core.system._File;
-import dev.anye.mc.cores.Cores;
 import dev.anye.mc.nekoui.NekoUI;
-import dev.anye.mc.nekoui.config.Configs;
-import dev.anye.mc.nekoui.config.screen$element.ScreenRenderIO;
-import dev.anye.mc.nekoui.dat$type.ScreenRender;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -16,32 +11,31 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 
 import java.util.function.Supplier;
 
-public class ScreenElementRegister {
-    public static final Identifier KEY =  Identifier.fromNamespaceAndPath(NekoUI.MOD_ID, "screen_element");
-    public static final ResourceKey<Registry<ScreenElement>> REGISTRY_KEY = ResourceKey.createRegistryKey(KEY);
-    public static final Registry<ScreenElement> REGISTRY = new RegistryBuilder<>(REGISTRY_KEY)
+public class MenuProjectRegister {
+    public static final Identifier KEY =  Identifier.fromNamespaceAndPath(NekoUI.MOD_ID, "menu_project");
+    public static final ResourceKey<Registry<MenuProject>> REGISTRY_KEY = ResourceKey.createRegistryKey(KEY);
+    public static final Registry<MenuProject> REGISTRY = new RegistryBuilder<>(REGISTRY_KEY)
             .sync(false)
             .create();
-    public static final DeferredRegister<ScreenElement> SCREEN_ELEMENT = DeferredRegister.create(REGISTRY, NekoUI.MOD_ID);
+    public static final DeferredRegister<MenuProject> SCREEN_ELEMENT = DeferredRegister.create(REGISTRY, NekoUI.MOD_ID);
 
+    /*
 	static {
 		regFromConfig();
 	}
 	public static void regFromConfig(){
-		_File.getFiles(Configs.ConfigDir_ScreenElement,".json").forEach(path -> {
+		_File.getFiles(Configs.ConfigDir_MenuProject,".json").forEach(path -> {
 			String k = path.getFileName().toString();
-            ScreenRender sr = new ScreenRenderIO(k).getDatas();
+            MenuProjectData menuProjectData = new MenuProjectIO(k).getDatas();
 			k = k.substring(0, k.length() - 5);
-            if (sr != null && !REGISTRY.containsKey(Identifier.fromNamespaceAndPath(Cores.MOD_ID, k))) reg(k, () -> new ScreenElement(sr));
+            if (menuProjectData != null && !REGISTRY.containsKey(Identifier.fromNamespaceAndPath(Cores.MOD_ID, k))) reg(k, () -> new MenuProject(menuProjectData));
         });
 	}
-    public static <I extends ScreenElement> DeferredHolder<ScreenElement, I>  reg(String name, Supplier<? extends I> sup) {
+
+     */
+    public static <I extends MenuProject> DeferredHolder<MenuProject, I>  reg(String name, Supplier<? extends I> sup) {
         return SCREEN_ELEMENT.register(name, sup);
     }
-
-
-
-
     public static void register(IEventBus eventBus){
         SCREEN_ELEMENT.register(eventBus);
     }

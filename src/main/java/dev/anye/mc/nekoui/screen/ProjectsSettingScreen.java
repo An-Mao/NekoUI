@@ -10,6 +10,7 @@ import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.config.menu.MenuProjectIO;
 import dev.anye.mc.nekoui.dat$type.MenuProjectData;
+import dev.anye.mc.nekoui.register.menu_project.MenuProject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
@@ -84,7 +85,7 @@ public class ProjectsSettingScreen extends ScreenCore {
         String id = idEditBox.getValue();
         if (id.isEmpty()) return;
         MenuProjectData menuProjectData = new MenuProjectData(id,runType.getNowSelectIndex(),valueEditBox.getValue());
-        Configs.MenuProjects.put(id,menuProjectData);
+        Configs.MenuProjects.put(id,new MenuProject(menuProjectData));
         new MenuProjectIO(id+".json").setData(menuProjectData).save();
         Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
     }
@@ -124,12 +125,12 @@ public class ProjectsSettingScreen extends ScreenCore {
     }
     public void setData(Object v){
         if (v instanceof String id){
-            MenuProjectData menuData = Configs.MenuProjects.get(id);
-            if (menuData != null){
+            MenuProject menuProject = Configs.MenuProjects.get(id);
+            if (menuProject != null){
                 idEditBox.setValue(id);
-                nameEditBox.setValue(menuData.name());
-                runType.setSelect(menuData.type().v());
-                valueEditBox.setValue(menuData.value());
+                nameEditBox.setValue(menuProject.name());
+                runType.setSelect(menuProject.type().v());
+                valueEditBox.setValue(menuProject.value());
             }
         }
     }

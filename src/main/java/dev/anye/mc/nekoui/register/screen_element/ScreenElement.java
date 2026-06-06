@@ -1,9 +1,5 @@
 package dev.anye.mc.nekoui.register.screen_element;
 
-import java.util.HashMap;
-
-import org.joml.Vector3i;
-
 import dev.anye.core.color._ColorSupport;
 import dev.anye.core.format._FormatToString;
 import dev.anye.core.system._File;
@@ -17,37 +13,38 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
+import org.joml.Vector3i;
 
-public abstract class ScreenElement {
+import java.util.HashMap;
+
+public class ScreenElement {
     public static final HashMap<String,Identifier> Resources = new HashMap<>();
-	private ScreenRender config;
+	private final ScreenRender config;
 	private int x;
 	private int y;
-	private int renderX;
-	private int renderY;
 	public ScreenElement(ScreenRender screenRender) {
 		this.config = screenRender;
 	}
 	public void reSize(int screenWidth, int screenHeight) {
 		x = switch (config.x()) {
 			case "left" -> 0;
-			case "center" -> screenWidth / 2;
+			case "center" -> screenWidth >> 1;
 			case "right" -> screenWidth;
 			default -> config.x().isEmpty() ? 0 : Integer.parseInt(config.x());
 		};
 		y = switch (config.y()) {
 			case "top" -> 0;
-			case "center" -> screenHeight / 2;
+			case "center" -> screenHeight >> 1;
 			case "bottom" -> screenHeight;
 			default -> config.y().isEmpty() ? 0 : Integer.parseInt(config.y());
 		};
-		renderX = x + config.pos().x;
-		renderY = y + config.pos().y;
+		x += config.pos().x;
+		y += config.pos().y;
 	}
 	public void render(Minecraft minecraft, LocalPlayer localPlayer, GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight) {
 		config.elements().forEach(element -> {
 			Vector3i ePos = element.pos();
-			int dx = renderX + ePos.x, dy = renderY + ePos.y;
+			int dx = this.x + ePos.x, dy = this.y + ePos.y;
 			guiGraphics.pose().pushMatrix();
 			guiGraphics.pose().translate(0, 0);
 			String tmpS = "";
@@ -87,4 +84,6 @@ public abstract class ScreenElement {
 			guiGraphics.pose().popMatrix();
 		});
 	}
+
+	public void reload(){};
 }

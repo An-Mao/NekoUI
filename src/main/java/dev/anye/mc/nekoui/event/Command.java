@@ -12,6 +12,10 @@ public class Command {
         context.getSource().sendSuccess(()-> Component.translatable("reload.nekoui.all.success"), false);
         return 1;
     }
-
+	public static int reloadScreenElement(CommandContext<CommandSourceStack> context) {
+		Configs.LoadScreenRender();
+		context.getSource().sendSuccess(()-> Component.translatable("reload.nekoui.screen_element.success"), false);
+		return 1;
+	}
 
 }

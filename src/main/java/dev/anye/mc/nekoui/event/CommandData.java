@@ -3,7 +3,6 @@ package dev.anye.mc.nekoui.event;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionCheck;
 
 import java.util.List;

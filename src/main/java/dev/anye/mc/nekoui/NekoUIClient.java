@@ -104,7 +104,7 @@ public class NekoUIClient {
     }
     @SubscribeEvent
     public static void onGuiReg(RegisterGuiLayersEvent event){
-        event.registerAboveAll(ScreenElementGui.RESOURCE_LOCATION, ScreenElementGui::render);
+        event.registerAboveAll(ScreenElementGui.KEY, ScreenElementGui::render);
         event.registerAboveAll(MobDirectionGui.RESOURCE_LOCATION, MobDirectionGui::render);
         event.registerAboveAll(HotBarGui.RESOURCE_LOCATION, HotBarGui::render);
     }

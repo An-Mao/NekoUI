@@ -1,16 +1,12 @@
 package dev.anye.mc.nekoui.gui;
 
-import com.mojang.blaze3d.textures.GpuTextureView;
 import dev.anye.core.color._ColorSupport;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.GuiGraphicsX;
 import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.mob$direction.MobDirectionConfig;
-import dev.anye.mc.nekoui.render.element.ImageRenderState;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;

@@ -7,15 +7,10 @@ import dev.anye.core.color._ColorSupport;
 import dev.anye.core.json._JsonConfig;
 import dev.anye.core.system._File;
 import dev.anye.mc.nekoui.config.Configs;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import org.slf4j.Logger;
 
 public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
@@ -26,27 +21,27 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
     public MobDirectionConfig() {
         super(filePath, """
                 {
-                                      "enable": true,
-                                      "dynamicDisplay":true,
-                                      "poiShowRadius":40,
-                                      "poiRadius":22,
-                                      "poiSize":11,
-                                      "poiMaxSize": 9,
-                                      "poiMinSize": 2,
-                                      "ratio":-0.5,
-                                      "onlyLivingEntity":true,
-                                      "notInListMode":true,
-                                      "entityList":{
-                                          "minecraft.chest_minecart": true
-                                      },
-                                      "defaultColor":"0xFF000000",
-                                      "useEggColor": false,
-                                      "eggLayerIndex": 0,
-                                      "entityColors":{
-                                          "minecraft.player": "0x56FFFFFF",
-                                          "minecraft.chest_minecart": "0xFFFFFF00"
-                                      }
-                                    }""", new TypeToken<>(){});
+					"enable": true,
+					"dynamicDisplay":true,
+					"poiShowRadius":40,
+					"poiRadius":22,
+					"poiSize":11,
+					"poiMaxSize": 9,
+					"poiMinSize": 2,
+					"ratio":-0.5,
+					"onlyLivingEntity":true,
+					"notInListMode":true,
+					"entityList":{
+						"minecraft.chest_minecart": true
+					},
+					"defaultColor":"0xFF000000",
+					"useEggColor": false,
+					"eggLayerIndex": 0,
+					"entityColors":{
+						"minecraft.player": "0x56FFFFFF",
+						"minecraft.chest_minecart": "0xFFFFFF00"
+					}
+				}""", new TypeToken<>(){});
 
         //if (getDatas().isUseEggColor()) writeEggColor();
         writeColor();
