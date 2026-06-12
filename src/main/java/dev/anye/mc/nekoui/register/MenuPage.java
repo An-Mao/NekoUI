@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.register.menu_page;
+package dev.anye.mc.nekoui.register;
 
 import dev.anye.mc.nekoui.dat$type.MenuPageData;
 

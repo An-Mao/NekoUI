@@ -14,19 +14,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
-    @Unique
-    private static final Logger nekoUI$LOGGER = LogUtils.getLogger();
+	@Unique
+	private static final Logger nekoUI$LOGGER = LogUtils.getLogger();
 
-    @Inject(method = "setScreen" ,at = @At("HEAD"), cancellable = true)
-    public void nekoui$setScreen$ban(Screen pGuiScreen, CallbackInfo ci){
-        if (pGuiScreen != null) {
-            String path = pGuiScreen.getClass().getName();
-            if (Config.INSTANCE.getDatas().isOutputScreenPathName()) {
-                nekoUI$LOGGER.info(path);
-            }
-            if (BanScreenConfig.I.isBan(path)) {
-                ci.cancel();
-            }
-        }
-    }
+	@Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+	public void nekoui$setScreen$ban(Screen pGuiScreen, CallbackInfo ci) {
+		if (pGuiScreen != null) {
+			String path = pGuiScreen.getClass().getName();
+			if (Config.INSTANCE.getDatas().isOutputScreenPathName()) {
+				nekoUI$LOGGER.info(path);
+			}
+			if (BanScreenConfig.I.isBan(path)) {
+				ci.cancel();
+			}
+		}
+	}
 }

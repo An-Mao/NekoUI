@@ -18,13 +18,15 @@ import org.joml.Vector3i;
 import java.util.HashMap;
 
 public class ScreenElement {
-    public static final HashMap<String,Identifier> Resources = new HashMap<>();
+	public static final HashMap<String, Identifier> Resources = new HashMap<>();
 	private final ScreenRender config;
 	private int x;
 	private int y;
+
 	public ScreenElement(ScreenRender screenRender) {
 		this.config = screenRender;
 	}
+
 	public void reSize(int screenWidth, int screenHeight) {
 		x = switch (config.x()) {
 			case "left" -> 0;
@@ -41,6 +43,7 @@ public class ScreenElement {
 		x += config.pos().x;
 		y += config.pos().y;
 	}
+
 	public void render(Minecraft minecraft, LocalPlayer localPlayer, GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight) {
 		config.elements().forEach(element -> {
 			Vector3i ePos = element.pos();
@@ -49,10 +52,10 @@ public class ScreenElement {
 			guiGraphics.pose().translate(0, 0);
 			String tmpS = "";
 			switch (element.type()) {
-				case Image ->{
-					Identifier res = Resources.getOrDefault(element.key(),Identifier.tryParse(element.key()));
+				case Image -> {
+					Identifier res = Resources.getOrDefault(element.key(), Identifier.tryParse(element.key()));
 					if (res != null)
-						guiGraphics.blit(RenderPipelines.GUI_TEXTURED,res, dx, dy, 0, 0, element.width(), element.height(), element.width(), element.height());
+						guiGraphics.blit(RenderPipelines.GUI_TEXTURED, res, dx, dy, 0, 0, element.width(), element.height(), element.width(), element.height());
 				}
 				case Self -> tmpS = element.key();
 				case Custom -> tmpS = PlayerInfo.getPlayerDat(element.key());
@@ -60,23 +63,24 @@ public class ScreenElement {
 				case Js -> {
 					String key = element.key();
 					tmpS = CJS.E.addParameter("x", dx)
-								.addParameter("y", dy)
-								.addParameter("screenWidth", screenWidth)
-								.addParameter("screenHeight", screenHeight)
-								.addParameter("server", minecraft.getCurrentServer())
-								.addParameter("player", localPlayer)
-								.addParameter("playerNbt", localPlayer.getPersistentData())
-								.addParameter("guiGraphics", guiGraphics)
-								.addParameter("minecraft", minecraft)
-								.runFile(key, _File.getFilePath(Configs.ConfigDir_JS , key)).toString();
+							.addParameter("y", dy)
+							.addParameter("screenWidth", screenWidth)
+							.addParameter("screenHeight", screenHeight)
+							.addParameter("server", minecraft.getCurrentServer())
+							.addParameter("player", localPlayer)
+							.addParameter("playerNbt", localPlayer.getPersistentData())
+							.addParameter("guiGraphics", guiGraphics)
+							.addParameter("minecraft", minecraft)
+							.runFile(key, _File.getFilePath(Configs.ConfigDir_JS, key)).toString();
 				}
-				case Slot ->guiGraphics.item(localPlayer.getInventory().getItem(Integer.parseInt(element.key())), dx, dy);
+				case Slot ->
+						guiGraphics.item(localPlayer.getInventory().getItem(Integer.parseInt(element.key())), dx, dy);
 			}
 			if (!tmpS.isEmpty()) {
 				String color = element.color();
 				ComponentStyle.RainbowType rainbowType = ComponentStyle.RainbowType.GetByName(color);
 				if (rainbowType != null) {
-					guiGraphics.text(minecraft.font, ComponentStyle.Flash(tmpS,rainbowType), dx, dy, 0xffffffff);
+					guiGraphics.text(minecraft.font, ComponentStyle.Flash(tmpS, rainbowType), dx, dy, 0xffffffff);
 				} else {
 					guiGraphics.text(minecraft.font, tmpS, dx, dy, _ColorSupport.HexToColor(color));
 				}
@@ -85,5 +89,8 @@ public class ScreenElement {
 		});
 	}
 
-	public void reload(){};
+	public void reload() {
+	}
+
+	;
 }

@@ -7,11 +7,12 @@ import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.dat$type.MenuPageData;
 
 public class MenuPageIO extends _JsonConfig<MenuPageData> {
-    public MenuPageIO(String filePath) {
-        super(_File.getFilePath(Configs.ConfigDir_MenuPage , filePath), "", new TypeToken<>(){});
-    }
+	public MenuPageIO(String filePath) {
+		super(_File.getFilePath(Configs.ConfigDir_MenuPage, filePath), "", new TypeToken<>() {
+		});
+	}
 
-    public void setData(MenuPageData menuPageData) {
-        this.datas = menuPageData;
-    }
+	public void setData(MenuPageData menuPageData) {
+		this.datas = menuPageData;
+	}
 }

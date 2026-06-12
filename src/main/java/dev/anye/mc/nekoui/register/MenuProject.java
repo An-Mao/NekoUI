@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.register.menu_project;
+package dev.anye.mc.nekoui.register;
 
 import com.mojang.logging.LogUtils;
 import dev.anye.core.system._File;

@@ -14,13 +14,13 @@ import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
 public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String filePath = _File.getFilePath(Configs.ConfigDir ,"mob-direction.json");
-    public static final MobDirectionConfig I = new MobDirectionConfig();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final String filePath = _File.getFilePath(Configs.ConfigDir, "mob-direction.json");
+	public static final MobDirectionConfig I = new MobDirectionConfig();
 
-    public MobDirectionConfig() {
-        super(filePath, """
-                {
+	public MobDirectionConfig() {
+		super(filePath, """
+				            {
 					"enable": true,
 					"dynamicDisplay":true,
 					"poiShowRadius":40,
@@ -41,60 +41,64 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 						"minecraft.player": "0x56FFFFFF",
 						"minecraft.chest_minecart": "0xFFFFFF00"
 					}
-				}""", new TypeToken<>(){});
+				}""", new TypeToken<>() {
+		});
 
-        //if (getDatas().isUseEggColor()) writeEggColor();
-        writeColor();
-    }
+		//if (getDatas().isUseEggColor()) writeEggColor();
+		writeColor();
+	}
 
-    @Override
-    public void init() {
-        super.init();
-    }
+	@Override
+	public void init() {
+		super.init();
+	}
 
-    @Override
-    public MobDirectionData getDatas() {
-        if (datas== null) return new MobDirectionData();
-        return datas;
-    }
+	@Override
+	public MobDirectionData getDatas() {
+		if (datas == null) return new MobDirectionData();
+		return datas;
+	}
 
-    public int getEntityColor(Entity entity){
-        if (entity != null){
-            Identifier res = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-            return getEntityColor(res.toLanguageKey());
-        }
-        return _ColorCDT.white;
-    }
+	public int getEntityColor(Entity entity) {
+		if (entity != null) {
+			Identifier res = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+			return getEntityColor(res.toLanguageKey());
+		}
+		return _ColorCDT.white;
+	}
 
-    public int getEntityColor(String entity){
-        return getDatas().getColor(entity);
-    }
-    public boolean isShowPoi(Entity entity){
-        if (entity != null){
-            Identifier res = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-            return isShowPoi(res.toLanguageKey());
-        }
-        return false;
-    }
-    public boolean isShowPoi(String entity){
-        return getDatas().isShow(entity);
-    }
+	public int getEntityColor(String entity) {
+		return getDatas().getColor(entity);
+	}
 
-    public static int getEntityColor(MobCategory mobCategory) {
-        return mobCategory == MobCategory.MONSTER ? _ColorCDT.red : mobCategory.isPersistent() ? _ColorCDT.blue : mobCategory.isFriendly() ? _ColorCDT.green : _ColorCDT.yellow;
-    }
-    public void writeColor(){
-        BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> {
-            String eid = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toLanguageKey();
-            if (getDatas().getEntityColors().get(eid) == null){
-                int color = getEntityColor(entityType.getCategory());
-                //int color = getSpawnEggColors(entityType)[getDatas().getEggLayerIndex()];
-                if (color == -1) return;
-                getDatas().getEntityColors().put(eid, _ColorSupport.intToHexColor(color));
-            }
-        });
-        save();
-    }
+	public boolean isShowPoi(Entity entity) {
+		if (entity != null) {
+			Identifier res = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+			return isShowPoi(res.toLanguageKey());
+		}
+		return false;
+	}
+
+	public boolean isShowPoi(String entity) {
+		return getDatas().isShow(entity);
+	}
+
+	public static int getEntityColor(MobCategory mobCategory) {
+		return mobCategory == MobCategory.MONSTER ? _ColorCDT.red : mobCategory.isPersistent() ? _ColorCDT.blue : mobCategory.isFriendly() ? _ColorCDT.green : _ColorCDT.yellow;
+	}
+
+	public void writeColor() {
+		BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> {
+			String eid = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toLanguageKey();
+			if (getDatas().getEntityColors().get(eid) == null) {
+				int color = getEntityColor(entityType.getCategory());
+				//int color = getSpawnEggColors(entityType)[getDatas().getEggLayerIndex()];
+				if (color == -1) return;
+				getDatas().getEntityColors().put(eid, _ColorSupport.intToHexColor(color));
+			}
+		});
+		save();
+	}
     /*
     public void writeEggColor(){
         BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> {

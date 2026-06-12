@@ -11,23 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BanScreenConfig extends _JsonConfig<List<String>> {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String configFile = _File.getFilePath(Configs.ConfigDir ,"ban-screen.json");
-    public static final BanScreenConfig I = new BanScreenConfig();
-    public BanScreenConfig() {
-        super(configFile, """
-                    [
-                      "something"
-                    ]""", new TypeToken<>(){});
-    }
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final String configFile = _File.getFilePath(Configs.ConfigDir, "ban-screen.json");
+	public static final BanScreenConfig I = new BanScreenConfig();
 
-    @Override
-    public List<String> getDatas() {
-        if (datas == null)  return new ArrayList<>();
-        return super.getDatas();
-    }
+	public BanScreenConfig() {
+		super(configFile, """
+				[
+				  "something"
+				]""", new TypeToken<>() {
+		});
+	}
 
-    public boolean isBan(String s){
-        return getDatas() != null && getDatas().contains(s);
-    }
+	@Override
+	public List<String> getDatas() {
+		if (datas == null) return new ArrayList<>();
+		return super.getDatas();
+	}
+
+	public boolean isBan(String s) {
+		return getDatas() != null && getDatas().contains(s);
+	}
 }

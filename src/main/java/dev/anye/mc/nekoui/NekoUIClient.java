@@ -28,107 +28,110 @@ import org.slf4j.Logger;
 @Mod(value = NekoUI.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = NekoUI.MOD_ID, value = Dist.CLIENT)
 public class NekoUIClient {
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    @SubscribeEvent
-    public static void regCommand(RegisterCommandsEvent event) {
-        CommandList commandList = new CommandList(event.getDispatcher());
-        commandList.register();
-    }
+	@SubscribeEvent
+	public static void regCommand(RegisterCommandsEvent event) {
+		CommandList commandList = new CommandList(event.getDispatcher());
+		commandList.register();
+	}
 
-    @SubscribeEvent
-    public static void onGuiRender(RenderGuiLayerEvent.Pre event){
-        if (Config.INSTANCE.getDatas().isOutputGuiId()){
-            LOGGER.info(event.getName().toString());
-        }
-        if (HideHudConfig.I.isHide(event.getName())){
-            event.setCanceled(true);
-        }
-    }
-    @SubscribeEvent
-    public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
-        //Messages.sendToServer(new TimeIsLifeS());
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null) {
-            if (player.isAlive()) {
-                HotBarSys.setNowTime();
-            }
-        }
-    }
+	@SubscribeEvent
+	public static void onGuiRender(RenderGuiLayerEvent.Pre event) {
+		if (Config.INSTANCE.getDatas().isOutputGuiId()) {
+			LOGGER.info(event.getName().toString());
+		}
+		if (HideHudConfig.I.isHide(event.getName())) {
+			event.setCanceled(true);
+		}
+	}
 
-    @SubscribeEvent
-    public static void onKeyInput(InputEvent.Key event) {
-        Player player = Minecraft.getInstance().player;
-        if (player != null) {
-            if (player.isAlive()) {
-                //GLFW.GLFW_KEY_1
-                if (event.getKey() >= 49 && event.getKey() <= 57) {
-                    HotBarSys.setNowTime();
-                }
-                if (Config.INSTANCE.getDatas().isMenu()) {
-                    if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
-                        Screen screen = Minecraft.getInstance().screen;
-                        if (event.getAction() == 0) {
-                            if (screen instanceof MenuScreen menuScreen) {
-                                menuScreen.onClose();
-                            }
-                        } else if (event.getAction() == 1) {
-                            if (screen == null) {
-                                Minecraft.getInstance().setScreen(new MenuScreen());
-                            }
-                        }
-                    }
-                    if (event.getKey() == KeyBinding.OPEN_SET_MENU.getKey().getValue()) {
-                        Screen screen = Minecraft.getInstance().screen;
-                        if (event.getAction() == 1) {
-                            if (screen == null) {
-                                Minecraft.getInstance().setScreen(new SettingScreen());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+	@SubscribeEvent
+	public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
+		//Messages.sendToServer(new TimeIsLifeS());
+		LocalPlayer player = Minecraft.getInstance().player;
+		if (player != null) {
+			if (player.isAlive()) {
+				HotBarSys.setNowTime();
+			}
+		}
+	}
 
-    @SubscribeEvent
-    public static void onClientSetup(FMLClientSetupEvent event)
-    {
-    }
-    @SubscribeEvent
-    public static void onKeyRegister(RegisterKeyMappingsEvent event){
-        if (Config.INSTANCE.getDatas().isMenu()){
-            event.register(KeyBinding.OPEN_MENU);
-            event.register(KeyBinding.OPEN_SET_MENU);
-        }
-    }
-    @SubscribeEvent
-    public static void onGuiReg(RegisterGuiLayersEvent event){
-        event.registerAboveAll(ScreenElementGui.KEY, ScreenElementGui::render);
-        event.registerAboveAll(MobDirectionGui.RESOURCE_LOCATION, MobDirectionGui::render);
-        event.registerAboveAll(HotBarGui.RESOURCE_LOCATION, HotBarGui::render);
-    }
-    /*
-    @SubscribeEvent
-    public static void on(RegisterRenderStateModifiersEvent event){
-        event.registerEntityModifier(new TypeToken<>() {}, (entity, renderState) -> {
-            renderState.setRenderData(MobHealthBar.EntityKey,entity);
-            if (entity instanceof LivingEntity livingEntity) {
-                renderState.setRenderData(MobHealthBar.HealthKey, livingEntity.getHealth());
-                renderState.setRenderData(MobHealthBar.MaxHealthKey, livingEntity.getMaxHealth());
-            }
-        });
-    }
+	@SubscribeEvent
+	public static void onKeyInput(InputEvent.Key event) {
+		Player player = Minecraft.getInstance().player;
+		if (player != null) {
+			if (player.isAlive()) {
+				//GLFW.GLFW_KEY_1
+				if (event.getKey() >= 49 && event.getKey() <= 57) {
+					HotBarSys.setNowTime();
+				}
+				if (Config.INSTANCE.getDatas().isMenu()) {
+					if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
+						Screen screen = Minecraft.getInstance().screen;
+						if (event.getAction() == 0) {
+							if (screen instanceof MenuScreen menuScreen) {
+								menuScreen.onClose();
+							}
+						} else if (event.getAction() == 1) {
+							if (screen == null) {
+								Minecraft.getInstance().setScreen(new MenuScreen());
+							}
+						}
+					}
+					if (event.getKey() == KeyBinding.OPEN_SET_MENU.getKey().getValue()) {
+						Screen screen = Minecraft.getInstance().screen;
+						if (event.getAction() == 1) {
+							if (screen == null) {
+								Minecraft.getInstance().setScreen(new SettingScreen());
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
-     */
-    public static void onELRSE(ExtractLevelRenderStateEvent event){
+	@SubscribeEvent
+	public static void onClientSetup(FMLClientSetupEvent event) {
+	}
 
-    }
+	@SubscribeEvent
+	public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+		if (Config.INSTANCE.getDatas().isMenu()) {
+			event.register(KeyBinding.OPEN_MENU);
+			event.register(KeyBinding.OPEN_SET_MENU);
+		}
+	}
 
-    //@SubscribeEvent
-    public static void onRender(RenderLivingEvent.Post<LivingEntity,?,?> event){
+	@SubscribeEvent
+	public static void onGuiReg(RegisterGuiLayersEvent event) {
+		event.registerAboveAll(ScreenElementGui.KEY, ScreenElementGui::render);
+		event.registerAboveAll(MobDirectionGui.RESOURCE_LOCATION, MobDirectionGui::render);
+		event.registerAboveAll(HotBarGui.RESOURCE_LOCATION, HotBarGui::render);
+	}
 
-        //MobHealthBar.render(event.getRenderState(),event.getRenderer(),event.getSubmitNodeCollector(),event.getPoseStack());
+	/*
+	@SubscribeEvent
+	public static void on(RegisterRenderStateModifiersEvent event){
+		event.registerEntityModifier(new TypeToken<>() {}, (entity, renderState) -> {
+			renderState.setRenderData(MobHealthBar.EntityKey,entity);
+			if (entity instanceof LivingEntity livingEntity) {
+				renderState.setRenderData(MobHealthBar.HealthKey, livingEntity.getHealth());
+				renderState.setRenderData(MobHealthBar.MaxHealthKey, livingEntity.getMaxHealth());
+			}
+		});
+	}
+
+	 */
+	public static void onELRSE(ExtractLevelRenderStateEvent event) {
+
+	}
+
+	//@SubscribeEvent
+	public static void onRender(RenderLivingEvent.Post<LivingEntity, ?, ?> event) {
+
+		//MobHealthBar.render(event.getRenderState(),event.getRenderer(),event.getSubmitNodeCollector(),event.getPoseStack());
         /*
 
 
@@ -160,5 +163,5 @@ public class NekoUIClient {
         poseStack.popPose();
         //event.getSubmitNodeCollector().submitCustomGeometry();
          */
-    }
+	}
 }
