@@ -1,34 +1,38 @@
 # **NekoUI**
 
-此Mod已内置[Cores](https://github.com/An-Mao/MC-Cores)
+[中文](https://github.com/An-Mao/NekoUI/blob/main/README_ZH.MD)
 
-一款我的世界辅助类mod，可以通过【[CurseForge](https://www.curseforge.com/minecraft/mc-mods/nekoui)】或【[Modrinth](https://modrinth.com/mod/neko-ui)】下载  
+This mod comes with [Cores](https://github.com/An-Mao/MC-Cores) built-in.
 
-- 可以自定义添加想要显示在界面上的元素
-- 可以通过轮盘来快速执行一些操作
-- 生物血量显示
-- 生物方位显示
+A Minecraft utility mod available for download via [CurseForge](https://www.curseforge.com/minecraft/mc-mods/nekoui) or [Modrinth](https://modrinth.com/mod/neko-ui).
 
-## 如何自定义添加界面元素
+- Add customizable elements to your screen.
+- Execute quick actions via a radial menu (轮盘).
+- Entity health display.
+- Entity direction indicator.
 
-<font size=3 color=#f08000>普通玩家</font>可以参考wiki界面用配置文件进行添加。*配置文件方式添加的元素可以利用指令动态添加与删除*
+## How to Add Custom UI Elements
 
-<font size=3 color=#ff0000>Mod开发者</font>可以通过代码添加。*此方式不支持动态添加与删除*
+<font size=3 color=#f08000>Regular Players</font> can refer to the wiki to add elements using configuration files. *Elements added via config files can be dynamically added or removed using commands.*
 
-首先引用本mod至项目：
+<font size=3 color=#ff0000>Mod Developers</font> can add elements via code. *Note: This method does not support dynamic addition or removal.*
+
+First, add this mod to your project as a dependency:
 
 ``` gradle
-    compileOnly "dev.anye.mc:nekoui:${nekouiVersion}" //将版本替换为实际引用版本
+    compileOnly "dev.anye.mc:nekoui:${nekouiVersion}" // Replace with the actual version
 ```
 
-之后可以像添加我的世界元素那样
+Then, you can register elements similarly to how you register standard Minecraft objects:
 
 ``` java
-    //neoforge
+    // neoforge
     import dev.anye.mc.nekoui.register.screen_element.ScreenElement;
     import dev.anye.mc.cores.register.Register;
-    //获取DeferredRegister
+    
+    // Get the DeferredRegister
     public static final DeferredRegister<ScreenElement> SCREEN_ELEMENTS = DeferredRegister.create(Registers.SCREEN_ELEMENT.getResourceKey(), YourMod.MOD_ID);
-    //注册
-    public static final DeferredHolder<ScreenElement,YourScreenElement> YOUR_SCREEN_ELEMENT = ITEMS.register("you_screen_element_name", YourScreenElement::new);
+    
+    // Register the element
+    public static final DeferredHolder<ScreenElement, YourScreenElement> YOUR_SCREEN_ELEMENT = SCREEN_ELEMENTS.register("your_screen_element_name", YourScreenElement::new);
 ```
