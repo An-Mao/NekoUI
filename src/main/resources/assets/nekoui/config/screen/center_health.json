@@ -1,0 +1,23 @@
+{
+  "x": "center",
+  "y": "center",
+  "pos": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "elements": [
+    {
+      "pos": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "type": "Js",
+      "key": "CenterHealth.js",
+      "color": "FFFFFFFF",
+      "width": 0,
+      "height": 0
+    }
+  ]
+}

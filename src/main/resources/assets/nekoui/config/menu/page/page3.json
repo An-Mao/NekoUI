@@ -1,0 +1,15 @@
+{
+  "title": "Msg Page",
+  "projectNumber": 5,
+  "innerRadius": 20,
+  "outerRadius": 80,
+  "projects": [
+    {
+      "key": "TestMessage",
+      "textNormalColor": "0xff00ffff",
+      "textHighlightColor": "0xff00ff00",
+      "backgroundNormalColor": "0x70000000",
+      "backgroundHighlightColor": "0x50ffffff"
+    }
+  ]
+}
