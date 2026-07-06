@@ -25,6 +25,8 @@ jobs:
         run: chmod +x gradlew
         
       - name: Build with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew build
 
       - name: Upload Build Artifact
