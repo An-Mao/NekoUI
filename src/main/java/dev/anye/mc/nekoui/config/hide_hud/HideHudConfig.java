@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.config.hide$hud;
+package dev.anye.mc.nekoui.config.hide_hud;
 
 import com.google.gson.reflect.TypeToken;
 import dev.anye.core.json._JsonConfig;
@@ -7,11 +7,12 @@ import dev.anye.mc.nekoui.config.Configs;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class HideHudConfig extends _JsonConfig<ArrayList<String>> {
+public class HideHudConfig extends _JsonConfig<List<String>> {
 	private static final String filePath = _File.getFilePath(Configs.ConfigDir, "hide-gui.json");
 	public static final HideHudConfig I = new HideHudConfig();
-	private final ArrayList<Identifier> list = new ArrayList<>();
+	private final List<Identifier> list = new ArrayList<>();
 
 	public HideHudConfig() {
 		super(filePath, """
@@ -29,14 +30,14 @@ public class HideHudConfig extends _JsonConfig<ArrayList<String>> {
 	}
 
 	@Override
-	public ArrayList<String> getDatas() {
-		if (datas == null) new ArrayList<>();
-		return super.getDatas();
+	public List<String> getData() {
+		if (data == null) new ArrayList<>();
+		return super.getData();
 	}
 
 	private void toRes() {
 		list.clear();
-		getDatas().forEach((s) -> list.add(Identifier.parse(s)));
+		getData().forEach((s) -> list.add(Identifier.parse(s)));
 	}
 
 	public boolean isHide(Identifier id) {

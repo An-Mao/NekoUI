@@ -25,7 +25,7 @@ public class AutoPageSettingScreen extends ScreenCore {
 
 		sectorsEditBox = createNewEditBox(simpleLabel.getX() + simpleLabel.getWidth(), py, 24, 16, sectorsEditBox, getComponent("sectors_input"));
 		addRenderableWidget(sectorsEditBox);
-		sectorsEditBox.setValue(String.valueOf(MenuScreenConfig.INSTANCE.getDatas().sectors));
+		sectorsEditBox.setValue(String.valueOf(MenuScreenConfig.INSTANCE.getData().sectors));
 
 
 		py += 20;
@@ -34,7 +34,7 @@ public class AutoPageSettingScreen extends ScreenCore {
 		addRenderableWidget(simpleLabel);
 		innerRadiusEditBox = createNewEditBox(simpleLabel.getX() + simpleLabel.getWidth(), py, 32, 16, innerRadiusEditBox, getComponent("inner_radius_input"));
 		addRenderableWidget(innerRadiusEditBox);
-		innerRadiusEditBox.setValue(String.valueOf(MenuScreenConfig.INSTANCE.getDatas().innerRadius));
+		innerRadiusEditBox.setValue(String.valueOf(MenuScreenConfig.INSTANCE.getData().innerRadius));
 
 
 		py += 20;
@@ -43,7 +43,7 @@ public class AutoPageSettingScreen extends ScreenCore {
 		addRenderableWidget(simpleLabel);
 		outerRadiusEditBox = createNewEditBox(simpleLabel.getX() + simpleLabel.getWidth(), py, 32, 16, outerRadiusEditBox, getComponent("outer_radius_input"));
 		addRenderableWidget(outerRadiusEditBox);
-		outerRadiusEditBox.setValue(String.valueOf(MenuScreenConfig.INSTANCE.getDatas().outerRadius));
+		outerRadiusEditBox.setValue(String.valueOf(MenuScreenConfig.INSTANCE.getData().outerRadius));
 
 
 		py += 20;
@@ -52,7 +52,7 @@ public class AutoPageSettingScreen extends ScreenCore {
 		addRenderableWidget(simpleLabel);
 		selectColorEditBox = createNewEditBox(simpleLabel.getX() + simpleLabel.getWidth(), py, 90, 16, selectColorEditBox, getComponent("select_color_input"));
 		addRenderableWidget(selectColorEditBox);
-		selectColorEditBox.setValue(MenuScreenConfig.INSTANCE.getDatas().SelectColor);
+		selectColorEditBox.setValue(MenuScreenConfig.INSTANCE.getData().SelectColor);
 
 		py += 20;
 		simpleLabel = createNewLabel(cx, py, 12, 16, getComponent("label.usual_color"));
@@ -60,7 +60,7 @@ public class AutoPageSettingScreen extends ScreenCore {
 		addRenderableWidget(simpleLabel);
 		usualColorEditBox = createNewEditBox(simpleLabel.getX() + simpleLabel.getWidth(), py, 90, 16, usualColorEditBox, getComponent("usual_color_input"));
 		addRenderableWidget(usualColorEditBox);
-		usualColorEditBox.setValue(MenuScreenConfig.INSTANCE.getDatas().UsualColor);
+		usualColorEditBox.setValue(MenuScreenConfig.INSTANCE.getData().UsualColor);
 
 		py += 24;
 		SimpleButton save = createNewButton(cx, py, 32, 16, getComponent("save"), this::saveConfig);
@@ -68,11 +68,11 @@ public class AutoPageSettingScreen extends ScreenCore {
 	}
 
 	private void saveConfig() {
-		MenuScreenConfig.INSTANCE.getDatas().sectors = Integer.parseInt(sectorsEditBox.getValue());
-		MenuScreenConfig.INSTANCE.getDatas().innerRadius = Integer.parseInt(innerRadiusEditBox.getValue());
-		MenuScreenConfig.INSTANCE.getDatas().outerRadius = Integer.parseInt(outerRadiusEditBox.getValue());
-		MenuScreenConfig.INSTANCE.getDatas().SelectColor = selectColorEditBox.getValue();
-		MenuScreenConfig.INSTANCE.getDatas().UsualColor = usualColorEditBox.getValue();
+		MenuScreenConfig.INSTANCE.getData().sectors = Integer.parseInt(sectorsEditBox.getValue());
+		MenuScreenConfig.INSTANCE.getData().innerRadius = Integer.parseInt(innerRadiusEditBox.getValue());
+		MenuScreenConfig.INSTANCE.getData().outerRadius = Integer.parseInt(outerRadiusEditBox.getValue());
+		MenuScreenConfig.INSTANCE.getData().SelectColor = selectColorEditBox.getValue();
+		MenuScreenConfig.INSTANCE.getData().UsualColor = usualColorEditBox.getValue();
 		MenuScreenConfig.INSTANCE.save();
 		this.minecraft.setScreenAndShow(new AutoPageSettingScreen());
 	}

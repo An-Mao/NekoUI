@@ -5,7 +5,7 @@ import dev.anye.core.format._FormatToString;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.helper.component.ComponentStyle;
 import dev.anye.mc.nekoui.config.Configs;
-import dev.anye.mc.nekoui.dat$type.ScreenRender;
+import dev.anye.mc.nekoui.dat_type.ScreenRender;
 import dev.anye.mc.nekoui.other.CJS;
 import dev.anye.mc.nekoui.player.PlayerInfo;
 import net.minecraft.client.Minecraft;

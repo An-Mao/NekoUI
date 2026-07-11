@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.config.health$bar;
+package dev.anye.mc.nekoui.config.health_bar;
 
 import com.google.gson.reflect.TypeToken;
 import dev.anye.core.json._JsonConfig;
@@ -27,8 +27,8 @@ public class HealthBarConfig extends _JsonConfig<HealthBarData> {
 	}
 
 	@Override
-	public HealthBarData getDatas() {
-		if (datas == null) return HealthBarData.DEFAULT;
-		return super.getDatas();
+	public HealthBarData getData() {
+		if (data == null) return HealthBarData.DEFAULT;
+		return super.getData();
 	}
 }

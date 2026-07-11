@@ -2,7 +2,7 @@ package dev.anye.mc.nekoui.mixin;
 
 import com.mojang.logging.LogUtils;
 import dev.anye.mc.nekoui.config.Config;
-import dev.anye.mc.nekoui.config.ban$screen.BanScreenConfig;
+import dev.anye.mc.nekoui.config.ban_screen.BanScreenConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class MinecraftMixin {
 	public void nekoui$setScreenAndShow$ban(Screen pGuiScreen, CallbackInfo ci) {
 		if (pGuiScreen != null) {
 			String path = pGuiScreen.getClass().getName();
-			if (Config.INSTANCE.getDatas().isOutputScreenPathName()) {
+			if (Config.INSTANCE.getData().isOutputScreenPathName()) {
 				nekoUI$LOGGER.info(path);
 			}
 			if (BanScreenConfig.I.isBan(path)) {

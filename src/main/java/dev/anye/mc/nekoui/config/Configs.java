@@ -3,19 +3,18 @@ package dev.anye.mc.nekoui.config;
 import com.mojang.logging.LogUtils;
 import dev.anye.core.pack._Pack;
 import dev.anye.core.system._File;
-import dev.anye.mc.nekoui.config.ban$screen.BanScreenConfig;
-import dev.anye.mc.nekoui.config.health$bar.HealthBarConfig;
-import dev.anye.mc.nekoui.config.hide$hud.HideHudConfig;
+import dev.anye.mc.nekoui.config.ban_screen.BanScreenConfig;
+import dev.anye.mc.nekoui.config.health_bar.HealthBarConfig;
+import dev.anye.mc.nekoui.config.hide_hud.HideHudConfig;
 import dev.anye.mc.nekoui.config.hotbar.HotBarConfig;
-import dev.anye.mc.nekoui.config.menu.MenuPageConfig;
 import dev.anye.mc.nekoui.config.menu.MenuPageIO;
 import dev.anye.mc.nekoui.config.menu.MenuProjectIO;
 import dev.anye.mc.nekoui.config.menu.MenuScreenConfig;
-import dev.anye.mc.nekoui.config.mob$direction.MobDirectionConfig;
-import dev.anye.mc.nekoui.config.screen$element.ScreenRenderIO;
-import dev.anye.mc.nekoui.dat$type.MenuPageData;
-import dev.anye.mc.nekoui.dat$type.MenuProjectData;
-import dev.anye.mc.nekoui.dat$type.ScreenRender;
+import dev.anye.mc.nekoui.config.mob_direction.MobDirectionConfig;
+import dev.anye.mc.nekoui.config.screen_element.ScreenRenderIO;
+import dev.anye.mc.nekoui.dat_type.MenuPageData;
+import dev.anye.mc.nekoui.dat_type.MenuProjectData;
+import dev.anye.mc.nekoui.dat_type.ScreenRender;
 import dev.anye.mc.nekoui.register.MenuProject;
 import dev.anye.mc.nekoui.register.screen_element.ScreenElement;
 
@@ -57,12 +56,12 @@ public class Configs {
 		if (isInit) {
 			isInit = false;
 
-			if (Config.INSTANCE.getDatas().isPutDefault()) {
+			if (Config.INSTANCE.getData().isPutDefault()) {
 				_Pack.writeFiles("assets/nekoui/config/screen/", Configs.ConfigDir_ScreenElement + File.separator, ".json", "air", "armor", "armor_toughness", "damage", "exp", "fps", "health", "hunger", "luck", "speed");
 				_Pack.writeFiles("assets/nekoui/config/menu/project/", Configs.ConfigDir_MenuProject + File.separator, ".json", "SwitchItemSlot0", "SwitchItemSlot1", "SwitchItemSlot2", "SwitchItemSlot3", "SwitchItemSlot4", "SwitchItemSlot5", "SwitchItemSlot6", "SwitchItemSlot7", "SwitchItemSlot8", "TestCommand", "TestCommand1", "TestMessage");
 				_Pack.writeFiles("assets/nekoui/config/menu/page/", Configs.ConfigDir_MenuPage + File.separator, ".json", "page1", "page2", "page3");
 
-				Config.INSTANCE.getDatas().setPutDefault(false);
+				Config.INSTANCE.getData().setPutDefault(false);
 				Config.INSTANCE.save();
 			}
 		}
@@ -82,7 +81,7 @@ public class Configs {
 	public static void LoadScreenRender() {
 		ScreenRenders.clear();
 		_File.getFiles(ConfigDir_ScreenElement, ".json").forEach(path -> {
-			ScreenRender screenRender = new ScreenRenderIO(path.getFileName().toString()).getDatas();
+			ScreenRender screenRender = new ScreenRenderIO(path.getFileName().toString()).getData();
 			if (screenRender != null) ScreenRenders.add(new ScreenElement(screenRender));
 		});
 	}
@@ -90,7 +89,7 @@ public class Configs {
 	public static void LoadMenuProject() {
 		MenuProjects.clear();
 		_File.getFiles(ConfigDir_MenuProject, ".json").forEach(path -> {
-			MenuProjectData menuProjectData = new MenuProjectIO(path.getFileName().toString()).getDatas();
+			MenuProjectData menuProjectData = new MenuProjectIO(path.getFileName().toString()).getData();
 			if (menuProjectData != null)
 				MenuProjects.put(getFileNameWithoutExtension(path.getFileName().toString()), new MenuProject(menuProjectData));
 		});
@@ -99,7 +98,7 @@ public class Configs {
 	public static void LoadMenuPage() {
 		MenuPage.clear();
 		_File.getFiles(ConfigDir_MenuPage, ".json").forEach(path -> {
-			MenuPageData menuPageData = new MenuPageIO(path.getFileName().toString()).getDatas();
+			MenuPageData menuPageData = new MenuPageIO(path.getFileName().toString()).getData();
 			if (menuPageData != null) {
 				MenuPage.add(menuPageData);
 			}

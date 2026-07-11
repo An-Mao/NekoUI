@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.config.ban$screen;
+package dev.anye.mc.nekoui.config.ban_screen;
 
 import com.google.gson.reflect.TypeToken;
 import com.mojang.logging.LogUtils;
@@ -24,12 +24,12 @@ public class BanScreenConfig extends _JsonConfig<List<String>> {
 	}
 
 	@Override
-	public List<String> getDatas() {
-		if (datas == null) return new ArrayList<>();
-		return super.getDatas();
+	public List<String> getData() {
+		if (data == null) return new ArrayList<>();
+		return super.getData();
 	}
 
 	public boolean isBan(String s) {
-		return getDatas() != null && getDatas().contains(s);
+		return getData() != null && getData().contains(s);
 	}
 }

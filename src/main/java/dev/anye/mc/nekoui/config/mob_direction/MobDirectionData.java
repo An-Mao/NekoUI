@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.config.mob$direction;
+package dev.anye.mc.nekoui.config.mob_direction;
 
 import dev.anye.core.color._ColorSupport;
 

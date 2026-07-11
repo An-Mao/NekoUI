@@ -9,7 +9,7 @@ import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
 import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.config.menu.MenuProjectIO;
-import dev.anye.mc.nekoui.dat$type.MenuProjectData;
+import dev.anye.mc.nekoui.dat_type.MenuProjectData;
 import dev.anye.mc.nekoui.register.MenuProject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.KeyEvent;
@@ -89,7 +89,7 @@ public class ProjectsSettingScreen extends ScreenCore {
 		if (id.isEmpty()) return;
 		MenuProjectData menuProjectData = new MenuProjectData(id, runType.getNowSelectIndex(), valueEditBox.getValue());
 		Configs.MenuProjects.put(id, new MenuProject(menuProjectData));
-		new MenuProjectIO(id + ".json").setData(menuProjectData).save();
+		new MenuProjectIO(id + ".json").save(menuProjectData);
 		Minecraft.getInstance().setScreenAndShow(new ProjectsSettingScreen());
 	}
 

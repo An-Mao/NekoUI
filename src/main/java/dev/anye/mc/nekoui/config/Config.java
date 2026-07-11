@@ -23,8 +23,12 @@ public class Config extends _JsonConfig<ConfigData> {
 	}
 
 	@Override
-	public ConfigData getDatas() {
-		if (datas == null) return new ConfigData();
-		return super.getDatas();
+	public ConfigData getData() {
+		if (data == null) return new ConfigData();
+		return super.getData();
 	}
+
+
+
+
 }

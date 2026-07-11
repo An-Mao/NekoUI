@@ -17,7 +17,7 @@ public class SettingScreen extends ScreenCore {
 		int px = -64;
 		int py = -32;
 		SimpleButton changeAutoPage = new SimpleButton(centerX + px, centerY + py, 128, 16, getComponent("change_auto_page." + getAutoPageState()), () -> {
-			Config.INSTANCE.getDatas().setAutoPage(!Config.INSTANCE.getDatas().isAutoPage());
+			Config.INSTANCE.getData().setAutoPage(!Config.INSTANCE.getData().isAutoPage());
 			Config.INSTANCE.save();
 			Minecraft.getInstance().setScreenAndShow(new SettingScreen());
 		});
@@ -28,7 +28,7 @@ public class SettingScreen extends ScreenCore {
 		py += 20;
 
 		SimpleButton openPageSetting = new SimpleButton(centerX + px, centerY + py, 128, 16, getComponent("open_page_setting"), () -> {
-			if (Config.INSTANCE.getDatas().isAutoPage()) {
+			if (Config.INSTANCE.getData().isAutoPage()) {
 				Minecraft.getInstance().setScreenAndShow(new AutoPageSettingScreen());
 			} else {
 				Minecraft.getInstance().setScreenAndShow(new PageSettingScreen());
@@ -53,7 +53,7 @@ public class SettingScreen extends ScreenCore {
 	}
 
 	private String getAutoPageState() {
-		if (Config.INSTANCE.getDatas().isAutoPage()) {
+		if (Config.INSTANCE.getData().isAutoPage()) {
 			return "on";
 		} else {
 			return "off";

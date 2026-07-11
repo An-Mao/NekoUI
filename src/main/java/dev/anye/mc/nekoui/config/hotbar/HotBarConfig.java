@@ -28,8 +28,8 @@ public class HotBarConfig extends _JsonConfig<HotBarData> {
 	}
 
 	@Override
-	public HotBarData getDatas() {
-		if (datas == null) return new HotBarData();
-		return super.getDatas();
+	public HotBarData getData() {
+		if (data == null) return new HotBarData();
+		return super.getData();
 	}
 }

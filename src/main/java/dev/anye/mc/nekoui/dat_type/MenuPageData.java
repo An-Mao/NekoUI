@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.dat$type;
+package dev.anye.mc.nekoui.dat_type;
 
 import java.util.List;
 

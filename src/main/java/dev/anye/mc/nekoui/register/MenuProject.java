@@ -5,7 +5,7 @@ import dev.anye.core.system._File;
 import dev.anye.core.system._KeySimulate;
 import dev.anye.core.system._System;
 import dev.anye.mc.nekoui.config.Configs;
-import dev.anye.mc.nekoui.dat$type.MenuProjectData;
+import dev.anye.mc.nekoui.dat_type.MenuProjectData;
 import dev.anye.mc.nekoui.other.CJS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.dat$type;
+package dev.anye.mc.nekoui.dat_type;
 
 public record MenuProjectData(String name, Type type, String value) {
 	public MenuProjectData(String name, String type, String value) {

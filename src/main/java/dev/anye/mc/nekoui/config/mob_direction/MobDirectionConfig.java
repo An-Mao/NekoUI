@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.config.mob$direction;
+package dev.anye.mc.nekoui.config.mob_direction;
 
 import com.google.gson.reflect.TypeToken;
 import com.mojang.logging.LogUtils;
@@ -54,9 +54,9 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	}
 
 	@Override
-	public MobDirectionData getDatas() {
-		if (datas == null) return new MobDirectionData();
-		return datas;
+	public MobDirectionData getData() {
+		if (data == null) return new MobDirectionData();
+		return data;
 	}
 
 	public int getEntityColor(Entity entity) {
@@ -68,7 +68,7 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	}
 
 	public int getEntityColor(String entity) {
-		return getDatas().getColor(entity);
+		return getData().getColor(entity);
 	}
 
 	public boolean isShowPoi(Entity entity) {
@@ -80,7 +80,7 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	}
 
 	public boolean isShowPoi(String entity) {
-		return getDatas().isShow(entity);
+		return getData().isShow(entity);
 	}
 
 	public static int getEntityColor(MobCategory mobCategory) {
@@ -90,11 +90,11 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	public void writeColor() {
 		BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> {
 			String eid = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toLanguageKey();
-			if (getDatas().getEntityColors().get(eid) == null) {
+			if (getData().getEntityColors().get(eid) == null) {
 				int color = getEntityColor(entityType.getCategory());
 				//int color = getSpawnEggColors(entityType)[getDatas().getEggLayerIndex()];
 				if (color == -1) return;
-				getDatas().getEntityColors().put(eid, _ColorSupport.intToHexColor(color));
+				getData().getEntityColors().put(eid, _ColorSupport.intToHexColor(color));
 			}
 		});
 		save();

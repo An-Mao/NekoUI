@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.dat$type;
+package dev.anye.mc.nekoui.dat_type;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;

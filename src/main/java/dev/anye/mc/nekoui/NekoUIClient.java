@@ -2,7 +2,7 @@ package dev.anye.mc.nekoui;
 
 import com.mojang.logging.LogUtils;
 import dev.anye.mc.nekoui.config.Config;
-import dev.anye.mc.nekoui.config.hide$hud.HideHudConfig;
+import dev.anye.mc.nekoui.config.hide_hud.HideHudConfig;
 import dev.anye.mc.nekoui.event.CommandList;
 import dev.anye.mc.nekoui.gui.MobDirectionGui;
 import dev.anye.mc.nekoui.gui.ScreenElementGui;
@@ -40,7 +40,7 @@ public class NekoUIClient {
 
 	@SubscribeEvent
 	public static void onGuiRender(RenderGuiLayerEvent.Pre event) {
-		if (Config.INSTANCE.getDatas().isOutputGuiId()) {
+		if (Config.INSTANCE.getData().isOutputGuiId()) {
 			LOGGER.info("GUI ID: {}", event.getName());
 		}
 		if (HideHudConfig.I.isHide(event.getName())) {
@@ -64,7 +64,7 @@ public class NekoUIClient {
 			if (event.getKey() >= 49 && event.getKey() <= 57) {
 				HotBarSys.setNowTime();
 			}
-			if (Config.INSTANCE.getDatas().isMenu()) {
+			if (Config.INSTANCE.getData().isMenu()) {
 				if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
 					Screen screen = Minecraft.getInstance().gui.screen();
 					if (event.getAction() == 0) {
@@ -93,7 +93,7 @@ public class NekoUIClient {
 
 	@SubscribeEvent
 	public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-		if (Config.INSTANCE.getDatas().isMenu()) {
+		if (Config.INSTANCE.getData().isMenu()) {
 			event.register(KeyBinding.OPEN_MENU);
 			event.register(KeyBinding.OPEN_SET_MENU);
 		}
@@ -137,7 +137,7 @@ public class NekoUIClient {
         Minecraft minecraft = Minecraft.getInstance();
         Quaternionf camera = minecraft.getEntityRenderDispatcher().camera.rotation();
         poseStack.pushPose();
-        float y = event.getRenderState().boundingBoxHeight + HealthBarConfig.I.getDatas().renderTop;
+        float y = event.getRenderState().boundingBoxHeight + HealthBarConfig.I.getData().renderTop;
         poseStack.translate(0, y, 0);
         poseStack.mulPose(camera);
         poseStack.mulPose(Axis.YP.rotationDegrees(180));

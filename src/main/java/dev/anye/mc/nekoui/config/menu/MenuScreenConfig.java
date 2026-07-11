@@ -22,8 +22,8 @@ public class MenuScreenConfig extends _JsonConfig<MenuScreenData> {
 	}
 
 	@Override
-	public MenuScreenData getDatas() {
-		if (datas == null) return new MenuScreenData();
-		return super.getDatas();
+	public MenuScreenData getData() {
+		if (data == null) return new MenuScreenData();
+		return super.getData();
 	}
 }

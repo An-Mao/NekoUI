@@ -1,7 +1,7 @@
 package dev.anye.mc.register.nekoui.screen_element;
 
 import dev.anye.mc.nekoui.NekoUI;
-import dev.anye.mc.nekoui.dat$type.ScreenRender;
+import dev.anye.mc.nekoui.dat_type.ScreenRender;
 import dev.anye.mc.nekoui.register.screen_element.NekoUIScreenElement;
 import dev.anye.mc.nekoui.register.screen_element.ScreenElement;
 import org.joml.Vector3i;

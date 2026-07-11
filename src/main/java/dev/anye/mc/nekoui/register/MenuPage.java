@@ -1,6 +1,6 @@
 package dev.anye.mc.nekoui.register;
 
-import dev.anye.mc.nekoui.dat$type.MenuPageData;
+import dev.anye.mc.nekoui.dat_type.MenuPageData;
 
 import java.util.List;
 

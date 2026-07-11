@@ -35,18 +35,18 @@ public class HotBarGui extends HotBarConfig {
 	private static int startX, startY;
 
 	private static void addSpace() {
-		switch (INSTANCE.getDatas().getDirection()) {
-			case "horizontal" -> startX += INSTANCE.getDatas().getSpace();
-			case "vertical" -> startY += INSTANCE.getDatas().getSpace();
+		switch (INSTANCE.getData().getDirection()) {
+			case "horizontal" -> startX += INSTANCE.getData().getSpace();
+			case "vertical" -> startY += INSTANCE.getData().getSpace();
 		}
 	}
 
 	public static void render(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTick) {
-		if (!INSTANCE.getDatas().isEnable()) return;
+		if (!INSTANCE.getData().isEnable()) return;
 
 		Minecraft minecraft = Minecraft.getInstance();
 		if (minecraft.gui.hud.isHidden()) return;
-		if (HotBarSys.isOutTime() && INSTANCE.getDatas().isDynamicDisplay()) return;
+		if (HotBarSys.isOutTime() && INSTANCE.getData().isDynamicDisplay()) return;
 		Level clientLevel = minecraft.level;
 		LocalPlayer localPlayer = minecraft.player;
 		if (clientLevel != null && localPlayer != null) {
@@ -55,18 +55,18 @@ public class HotBarGui extends HotBarConfig {
 
 				int screenWidth = minecraft.getWindow().getGuiScaledWidth();
 				int screenHeight = minecraft.getWindow().getGuiScaledHeight();
-				startX = switch (INSTANCE.getDatas().getStartX()) {
+				startX = switch (INSTANCE.getData().getStartX()) {
 					case "center" -> screenWidth / 2;
 					case "right" -> screenWidth;
 					default -> 0;
 				};
-				startX += INSTANCE.getDatas().getX();
-				startY = switch (INSTANCE.getDatas().getStartY()) {
+				startX += INSTANCE.getData().getX();
+				startY = switch (INSTANCE.getData().getStartY()) {
 					case "center" -> screenHeight / 2;
 					case "bottom" -> screenHeight;
 					default -> 0;
 				};
-				startY += INSTANCE.getDatas().getY();
+				startY += INSTANCE.getData().getY();
 
 				Inventory opi = localPlayer.getInventory();
 				NonNullList<ItemStack> oItems = opi.getNonEquipmentItems();

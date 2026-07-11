@@ -1,6 +1,7 @@
 package dev.anye.mc.nekoui.screen;
 
 import com.mojang.logging.LogUtils;
+import dev.anye.core.cdt._SuffixCDT;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
@@ -9,7 +10,7 @@ import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleLabel;
 import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.config.menu.MenuPageIO;
-import dev.anye.mc.nekoui.dat$type.MenuPageData;
+import dev.anye.mc.nekoui.dat_type.MenuPageData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
@@ -141,7 +142,7 @@ public class PageSettingScreen extends ScreenCore {
 
 	public void setData(Object v) {
 		if (v instanceof String id) {
-			MenuPageData pageData = new MenuPageIO(id + ".json").getDatas();
+			MenuPageData pageData = new MenuPageIO(id + _SuffixCDT.JSON_SUFFIX).getData();
 			if (pageData != null) {
 				idEditBox.setValue(id);
 				nameEditBox.setValue(pageData.title());
@@ -156,7 +157,7 @@ public class PageSettingScreen extends ScreenCore {
 
 	public void setProjectData(Object v) {
 		if (v instanceof String id) {
-			MenuPageData pageData = new MenuPageIO(idEditBox.getValue() + ".json").getDatas();
+			MenuPageData pageData = new MenuPageIO(idEditBox.getValue() + _SuffixCDT.JSON_SUFFIX).getData();
 			if (pageData != null) {
 				int index = Integer.parseInt(id);
 				MenuPageData.ProjectInfo pd = null;
@@ -183,8 +184,8 @@ public class PageSettingScreen extends ScreenCore {
 		if (id.isEmpty()) {
 			return;
 		}
-		MenuPageIO menuPageIO = new MenuPageIO(id + ".json");
-		MenuPageData menuPageData = menuPageIO.getDatas();
+		MenuPageIO menuPageIO = new MenuPageIO(id + _SuffixCDT.JSON_SUFFIX);
+		MenuPageData menuPageData = menuPageIO.getData();
 		String title = checkValue(nameEditBox.getValue(), "page title");
 		int pn = Integer.parseInt(checkValue(projectNumberEditBox.getValue(), "7"));
 		if (pn > 0) {
@@ -221,7 +222,7 @@ public class PageSettingScreen extends ScreenCore {
 	public void delete() {
 		String id = idEditBox.getValue();
 		if (!id.isEmpty()) {
-			File file = new File(_File.getFilePath(Configs.ConfigDir_MenuPage, id + ".json"));
+			File file = new File(_File.getFilePath(Configs.ConfigDir_MenuPage, id + _SuffixCDT.JSON_SUFFIX));
 			if (file.exists()) {
 				if (file.delete()) Configs.LoadMenuPage();
 				else LOGGER.warn("Delete file {} error", id);

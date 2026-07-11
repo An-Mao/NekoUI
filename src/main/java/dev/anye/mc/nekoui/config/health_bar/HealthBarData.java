@@ -1,4 +1,4 @@
-package dev.anye.mc.nekoui.config.health$bar;
+package dev.anye.mc.nekoui.config.health_bar;
 
 import dev.anye.core.color._ColorSupport;
 

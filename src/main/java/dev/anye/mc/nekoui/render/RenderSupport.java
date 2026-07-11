@@ -1,7 +1,6 @@
 package dev.anye.mc.nekoui.render;
 
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.resources.Identifier;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.joml.Matrix4f;
 
 public class RenderSupport {

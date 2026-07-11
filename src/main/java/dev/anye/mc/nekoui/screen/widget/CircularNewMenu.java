@@ -6,7 +6,7 @@ import dev.anye.mc.cores.render.GuiGraphicsX;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
 import dev.anye.mc.nekoui.config.Configs;
-import dev.anye.mc.nekoui.dat$type.MenuPageData;
+import dev.anye.mc.nekoui.dat_type.MenuPageData;
 import dev.anye.mc.nekoui.register.MenuProject;
 import dev.anye.mc.nekoui.register.Registers;
 import net.minecraft.client.Minecraft;
