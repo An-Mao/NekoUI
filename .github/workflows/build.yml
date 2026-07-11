@@ -32,5 +32,4 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nekoui-${{ github.ref_name }}-${{ github.run_number }}-jar
           path: build/libs/*.jar
