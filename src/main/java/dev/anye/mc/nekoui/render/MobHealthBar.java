@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MobHealthBar {
-    private static final Identifier HealthBar_B = Identifier.fromNamespaceAndPath(NekoUI.MOD_ID,"textures/hud/mob/hb_b.png");
-    private static final Identifier HealthBar_F = Identifier.fromNamespaceAndPath(NekoUI.MOD_ID,"textures/hud/mob/hb_f.png");
+    public static final Identifier HealthBar_B = Identifier.fromNamespaceAndPath(NekoUI.MOD_ID,"textures/hud/mob/hb_b.png");
+    public static final Identifier HealthBar_F = Identifier.fromNamespaceAndPath(NekoUI.MOD_ID,"textures/hud/mob/hb_f.png");
 
     public static final RenderType HealthBarBorderRenderType = RenderTypes.text(HealthBar_B);
     public static final RenderType HealthBarFillRenderType = RenderTypes.text(HealthBar_F);
@@ -45,53 +45,55 @@ public class MobHealthBar {
 
 
 
-    public static void render(LivingEntity livingEntity, LivingEntityRenderState renderState, SubmitNodeCollector submitNodeCollector, PoseStack poseStack){
-        if (HealthBarConfig.I.getData().enable()) {
-            Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.player != null && (HealthBarConfig.I.getData().renderOnlyView() && checkView(minecraft, livingEntity))) {
-                if (livingEntity.distanceTo(minecraft.player) > HealthBarConfig.I.getData().renderDistance()) return;
-                Quaternionf camera = minecraft.getEntityRenderDispatcher().camera.rotation();//.cameraOrientation();
-                if (HealthBarConfig.I.getData().renderHealthBar()) {
-                    float y = livingEntity.getBbHeight() + HealthBarConfig.I.getData().renderTop();
-                    int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 121), 0);
-                    poseStack.pushPose();
-                    poseStack.translate(0, y, 0);
-                    poseStack.mulPose(camera);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
-                    poseStack.scale(-0.0125F, -0.005F, 0.0125F);
-                    submitNodeCollector.submitCustomGeometry(poseStack, HealthBarBorderRenderType, (pose, vertexConsumer) -> RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
-                            0, 0,
-                            128, 32,
-                            128, 128,
-                            0, renderState.lightCoords));
-                    submitNodeCollector.submitCustomGeometry(poseStack, HealthBarFillRenderType, (pose, vertexConsumer) -> RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
-                            0, 32,
-                            Math.min(h, 121), 32,
-                            128, 128,
-                            0, renderState.lightCoords));
-                    if (HealthBarConfig.I.getData().renderHealthBarText()) {
-                        String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
+    public static void render(LivingEntity livingEntity, LivingEntityRenderState renderState, SubmitNodeCollector submitNodeCollector, PoseStack poseStack) {
+		/*
+		if (!HealthBarConfig.I.getData().enable()) return;
+		if (minecraft.player == null || !(HealthBarConfig.I.getData().renderOnlyView() && checkView(minecraft, livingEntity)))
+		    return;
+		if (livingEntity.distanceTo(minecraft.player) > HealthBarConfig.I.getData().renderDistance()) return;
 
-						submitNodeCollector.submitText(poseStack, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, FormattedCharSequence.forward(txt, Style.EMPTY), false, Font.DisplayMode.NORMAL, renderState.lightCoords, HealthBarConfig.I.getData().tempColor(), 0, 0);
-                    }
-                    poseStack.popPose();
-                }
-                if (HealthBarConfig.I.getData().renderEffect()) {
-                    float lY = livingEntity.getBbHeight() / 2 + 0.16f;
-                    poseStack.pushPose();
-                    poseStack.translate(0.0, lY, 0.0);
-                    camera.x = 0;
-                    camera.z = 0;
-                    poseStack.mulPose(camera);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
-                    poseStack.scale(-0.025F, -0.025F, 0.025F);
-                    draw(livingEntity, submitNodeCollector, poseStack, minecraft, renderState.lightCoords);
-                    poseStack.popPose();
-                }
-            }
-        }
+		 */
+		Minecraft minecraft = Minecraft.getInstance();
 
-    }
+		Quaternionf camera = minecraft.getEntityRenderDispatcher().camera.rotation();//.cameraOrientation();
+		if (HealthBarConfig.I.getData().renderHealthBar()) {
+			float y = livingEntity.getBbHeight() + HealthBarConfig.I.getData().renderTop();
+			int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 121), 0);
+			poseStack.pushPose();
+			poseStack.translate(0, y, 0);
+			//poseStack.mulPose(camera);
+			poseStack.mulPose(Axis.YP.rotationDegrees(180));
+			poseStack.scale(-0.0125F, -0.005F, 0.0125F);
+			submitNodeCollector.submitCustomGeometry(poseStack, HealthBarBorderRenderType, (pose, vertexConsumer) -> RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
+					0, 0,
+					128, 32,
+					128, 128,
+					0, renderState.lightCoords));
+			submitNodeCollector.submitCustomGeometry(poseStack, HealthBarFillRenderType, (pose, vertexConsumer) -> RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
+					0, 32,
+					Math.min(h, 121), 32,
+					128, 128,
+					0, renderState.lightCoords));
+			if (HealthBarConfig.I.getData().renderHealthBarText()) {
+				String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
+
+				submitNodeCollector.submitText(poseStack, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, FormattedCharSequence.forward(txt, Style.EMPTY), false, Font.DisplayMode.NORMAL, renderState.lightCoords, HealthBarConfig.I.getData().tempColor(), 0, 0);
+			}
+			poseStack.popPose();
+		}
+		if (HealthBarConfig.I.getData().renderEffect()) {
+			float lY = livingEntity.getBbHeight() / 2 + 0.16f;
+			poseStack.pushPose();
+			poseStack.translate(0.0, lY, 0.0);
+			camera.x = 0;
+			camera.z = 0;
+			poseStack.mulPose(camera);
+			poseStack.mulPose(Axis.YP.rotationDegrees(180));
+			poseStack.scale(-0.025F, -0.025F, 0.025F);
+			draw(livingEntity, submitNodeCollector, poseStack, minecraft, renderState.lightCoords);
+			poseStack.popPose();
+		}
+	}
     public static boolean checkView(Minecraft minecraft, LivingEntity entity){
         if (minecraft.player != null) {
             return ForgeHooksClient.isNameplateInRenderDistance(entity,minecraft.getEntityRenderDispatcher().distanceToSqr(entity),entity.getAttribute(Attributes.NAME_TAG_DISTANCE).getValue()) && minecraft.player.hasLineOfSight(entity) && entity == minecraft.getEntityRenderDispatcher().crosshairPickEntity;

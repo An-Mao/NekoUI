@@ -100,15 +100,9 @@ public class ClientEvent {
         event.addPass(Identifier.fromNamespaceAndPath(NekoUI.MOD_ID,"health_bar"),new HealthBarFramePassRender());
     }
 
-//	@SubscribeEvent
-//	public static void onRender(RenderLivingEvent.Post<LivingEntity, ?, ?> event) {
-//		event.getState().
-//		if (event.getRenderState().getRenderData(RenderStateEntityKey) instanceof LivingEntity livingEntity) {
-//			CoresRegs.ENTITY_RENDER_REG.forEach((s, iEntityRender) -> iEntityRender.render(livingEntity,
-//					event.getRenderState(), event.getRenderer(), event.getSubmitNodeCollector(), event.getPoseStack()));
-//            event.getState().
-//		}
-//	}
+	@SubscribeEvent
+	public static void onRender(RenderLivingEvent.Post<LivingEntity, ?, ?> event) {
+	}
 
 
 	@SubscribeEvent
