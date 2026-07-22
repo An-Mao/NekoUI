@@ -6,24 +6,11 @@ import dev.anye.core.system._File;
 import dev.anye.mc.nekoui.config.Configs;
 
 public class MenuScreenConfig extends _JsonConfig<MenuScreenData> {
-	public static final String file = _File.getFilePath(Configs.ConfigDir, "menu-config.json");
+	public static final String FILE = _File.getFilePath(Configs.CONFIG_DIR, "menu-config.json");
 	public static final MenuScreenConfig INSTANCE = new MenuScreenConfig();
 
 	public MenuScreenConfig() {
-		super(file, """
-				{
-				  "sectors": 9,
-				  "innerRadius": 20,
-				  "outerRadius": 80,
-				  "SelectColor": "50ffffff",
-				  "UsualColor": "70000000"
-				}""", new TypeToken<>() {
-		});
+		super(FILE, MenuScreenData.DEFAULT, new TypeToken<>() {});
 	}
 
-	@Override
-	public MenuScreenData getData() {
-		if (data == null) return new MenuScreenData();
-		return super.getData();
-	}
 }

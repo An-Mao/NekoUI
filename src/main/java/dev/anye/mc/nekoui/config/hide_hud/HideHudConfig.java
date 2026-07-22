@@ -10,34 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HideHudConfig extends _JsonConfig<List<String>> {
-	private static final String filePath = _File.getFilePath(Configs.ConfigDir, "hide-gui.json");
+	private static final String FILE_PATH = _File.getFilePath(Configs.CONFIG_DIR, "hide-gui.json");
 	public static final HideHudConfig I = new HideHudConfig();
 	private final List<Identifier> list = new ArrayList<>();
 
 	public HideHudConfig() {
-		super(filePath, """
-				[
-				  "minecraft:experience_level",
-				  "minecraft:experience_bar",
-				  "-minecraft:hotbar",
-				  "minecraft:player_health",
-				  "minecraft:food_level",
-				  "minecraft:armor_level",
-				  "minecraft:air_level"
-				]""", new TypeToken<>() {
+		super(FILE_PATH, List.of(
+				"minecraft:experience_level",
+				"minecraft:experience_bar",
+				"-minecraft:hotbar",
+				"minecraft:player_health",
+				"minecraft:food_level",
+				"minecraft:armor_level",
+				"minecraft:air_level"), new TypeToken<>() {
 		}, false);
 		toRes();
 	}
 
-	@Override
-	public List<String> getData() {
-		if (data == null) new ArrayList<>();
-		return super.getData();
-	}
-
 	private void toRes() {
 		list.clear();
-		getData().forEach((s) -> list.add(Identifier.parse(s)));
+		ifPresent(strings -> strings.forEach(s -> list.add(Identifier.parse(s))));
 	}
 
 	public boolean isHide(Identifier id) {

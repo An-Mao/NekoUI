@@ -7,13 +7,12 @@ import dev.anye.mc.nekoui.config.Configs;
 import dev.anye.mc.nekoui.dat_type.ScreenRender;
 
 public class ScreenRenderIO extends _JsonConfig<ScreenRender> {
-	public ScreenRenderIO(String filePath, String defaultData) {
-		super(_File.getFilePath(Configs.ConfigDir_ScreenElement, filePath), defaultData, new TypeToken<>() {
-		}, false);
+	public ScreenRenderIO(String filePath, ScreenRender defaultData) {
+		super(_File.getFilePath(Configs.CONFIG_DIR_SCREEN_ELEMENT, filePath), defaultData, new TypeToken<>() {}, false);
 	}
 
 	public ScreenRenderIO(String filePath) {
-		this(filePath, "");
+		this(filePath, ScreenRender.EMPTY);
 	}
 
 

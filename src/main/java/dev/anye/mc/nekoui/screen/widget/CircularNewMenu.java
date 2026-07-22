@@ -315,7 +315,7 @@ public class CircularNewMenu extends RenderWidgetCore<CircularNewMenu> {
 		public static RenderPageData creat(MenuPageData pageData, DT_ListBoxData.OnPress func) {
 			List<DT_ListBoxData> data = new ArrayList<>();
 			pageData.projects().forEach((projectData) -> {
-				MenuProject menuData = Configs.MenuProjects.get(projectData.key());
+				MenuProject menuData = Configs.MENU_PROJECTS.get(projectData.key());
 				if (menuData != null) {
 					data.add(new DT_ListBoxData(Component.literal(menuData.name()), projectData.key(), func));
 				} else {

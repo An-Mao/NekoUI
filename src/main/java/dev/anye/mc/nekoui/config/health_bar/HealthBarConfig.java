@@ -6,29 +6,11 @@ import dev.anye.core.system._File;
 import dev.anye.mc.nekoui.config.Configs;
 
 public class HealthBarConfig extends _JsonConfig<HealthBarData> {
-	public static final String file = _File.getFilePath(Configs.ConfigDir, "health-bar.json");
+	public static final String FILE = _File.getFilePath(Configs.CONFIG_DIR, "health-bar.json");
 	public static final HealthBarConfig I = new HealthBarConfig();
 
 	public HealthBarConfig() {
-		super(file, """
-				{
-				  "enable": true,
-				  "renderDistance":30,
-				  "renderTop":0.5,
-				  "renderHealthBar": true,
-				  "renderHealthBarText": true,
-				  "healthBarTextColor": "0xFFFFD700",
-				  "renderEffect": true,
-				  "effectRenderImage": true,
-				  "effectImageRotationAngle":10000,
-				  "renderOnlyView": true
-				}""", new TypeToken<>() {
-		});
+		super(FILE, HealthBarData.DEFAULT, new TypeToken<>() {});
 	}
 
-	@Override
-	public HealthBarData getData() {
-		if (data == null) return HealthBarData.DEFAULT;
-		return super.getData();
-	}
 }

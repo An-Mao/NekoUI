@@ -8,18 +8,14 @@ import dev.anye.mc.nekoui.config.Configs;
 import java.util.List;
 
 public class MenuPageConfig extends _JsonConfig<List<String>> {
-	public static final String File = _File.getFilePath(Configs.ConfigDir_Menu, "PageIndex.json");
+	public static final String FILE = _File.getFilePath(Configs.CONFIG_DIR_MENU, "PageIndex.json");
 
 	public static final MenuPageConfig I = new MenuPageConfig();
 
 	public MenuPageConfig() {
-		super(File, """
-				[
-				    "page1",
-				    "page2",
-				    "page3"
-				]
-				""", new TypeToken<>() {
-		}, false);
+		super(FILE, List.of(
+				"page1",
+				"page2",
+				"page3"), new TypeToken<>() {}, false);
 	}
 }

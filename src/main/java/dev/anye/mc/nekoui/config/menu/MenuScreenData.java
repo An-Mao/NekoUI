@@ -1,9 +1,15 @@
 package dev.anye.mc.nekoui.config.menu;
 
-public class MenuScreenData {
-	public int sectors;
-	public int innerRadius;
-	public int outerRadius;
-	public String SelectColor;
-	public String UsualColor;
+public record MenuScreenData(
+		int sectors,
+		int innerRadius,
+		int outerRadius,
+		String selectColor,
+		String usualColor) {
+	public static final MenuScreenData DEFAULT = new MenuScreenData(
+			9,
+			20,
+			80,
+			"50ffffff",
+			"70000000");
 }

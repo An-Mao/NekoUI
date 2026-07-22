@@ -119,7 +119,7 @@ public class PageSettingScreen extends ScreenCore {
 	public List<DT_ListBoxData> getConfigData() {
 		List<DT_ListBoxData> data = new ArrayList<>();
 
-		_File.getFiles(Configs.ConfigDir_MenuPage, ".json").forEach(path -> {
+		_File.getFiles(Configs.CONFIG_DIR_MENU_PAGE, ".json").forEach(path -> {
 			String s = Configs.getFileNameWithoutExtension(path.getFileName().toString());
 			data.add(new DT_ListBoxData(Component.literal(s), s, this::setData));
 		});
@@ -222,7 +222,7 @@ public class PageSettingScreen extends ScreenCore {
 	public void delete() {
 		String id = idEditBox.getValue();
 		if (!id.isEmpty()) {
-			File file = new File(_File.getFilePath(Configs.ConfigDir_MenuPage, id + _SuffixCDT.JSON_SUFFIX));
+			File file = new File(_File.getFilePath(Configs.CONFIG_DIR_MENU_PAGE, id + _SuffixCDT.JSON_SUFFIX));
 			if (file.exists()) {
 				if (file.delete()) Configs.LoadMenuPage();
 				else LOGGER.warn("Delete file {} error", id);

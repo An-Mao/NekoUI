@@ -8,7 +8,7 @@ import dev.anye.mc.nekoui.dat_type.MenuPageData;
 
 public class MenuPageIO extends _JsonConfig<MenuPageData> {
 	public MenuPageIO(String filePath) {
-		super(_File.getFilePath(Configs.ConfigDir_MenuPage, filePath), "", new TypeToken<>() {
+		super(_File.getFilePath(Configs.CONFIG_DIR_MENU_PAGE, filePath), MenuPageData.EMPTY, new TypeToken<>() {
 		},false);
 	}
 }

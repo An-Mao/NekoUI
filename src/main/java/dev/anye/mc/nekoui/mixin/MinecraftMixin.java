@@ -18,12 +18,12 @@ public class MinecraftMixin {
 	private static final Logger nekoUI$LOGGER = LogUtils.getLogger();
 
 	@Inject(method = "setScreenAndShow", at = @At("HEAD"), cancellable = true)
-	public void nekoui$setScreenAndShow$ban(Screen pGuiScreen, CallbackInfo ci) {
-		if (pGuiScreen != null) {
-			String path = pGuiScreen.getClass().getName();
-			if (Config.INSTANCE.getData().isOutputScreenPathName()) {
-				nekoUI$LOGGER.info(path);
-			}
+	public void nekoui$setScreenAndShow$ban(Screen screen, CallbackInfo ci) {
+		if (screen != null) {
+			String path = screen.getClass().getName();
+			Config.INSTANCE.ifPresent(configData -> {
+				if (configData.outputScreenPathName()) nekoUI$LOGGER.info(path);
+			});
 			if (BanScreenConfig.I.isBan(path)) {
 				ci.cancel();
 			}

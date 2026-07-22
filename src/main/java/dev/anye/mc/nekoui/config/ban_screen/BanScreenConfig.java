@@ -7,29 +7,19 @@ import dev.anye.core.system._File;
 import dev.anye.mc.nekoui.config.Configs;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BanScreenConfig extends _JsonConfig<List<String>> {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	private static final String configFile = _File.getFilePath(Configs.ConfigDir, "ban-screen.json");
+	private static final String FILE_PATH = _File.getFilePath(Configs.CONFIG_DIR, "ban-screen.json");
 	public static final BanScreenConfig I = new BanScreenConfig();
 
 	public BanScreenConfig() {
-		super(configFile, """
-				[
-				  "something"
-				]""", new TypeToken<>() {
-		});
+		super(FILE_PATH, List.of(), new TypeToken<>() {});
 	}
 
-	@Override
-	public List<String> getData() {
-		if (data == null) return new ArrayList<>();
-		return super.getData();
-	}
 
 	public boolean isBan(String s) {
-		return getData() != null && getData().contains(s);
+		return map(strings -> strings.contains(s)).orElse(false);
 	}
 }

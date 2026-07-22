@@ -1,58 +1,68 @@
 package dev.anye.mc.nekoui.config;
 
 public class ConfigData {
-	private boolean putDefault;
-	private boolean renderScreenElement;
-	private boolean outputGuiId;
-	private boolean outputScreenPathName;
-	private boolean menu;
-	private boolean autoPage;
-
-	public boolean isPutDefault() {
-		return putDefault;
-	}
-
-	public void setMenu(boolean menu) {
-		this.menu = menu;
-	}
-
-	public boolean isMenu() {
-		return menu;
-	}
-
-	public void setRenderScreenElement(boolean renderScreenElement) {
+	boolean putDefault;
+	boolean renderScreenElement;
+	boolean outputGuiId;
+	boolean outputScreenPathName;
+	boolean menu;
+	boolean autoPage;
+	public static ConfigData DEFAULT = new ConfigData(
+			true,
+			true,
+			false,
+			false,
+			true,
+			false
+	);
+	public ConfigData(
+			boolean putDefault,
+			boolean renderScreenElement,
+			boolean outputGuiId,
+			boolean outputScreenPathName,
+			boolean menu,
+			boolean autoPage){
+		this.putDefault = putDefault;
 		this.renderScreenElement = renderScreenElement;
-	}
-
-	public boolean isRenderScreenElement() {
-		return renderScreenElement;
-	}
-
-	public void setOutputGuiId(boolean outputGuiId) {
 		this.outputGuiId = outputGuiId;
-	}
-
-	public boolean isOutputGuiId() {
-		return outputGuiId;
-	}
-
-	public void setOutputScreenPathName(boolean outputScreenPathName) {
 		this.outputScreenPathName = outputScreenPathName;
-	}
-
-	public boolean isOutputScreenPathName() {
-		return outputScreenPathName;
-	}
-
-	public void setAutoPage(boolean autoPage) {
+		this.menu = menu;
 		this.autoPage = autoPage;
 	}
-
-	public boolean isAutoPage() {
+	public boolean putDefault(){
+		return putDefault;
+	}
+	public void setPutDefault(boolean putDefault){
+		this.putDefault = putDefault;
+	}
+	public boolean renderScreenElement(){
+		return renderScreenElement;
+	}
+	public void setRenderScreenElement(boolean renderScreenElement){
+		this.renderScreenElement = renderScreenElement;
+	}
+	public boolean outputGuiId(){
+		return outputGuiId;
+	}
+	public void setOutputGuiId(boolean outputGuiId){
+		this.outputGuiId = outputGuiId;
+	}
+	public boolean outputScreenPathName(){
+		return outputScreenPathName;
+	}
+	public void setOutputScreenPathName(boolean outputScreenPathName){
+		this.outputScreenPathName = outputScreenPathName;
+	}
+	public boolean menu(){
+		return menu;
+	}
+	public void setMenu(boolean menu){
+		this.menu = menu;
+	}
+	public boolean autoPage(){
 		return autoPage;
 	}
-
-	public void setPutDefault(boolean b) {
-		this.putDefault = b;
+	public void setAutoPage(boolean autoPage){
+		this.autoPage = autoPage;
 	}
 }

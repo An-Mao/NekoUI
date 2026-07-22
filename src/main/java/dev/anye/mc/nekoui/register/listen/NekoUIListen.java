@@ -2,6 +2,7 @@ package dev.anye.mc.nekoui.register.listen;
 
 import com.google.gson.reflect.TypeToken;
 import com.sun.net.httpserver.HttpExchange;
+import dev.anye.core.exception._IOException;
 import dev.anye.core.json._JsonConfig;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.am.listen.Listen;
@@ -52,9 +53,9 @@ public class NekoUIListen extends Listen {
 						case "save" -> config(exchange, p[1], postData.p());
 						case "list" -> {
 							switch (p[1]) {
-								case SCREEN_ELEMENT -> _files(exchange, Configs.ConfigDir_ScreenElement);
-								case MENU_PAGE -> _files(exchange, Configs.ConfigDir_MenuPage);
-								case MENU_PROJECT -> _files(exchange, Configs.ConfigDir_MenuProject);
+								case SCREEN_ELEMENT -> _files(exchange, Configs.CONFIG_DIR_SCREEN_ELEMENT);
+								case MENU_PAGE -> _files(exchange, Configs.CONFIG_DIR_MENU_PAGE);
+								case MENU_PROJECT -> _files(exchange, Configs.CONFIG_DIR_MENU_PROJECT);
 								default -> missType(exchange);
 							}
 						}
@@ -123,7 +124,15 @@ public class NekoUIListen extends Listen {
 
 	}
 	public void _load(HttpExchange exchange,_JsonConfig<?> config) throws IOException {
-		sendJson(exchange,200,gson.toJsonTree(config.getData()));
+		if (config.isPresent()) config.ifPresent(data -> {
+			try {
+				sendJson(exchange,200,gson.toJsonTree(data));
+			} catch (IOException e) {
+				throw new _IOException(e);
+			}
+		});
+		else sendJson(exchange,500,error("config null","error load config"));
+
 	}
 	public void _files(HttpExchange exchange,String dir) throws IOException {
 		List<String> files = new ArrayList<>();

@@ -34,31 +34,37 @@ public class MenuScreen extends Screen {
 	}
 
 	private void addMenu() {
-		if (Config.INSTANCE.getData().isAutoPage()) {
-			List<DT_ListBoxData> data = new ArrayList<>();
+		Config.INSTANCE.ifPresent(configData -> {
+			if (configData.autoPage()) {
+				MenuScreenConfig.INSTANCE.ifPresent(menuScreenData -> {
+					List<DT_ListBoxData> data = new ArrayList<>();
 
-			Configs.MenuProjects.forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.name()), s, this::run)));
-			Registers.MENU_PROJECT.getRegistry().entrySet().forEach(resourceKeyMenuProjectEntry -> data.add(new DT_ListBoxData(Component.literal(resourceKeyMenuProjectEntry.getValue().name()), resourceKeyMenuProjectEntry.getKey().identifier().toString(), this::run)));
+					Configs.MENU_PROJECTS.forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(menuData.name()), s, this::run)));
+					Registers.MENU_PROJECT.getRegistry().entrySet().forEach(resourceKeyMenuProjectEntry -> data.add(new DT_ListBoxData(Component.literal(resourceKeyMenuProjectEntry.getValue().name()), resourceKeyMenuProjectEntry.getKey().identifier().toString(), this::run)));
 
-			circularMenu = new CircularMenu(width / 2, height / 2, width, height, MenuScreenConfig.INSTANCE.getData().sectors, MenuScreenConfig.INSTANCE.getData().innerRadius, MenuScreenConfig.INSTANCE.getData().outerRadius, Component.empty(), data);
-			circularMenu.setFlipMode(CircularMenu.FlipMode.button);
 
-			addRenderableWidget(circularMenu);
-		} else {
-			List<CircularNewMenu.RenderPageData> pd = new ArrayList<>();
-			Configs.MenuPage.forEach((pageData) -> pd.add(CircularNewMenu.RenderPageData.creat(pageData, this::run)));
-			Registers.MENU_PAGE.getRegistry().entrySet().forEach(pageEntry -> pd.add(CircularNewMenu.RenderPageData.creat(pageEntry.getValue().getData(), this::run)));
 
-			circularNewMenu = new CircularNewMenu(width / 2, height / 2, width, height, Component.empty(), pd);
-			circularNewMenu.setFlipMode(CircularNewMenu.FlipMode.button);
-			addRenderableWidget(circularNewMenu);
+					circularMenu = new CircularMenu(width / 2, height / 2, width, height, menuScreenData.sectors(), menuScreenData.innerRadius(), menuScreenData.outerRadius(), Component.empty(), data);
+					circularMenu.setFlipMode(CircularMenu.FlipMode.button);
 
-		}
+					addRenderableWidget(circularMenu);
+				});
+			} else {
+				List<CircularNewMenu.RenderPageData> pd = new ArrayList<>();
+				Configs.MENU_PAGE.forEach(pageData -> pd.add(CircularNewMenu.RenderPageData.creat(pageData, this::run)));
+				Registers.MENU_PAGE.getRegistry().entrySet().forEach(pageEntry -> pd.add(CircularNewMenu.RenderPageData.creat(pageEntry.getValue().getData(), this::run)));
+
+				circularNewMenu = new CircularNewMenu(width / 2, height / 2, width, height, Component.empty(), pd);
+				circularNewMenu.setFlipMode(CircularNewMenu.FlipMode.button);
+				addRenderableWidget(circularNewMenu);
+
+			}
+		});
 	}
 
 	public void run(Object v) {
 		if (v instanceof String s) {
-			MenuProject menuData = Configs.MenuProjects.get(s);
+			MenuProject menuData = Configs.MENU_PROJECTS.get(s);
 			if (menuData != null) {
 				menuData.onClick();
 			} else {
@@ -69,17 +75,12 @@ public class MenuScreen extends Screen {
 
 	@Override
 	public void onClose() {
-		if (Config.INSTANCE.getData().isAutoPage()) {
-			DT_ListBoxData dtListBoxData = circularMenu.getData();
+		Config.INSTANCE.ifPresent(configData -> {
+			DT_ListBoxData dtListBoxData = configData.autoPage() ? circularMenu.getData() : circularNewMenu.getData();
 			if (dtListBoxData != null) {
 				dtListBoxData.OnPress(dtListBoxData.getValue());
 			}
-		} else {
-			DT_ListBoxData dtListBoxData = circularNewMenu.getData();
-			if (dtListBoxData != null) {
-				dtListBoxData.OnPress(dtListBoxData.getValue());
-			}
-		}
+		});
 		super.onClose();
 	}
 }

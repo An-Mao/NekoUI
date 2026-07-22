@@ -4,6 +4,8 @@ import java.util.List;
 
 public record MenuPageData(String title, int projectNumber, int innerRadius, int outerRadius,
                            List<ProjectInfo> projects) {
+	public static final MenuPageData EMPTY = new MenuPageData("",0,0,0,List.of());
+
 
 	public record ProjectInfo(String key, String textNormalColor, String textHighlightColor,
 	                          String backgroundNormalColor, String backgroundHighlightColor) {

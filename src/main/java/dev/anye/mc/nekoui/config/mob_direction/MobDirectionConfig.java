@@ -13,50 +13,33 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	private static final String filePath = _File.getFilePath(Configs.ConfigDir, "mob-direction.json");
+	private static final String FILE_PATH = _File.getFilePath(Configs.CONFIG_DIR, "mob-direction.json");
+	public static final MobDirectionData DEFAULT = new MobDirectionData(
+			true,
+			true,
+			40,
+			11,
+			22,
+			9,
+			2,
+			-0.5,
+			true,
+			true,
+			entityList(),
+			"0xFF000000",
+			false,
+			0,
+			entityColors());
 	public static final MobDirectionConfig I = new MobDirectionConfig();
 
 	public MobDirectionConfig() {
-		super(filePath, """
-				            {
-					"enable": true,
-					"dynamicDisplay":true,
-					"poiShowRadius":40,
-					"poiRadius":22,
-					"poiSize":11,
-					"poiMaxSize": 9,
-					"poiMinSize": 2,
-					"ratio":-0.5,
-					"onlyLivingEntity":true,
-					"notInListMode":true,
-					"entityList":{
-						"minecraft.chest_minecart": true
-					},
-					"defaultColor":"0xFF000000",
-					"useEggColor": false,
-					"eggLayerIndex": 0,
-					"entityColors":{
-						"minecraft.player": "0x56FFFFFF",
-						"minecraft.chest_minecart": "0xFFFFFF00"
-					}
-				}""", new TypeToken<>() {
-		});
-
-		//if (getDatas().isUseEggColor()) writeEggColor();
+		super(FILE_PATH, DEFAULT, new TypeToken<>() {});
 		writeColor();
-	}
-
-	@Override
-	public void init() {
-		super.init();
-	}
-
-	@Override
-	public MobDirectionData getData() {
-		if (data == null) return new MobDirectionData();
-		return data;
 	}
 
 	public int getEntityColor(Entity entity) {
@@ -68,7 +51,7 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	}
 
 	public int getEntityColor(String entity) {
-		return getData().getColor(entity);
+		return map(mobDirectionData -> mobDirectionData.getColor(entity)).orElseThrow();
 	}
 
 	public boolean isShowPoi(Entity entity) {
@@ -80,37 +63,38 @@ public class MobDirectionConfig extends _JsonConfig<MobDirectionData> {
 	}
 
 	public boolean isShowPoi(String entity) {
-		return getData().isShow(entity);
+		return map(mobDirectionData -> mobDirectionData.isShow(entity)).orElse(false);
 	}
 
 	public static int getEntityColor(MobCategory mobCategory) {
-		return mobCategory == MobCategory.MONSTER ? _ColorCDT.red : mobCategory.isPersistent() ? _ColorCDT.blue : mobCategory.isFriendly() ? _ColorCDT.green : _ColorCDT.yellow;
+		if (mobCategory == MobCategory.MONSTER) return _ColorCDT.red;
+		if (mobCategory.isPersistent()) return _ColorCDT.blue;
+		return mobCategory.isFriendly() ? _ColorCDT.green : _ColorCDT.yellow;
 	}
 
 	public void writeColor() {
-		BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> {
-			String eid = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toLanguageKey();
-			if (getData().getEntityColors().get(eid) == null) {
-				int color = getEntityColor(entityType.getCategory());
-				//int color = getSpawnEggColors(entityType)[getDatas().getEggLayerIndex()];
-				if (color == -1) return;
-				getData().getEntityColors().put(eid, _ColorSupport.intToHexColor(color));
-			}
+		ifPresent(mobDirectionData -> {
+			BuiltInRegistries.ENTITY_TYPE.forEach(entityType -> {
+				String eid = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toLanguageKey();
+				if (mobDirectionData.entityColors().get(eid) == null) {
+					int color = getEntityColor(entityType.getCategory());
+					if (color == -1) return;
+					mobDirectionData.entityColors().put(eid, _ColorSupport.intToHexColor(color));
+				}
+			});
 		});
 		save();
 	}
-    /*
-    public void writeEggColor(){
-        BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> {
-            String eid = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toLanguageKey();
-            if (getDatas().getEntityColors().get(eid) == null){
-                int color = getSpawnEggColors(entityType)[getDatas().getEggLayerIndex()];
-                if (color == -1) return;
-                getDatas().getEntityColors().put(eid, _ColorSupport.intToHexColor(color));
-            }
-        });
-        save();
-    }
 
-     */
+	private static Map<String,Boolean> entityList(){
+		Map<String,Boolean> map = new HashMap<>();
+		map.put("minecraft.chest_minecart",true);
+		return map;
+	}
+	private static Map<String,String> entityColors(){
+		Map<String,String> map = new HashMap<>();
+		map.put("minecraft.player","0x56FFFFFF");
+		map.put("minecraft.chest_minecart","0xFFFFFF00");
+		return map;
+	}
 }

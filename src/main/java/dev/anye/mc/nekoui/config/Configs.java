@@ -1,6 +1,7 @@
 package dev.anye.mc.nekoui.config;
 
 import com.mojang.logging.LogUtils;
+import dev.anye.core.cdt._SuffixCDT;
 import dev.anye.core.pack._Pack;
 import dev.anye.core.system._File;
 import dev.anye.mc.nekoui.config.ban_screen.BanScreenConfig;
@@ -13,8 +14,6 @@ import dev.anye.mc.nekoui.config.menu.MenuScreenConfig;
 import dev.anye.mc.nekoui.config.mob_direction.MobDirectionConfig;
 import dev.anye.mc.nekoui.config.screen_element.ScreenRenderIO;
 import dev.anye.mc.nekoui.dat_type.MenuPageData;
-import dev.anye.mc.nekoui.dat_type.MenuProjectData;
-import dev.anye.mc.nekoui.dat_type.ScreenRender;
 import dev.anye.mc.nekoui.register.MenuProject;
 import dev.anye.mc.nekoui.register.screen_element.ScreenElement;
 
@@ -28,50 +27,52 @@ import java.util.Map;
 
 public class Configs {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	public static final String ConfigDir = _File.getFileFullPathWithRun("config", "NekoUI");
-	public static final String ConfigDir_JS = _File.getFilePath(ConfigDir, "JavaScript");
-	public static final String ConfigDir_ScreenElement = _File.getFilePath(ConfigDir, "ScreenElement");
-	public static final String ConfigDir_Menu = _File.getFilePath(ConfigDir, "Menu");
-	public static final String ConfigDir_MenuProject = _File.getFilePath(ConfigDir_Menu, "Project");
-	public static final String ConfigDir_MenuPage = _File.getFilePath(ConfigDir_Menu, "Page");
-	private static boolean isInit = true;
+	public static final String CONFIG_DIR = _File.getFileFullPathWithRun("config", "NekoUI");
+	public static final String CONFIG_DIR_JS = _File.getFilePath(CONFIG_DIR, "JavaScript");
+	public static final String CONFIG_DIR_SCREEN_ELEMENT = _File.getFilePath(CONFIG_DIR, "ScreenElement");
+	public static final String CONFIG_DIR_MENU = _File.getFilePath(CONFIG_DIR, "Menu");
+	public static final String CONFIG_DIR_MENU_PROJECT = _File.getFilePath(CONFIG_DIR_MENU, "Project");
+	public static final String CONFIG_DIR_MENU_PAGE = _File.getFilePath(CONFIG_DIR_MENU, "Page");
 
-	public static final List<ScreenElement> ScreenRenders = new ArrayList<>();
-	public static final Map<String, MenuProject> MenuProjects = new HashMap<>();
-	public static final List<MenuPageData> MenuPage = new ArrayList<>();
+	private static boolean isInit = true;
+	public static final List<ScreenElement> SCREEN_RENDERS = new ArrayList<>();
+	public static final Map<String, MenuProject> MENU_PROJECTS = new HashMap<>();
+	public static final List<MenuPageData> MENU_PAGE = new ArrayList<>();
 
 	static {
-		_File.checkAndCreateDir(ConfigDir);
-		_File.checkAndCreateDir(ConfigDir_JS);
-		_File.checkAndCreateDir(ConfigDir_ScreenElement);
-		_File.checkAndCreateDir(ConfigDir_Menu);
-		_File.checkAndCreateDir(ConfigDir_MenuProject);
-		_File.checkAndCreateDir(ConfigDir_MenuPage);
+		_File.checkAndCreateDir(CONFIG_DIR);
+		_File.checkAndCreateDir(CONFIG_DIR_JS);
+		_File.checkAndCreateDir(CONFIG_DIR_SCREEN_ELEMENT);
+		_File.checkAndCreateDir(CONFIG_DIR_MENU);
+		_File.checkAndCreateDir(CONFIG_DIR_MENU_PROJECT);
+		_File.checkAndCreateDir(CONFIG_DIR_MENU_PAGE);
 	}
 
+	private Configs(){}
 
 	public static void init() {
 		LOGGER.info("load config");
-		Config.INSTANCE.init();
+		Config.INSTANCE.reload();
 		if (isInit) {
 			isInit = false;
+			Config.INSTANCE.ifPresent(configData -> {
+				if (configData.putDefault()) {
+					_Pack.writeFiles("assets/nekoui/config/screen/", Configs.CONFIG_DIR_SCREEN_ELEMENT + File.separator, _SuffixCDT.JSON_SUFFIX, "air", "armor", "armor_toughness", "damage", "exp", "fps", "health", "hunger", "luck", "speed");
+					_Pack.writeFiles("assets/nekoui/config/menu/project/", Configs.CONFIG_DIR_MENU_PROJECT + File.separator, _SuffixCDT.JSON_SUFFIX, "SwitchItemSlot0", "SwitchItemSlot1", "SwitchItemSlot2", "SwitchItemSlot3", "SwitchItemSlot4", "SwitchItemSlot5", "SwitchItemSlot6", "SwitchItemSlot7", "SwitchItemSlot8", "TestCommand", "TestCommand1", "TestMessage");
+					_Pack.writeFiles("assets/nekoui/config/menu/page/", Configs.CONFIG_DIR_MENU_PAGE + File.separator, _SuffixCDT.JSON_SUFFIX, "page1", "page2", "page3");
+					configData.setPutDefault(false);
+					Config.INSTANCE.save();
+				}
+			});
 
-			if (Config.INSTANCE.getData().isPutDefault()) {
-				_Pack.writeFiles("assets/nekoui/config/screen/", Configs.ConfigDir_ScreenElement + File.separator, ".json", "air", "armor", "armor_toughness", "damage", "exp", "fps", "health", "hunger", "luck", "speed");
-				_Pack.writeFiles("assets/nekoui/config/menu/project/", Configs.ConfigDir_MenuProject + File.separator, ".json", "SwitchItemSlot0", "SwitchItemSlot1", "SwitchItemSlot2", "SwitchItemSlot3", "SwitchItemSlot4", "SwitchItemSlot5", "SwitchItemSlot6", "SwitchItemSlot7", "SwitchItemSlot8", "TestCommand", "TestCommand1", "TestMessage");
-				_Pack.writeFiles("assets/nekoui/config/menu/page/", Configs.ConfigDir_MenuPage + File.separator, ".json", "page1", "page2", "page3");
-
-				Config.INSTANCE.getData().setPutDefault(false);
-				Config.INSTANCE.save();
-			}
 		}
-		BanScreenConfig.I.init();
-		HealthBarConfig.I.init();
-		HideHudConfig.I.init();
-		HotBarConfig.INSTANCE.init();
-		MenuScreenConfig.INSTANCE.init();
+		BanScreenConfig.I.reload();
+		HealthBarConfig.I.reload();
+		HideHudConfig.I.reload();
+		HotBarConfig.INSTANCE.reload();
+		MenuScreenConfig.INSTANCE.reload();
 
-		MobDirectionConfig.I.init();
+		MobDirectionConfig.I.reload();
 
 		LoadScreenRender();
 		LoadMenuProject();
@@ -79,30 +80,21 @@ public class Configs {
 	}
 
 	public static void LoadScreenRender() {
-		ScreenRenders.clear();
-		_File.getFiles(ConfigDir_ScreenElement, ".json").forEach(path -> {
-			ScreenRender screenRender = new ScreenRenderIO(path.getFileName().toString()).getData();
-			if (screenRender != null) ScreenRenders.add(new ScreenElement(screenRender));
-		});
+		SCREEN_RENDERS.clear();
+		_File.getFiles(CONFIG_DIR_SCREEN_ELEMENT, _SuffixCDT.JSON_SUFFIX).forEach(path -> new ScreenRenderIO(path.getFileName().toString()).ifPresent(screenRender -> {
+			LOGGER.debug("sce {}",screenRender.elements());
+			SCREEN_RENDERS.add(new ScreenElement(screenRender));
+		}));
 	}
 
 	public static void LoadMenuProject() {
-		MenuProjects.clear();
-		_File.getFiles(ConfigDir_MenuProject, ".json").forEach(path -> {
-			MenuProjectData menuProjectData = new MenuProjectIO(path.getFileName().toString()).getData();
-			if (menuProjectData != null)
-				MenuProjects.put(getFileNameWithoutExtension(path.getFileName().toString()), new MenuProject(menuProjectData));
-		});
+		MENU_PROJECTS.clear();
+		_File.getFiles(CONFIG_DIR_MENU_PROJECT, _SuffixCDT.JSON_SUFFIX).forEach(path -> new MenuProjectIO(path.getFileName().toString()).ifPresent(menuProjectData -> MENU_PROJECTS.put(getFileNameWithoutExtension(path.getFileName().toString()), new MenuProject(menuProjectData))));
 	}
 
 	public static void LoadMenuPage() {
-		MenuPage.clear();
-		_File.getFiles(ConfigDir_MenuPage, ".json").forEach(path -> {
-			MenuPageData menuPageData = new MenuPageIO(path.getFileName().toString()).getData();
-			if (menuPageData != null) {
-				MenuPage.add(menuPageData);
-			}
-		});
+		MENU_PAGE.clear();
+		_File.getFiles(CONFIG_DIR_MENU_PAGE, _SuffixCDT.JSON_SUFFIX).forEach(path -> new MenuPageIO(path.getFileName().toString()).ifPresent(MENU_PAGE::add));
 	}
 
 	public static String getFileNameWithoutExtension(String filename) {

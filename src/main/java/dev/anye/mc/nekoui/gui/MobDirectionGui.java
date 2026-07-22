@@ -2,8 +2,10 @@ package dev.anye.mc.nekoui.gui;
 
 import dev.anye.core.color._ColorSupport;
 import dev.anye.core.math._Math;
+import dev.anye.core.math._MathCDT;
 import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.mob_direction.MobDirectionConfig;
+import dev.anye.mc.nekoui.config.mob_direction.MobDirectionData;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -32,72 +34,69 @@ public class MobDirectionGui extends MobDirectionConfig {
 
 
 	public static void render(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTick) {
-		Minecraft minecraft = Minecraft.getInstance();
-		if (minecraft.gui.hud.isHidden()) return;
-		Level clientLevel = minecraft.level;
-		LocalPlayer localPlayer = minecraft.player;
-		if (clientLevel == null || localPlayer == null || !clientLevel.isClientSide()) return;
-		int screenWidth = minecraft.getWindow().getGuiScaledWidth();
-		int screenHeight = minecraft.getWindow().getGuiScaledHeight();
-		int startX = screenWidth / 2;
-		int startY = screenHeight / 2;
-		List<Entity> mobs = clientLevel.getEntities(null, localPlayer.getBoundingBox().inflate(I.getData().getPoiRadius()));
-		Vec3 playerForward = localPlayer.getForward();
-		Vec3 playerPosition = localPlayer.position();
-		for (Entity mob : mobs) {
-			if (mob == null || (mob instanceof LocalPlayer player && player.equals(localPlayer))) continue;
-			if (
-					(
-							I.getData().isOnlyLivingEntity()
-									&& mob instanceof LivingEntity
-									&& I.getData().isNotInListMode()
-					)
-							||
-							I.isShowPoi(mob)
-			) {
-
-				Vec3 mobPosition = mob.position();
-
-				double cx = mobPosition.x - playerPosition.x;
-				double cz = mobPosition.z - playerPosition.z;
-				double g = Math.atan2(cz, cx) - Math.atan2(playerForward.z, playerForward.x);
-				g = _Math.pullBackWithPI(g);
-				int ox = (int) (I.getData().getPoiShowRadius() * Math.cos(g));
-				int oz = (int) (I.getData().getPoiShowRadius() * Math.sin(g));
-
-				g += _Math.ARC_N135;
-				int imageSize;
-				if (I.getData().isDynamicDisplay()) {
-					double distance = playerPosition.distanceTo(mobPosition);
-					distance *= I.getData().getRatio();
-					imageSize = (int) (I.getData().getPoiSize() + distance);
-					imageSize = Mth.clamp(imageSize, I.getData().getPoiMinSize(), I.getData().getPoiMaxSize());
-				} else {
-					imageSize = I.getData().getPoiSize();
-				}
-				Matrix3x2fStack pose = guiGraphics.pose();
-				pose.pushMatrix();
-				pose.translate(startX + oz, startY - ox);
-				pose.translate(oz, -ox);
-				//pose.mulPose(new Quaternionf(new AxisAngle4d(g, 0, 0, 1)));
-				pose.rotate((float) g);
-				guiGraphics.blit(
-						RenderPipelines.GUI_TEXTURED,
-						MOB_POI,
-						0,
-						0,
-						0,
-						0,//0,
-						imageSize,
-						imageSize,
-						imageSize,
-						imageSize, getRenderColor(mob, guiGraphics));
-
-				//drawPoint(getRenderColor(mob, guiGraphics),guiGraphics, MOB_POI, imageSize);
-				pose.popMatrix();
-				//guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		I.ifPresent(mobDirectionData -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			if (minecraft.gui.hud.isHidden()) return;
+			Level clientLevel = minecraft.level;
+			LocalPlayer localPlayer = minecraft.player;
+			if (clientLevel == null || localPlayer == null || !clientLevel.isClientSide()) return;
+			int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+			int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+			int startX = screenWidth / 2;
+			int startY = screenHeight / 2;
+			List<Entity> mobs = clientLevel.getEntities(null, localPlayer.getBoundingBox().inflate(mobDirectionData.poiRadius()));
+			for (Entity mob : mobs) {
+				render(mob,localPlayer,startX,startY,guiGraphics,mobDirectionData);
 			}
+		});
 
+	}
+	public static void render(Entity mob, LocalPlayer localPlayer,int startX, int startY, GuiGraphicsExtractor guiGraphics, MobDirectionData mobDirectionData){
+		if (mob == null || (mob instanceof LocalPlayer player && player.equals(localPlayer))) return;
+		if ((mobDirectionData.onlyLivingEntity() && mob instanceof LivingEntity && mobDirectionData.notInListMode())
+				|| I.isShowPoi(mob)) {
+			Vec3 mobPosition = mob.position();
+			Vec3 playerForward = localPlayer.getForward();
+			Vec3 playerPosition = localPlayer.position();
+
+			double cx = mobPosition.x - playerPosition.x;
+			double cz = mobPosition.z - playerPosition.z;
+			double g = Math.atan2(cz, cx) - Math.atan2(playerForward.z, playerForward.x);
+			g = _Math.pullBackWithPI(g);
+			int ox = (int) (mobDirectionData.poiShowRadius() * Math.cos(g));
+			int oz = (int) (mobDirectionData.poiShowRadius() * Math.sin(g));
+
+			g += _MathCDT.ARC_N135;
+			int imageSize;
+			if (mobDirectionData.dynamicDisplay()) {
+				double distance = playerPosition.distanceTo(mobPosition);
+				distance *= mobDirectionData.ratio();
+				imageSize = (int) (mobDirectionData.poiSize() + distance);
+				imageSize = Mth.clamp(imageSize, mobDirectionData.poiMinSize(), mobDirectionData.poiMaxSize());
+			} else {
+				imageSize = mobDirectionData.poiSize();
+			}
+			Matrix3x2fStack pose = guiGraphics.pose();
+			pose.pushMatrix();
+			pose.translate(startX + oz, startY - ox);
+			pose.translate(oz, -ox);
+			//pose.mulPose(new Quaternionf(new AxisAngle4d(g, 0, 0, 1)));
+			pose.rotate((float) g);
+			guiGraphics.blit(
+					RenderPipelines.GUI_TEXTURED,
+					MOB_POI,
+					0,
+					0,
+					0,
+					0,//0,
+					imageSize,
+					imageSize,
+					imageSize,
+					imageSize, getRenderColor(mob, guiGraphics));
+
+			//drawPoint(getRenderColor(mob, guiGraphics),guiGraphics, MOB_POI, imageSize);
+			pose.popMatrix();
+			//guiGraphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 

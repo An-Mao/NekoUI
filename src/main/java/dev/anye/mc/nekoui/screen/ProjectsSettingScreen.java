@@ -1,6 +1,7 @@
 package dev.anye.mc.nekoui.screen;
 
 import com.mojang.logging.LogUtils;
+import dev.anye.core.cdt._SuffixCDT;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ProjectsSettingScreen extends ScreenCore {
 	public static final String ID = "screen." + NekoUI.MOD_ID + ".projects_setting";
@@ -74,9 +76,9 @@ public class ProjectsSettingScreen extends ScreenCore {
 	public void delete() {
 		String id = idEditBox.getValue();
 		if (!id.isEmpty()) {
-			if (Configs.MenuProjects.get(id) != null) {
-				Configs.MenuProjects.remove(id);
-				File file = new File(_File.getFilePath(Configs.ConfigDir_MenuProject, id + ".json"));
+			if (Configs.MENU_PROJECTS.get(id) != null) {
+				Configs.MENU_PROJECTS.remove(id);
+				File file = new File(_File.getFilePath(Configs.CONFIG_DIR_MENU_PROJECT, id + ".json"));
 				if (file.exists() && file.delete()) LOGGER.info("delete {}", id);
 				else LOGGER.error("delete fail {}", id);
 			}
@@ -88,8 +90,8 @@ public class ProjectsSettingScreen extends ScreenCore {
 		String id = idEditBox.getValue();
 		if (id.isEmpty()) return;
 		MenuProjectData menuProjectData = new MenuProjectData(id, runType.getNowSelectIndex(), valueEditBox.getValue());
-		Configs.MenuProjects.put(id, new MenuProject(menuProjectData));
-		new MenuProjectIO(id + ".json").save(menuProjectData);
+		Configs.MENU_PROJECTS.put(id, new MenuProject(menuProjectData));
+		new MenuProjectIO(id + _SuffixCDT.JSON_SUFFIX).save(menuProjectData);
 		Minecraft.getInstance().setScreenAndShow(new ProjectsSettingScreen());
 	}
 
@@ -98,8 +100,8 @@ public class ProjectsSettingScreen extends ScreenCore {
 	}
 
 	@Override
-	public boolean keyPressed(KeyEvent p_446782_) {
-		return keyPressed(p_446782_.key(), p_446782_.scancode(), p_446782_.modifiers()) || super.keyPressed(p_446782_);
+	public boolean keyPressed(KeyEvent keyEvent) {
+		return keyPressed(keyEvent.key(), keyEvent.scancode(), keyEvent.modifiers()) || super.keyPressed(keyEvent);
 	}
 
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
@@ -117,21 +119,21 @@ public class ProjectsSettingScreen extends ScreenCore {
 
 	public List<DT_ListBoxData> getConfigData() {
 		List<DT_ListBoxData> data = new ArrayList<>();
-		Configs.MenuProjects.forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(s), s, this::setData)));
+		Configs.MENU_PROJECTS.forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(s), s, this::setData)));
 		return data;
 	}
 
 	public List<DT_ListBoxData> getTypes() {
 		List<DT_ListBoxData> data = new ArrayList<>();
 		for (RunType type : RunType.values()) {
-			data.add(new DT_ListBoxData(getComponent("types." + type.name()), type.v));
+			data.add(new DT_ListBoxData(getComponent("types." + type.name().toLowerCase(Locale.ROOT)), type.v));
 		}
 		return data;
 	}
 
 	public void setData(Object v) {
 		if (v instanceof String id) {
-			MenuProject menuProject = Configs.MenuProjects.get(id);
+			MenuProject menuProject = Configs.MENU_PROJECTS.get(id);
 			if (menuProject != null) {
 				idEditBox.setValue(id);
 				nameEditBox.setValue(menuProject.name());
@@ -142,10 +144,10 @@ public class ProjectsSettingScreen extends ScreenCore {
 	}
 
 	public enum RunType {
-		message(0),
-		command(1),
-		button(2),
-		js(3);
+		MESSAGE(0),
+		COMMAND(1),
+		BUTTON(2),
+		JS(3);
 		private final int v;
 
 		RunType(int v) {

@@ -7,7 +7,18 @@ public record HealthBarData(
 		boolean renderHealthBar, boolean renderHealthBarText,
 		boolean renderEffect, boolean effectRenderImage, int effectImageRotationAngle,
 		boolean renderOnlyView, String healthBarTextColor, int tempColor) {
-	public static final HealthBarData DEFAULT = new HealthBarData(true, 30, 0.5f, true, true, true, true, 10000, true, "0xFFFFD700", 0);
+	public static final HealthBarData DEFAULT = new HealthBarData(
+			true,
+			30,
+			0.5f,
+			true,
+			true,
+			true,
+			true,
+			10000,
+			true,
+			"0xFFFFD700",
+			0);
 
 	public HealthBarData(
 			boolean enable, int renderDistance, float renderTop,

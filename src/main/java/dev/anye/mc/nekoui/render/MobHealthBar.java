@@ -7,6 +7,7 @@ import dev.anye.core.format._FormatToString;
 import dev.anye.core.math._Math;
 import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.health_bar.HealthBarConfig;
+import dev.anye.mc.nekoui.config.health_bar.HealthBarData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
@@ -43,58 +44,60 @@ public class MobHealthBar {
 
 
 	public static void render(LivingEntity livingEntity, LivingEntityRenderState renderState, LivingEntityRenderer<LivingEntity, ?, ?> renderer, SubmitNodeCollector submitNodeCollector, PoseStack poseStack) {
-		if (HealthBarConfig.I.getData().enable()) {
-			Minecraft minecraft = Minecraft.getInstance();
-			if (minecraft.player != null && (HealthBarConfig.I.getData().renderOnlyView() && checkView(minecraft, livingEntity))) {
-				if (livingEntity.distanceTo(minecraft.player) > HealthBarConfig.I.getData().renderDistance()) return;
-				Quaternionf camera = minecraft.getEntityRenderDispatcher().camera.rotation();//.cameraOrientation();
-				if (HealthBarConfig.I.getData().renderHealthBar()) {
-					float y = livingEntity.getBbHeight() + HealthBarConfig.I.getData().renderTop();
-					int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 128), 0);
-					poseStack.pushPose();
-					poseStack.translate(0, y, 0);
-					poseStack.mulPose(camera);
-					poseStack.mulPose(Axis.YP.rotationDegrees(180));
-					poseStack.scale(-0.0125F, -0.005F, 0.0125F);
-					submitNodeCollector.submitCustomGeometry(poseStack, HBRT_FILL, (pose, vertexConsumer) -> {
-						RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
-								0, 0,
-								Math.min(h, 128), 16,
-								128, 16,
-								0, renderState.lightCoords);
-					});
-					submitNodeCollector.submitCustomGeometry(poseStack, HBRT, (pose, vertexConsumer) -> {
-						RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
-								0, 0,
-								128, 16,
-								128, 16,
-								0, renderState.lightCoords);
-					});
-					if (HealthBarConfig.I.getData().renderHealthBarText()) {
-						String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
-						poseStack.translate(0, 1, -10);
-						submitNodeCollector.submitText(poseStack, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, FormattedCharSequence.forward(txt, Style.EMPTY), false, Font.DisplayMode.NORMAL, renderState.lightCoords, HealthBarConfig.I.getData().tempColor(), 0, 0);
+		HealthBarConfig.I.ifPresent(healthBarData -> {
+			if (healthBarData.enable()) {
+				Minecraft minecraft = Minecraft.getInstance();
+				if (minecraft.player != null && (healthBarData.renderOnlyView() && checkView(minecraft, livingEntity))) {
+					if (livingEntity.distanceTo(minecraft.player) > healthBarData.renderDistance()) return;
+					Quaternionf camera = minecraft.getEntityRenderDispatcher().camera.rotation();//.cameraOrientation();
+					if (healthBarData.renderHealthBar()) {
+						float y = livingEntity.getBbHeight() + healthBarData.renderTop();
+						int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 128), 0);
+						poseStack.pushPose();
+						poseStack.translate(0, y, 0);
+						poseStack.mulPose(camera);
+						poseStack.mulPose(Axis.YP.rotationDegrees(180));
+						poseStack.scale(-0.0125F, -0.005F, 0.0125F);
+						submitNodeCollector.submitCustomGeometry(poseStack, HBRT_FILL, (pose, vertexConsumer) -> {
+							RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
+									0, 0,
+									Math.min(h, 128), 16,
+									128, 16,
+									0, renderState.lightCoords);
+						});
+						submitNodeCollector.submitCustomGeometry(poseStack, HBRT, (pose, vertexConsumer) -> {
+							RenderSupport.image(vertexConsumer, pose.pose(), -64, 0,
+									0, 0,
+									128, 16,
+									128, 16,
+									0, renderState.lightCoords);
+						});
+						if (healthBarData.renderHealthBarText()) {
+							String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
+							poseStack.translate(0, 1, -10);
+							submitNodeCollector.submitText(poseStack, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, FormattedCharSequence.forward(txt, Style.EMPTY), false, Font.DisplayMode.NORMAL, renderState.lightCoords, healthBarData.tempColor(), 0, 0);
                         /*
                         minecraft.font.drawInBatch(txt, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, 0x00000000, false, poseStack.last().pose(), minecraft.renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, renderState.lightCoords);
 
                          */
+						}
+						poseStack.popPose();
 					}
-					poseStack.popPose();
-				}
-				if (HealthBarConfig.I.getData().renderEffect()) {
-					float lY = livingEntity.getBbHeight() / 2 + 0.16f;
-					poseStack.pushPose();
-					poseStack.translate(0.0, lY, 0.0);
-					camera.x = 0;
-					camera.z = 0;
-					poseStack.mulPose(camera);
-					poseStack.mulPose(Axis.YP.rotationDegrees(180));
-					poseStack.scale(-0.025F, -0.025F, 0.025F);
-					draw(livingEntity, submitNodeCollector, poseStack, minecraft, renderState.lightCoords);
-					poseStack.popPose();
+					if (healthBarData.renderEffect()) {
+						float lY = livingEntity.getBbHeight() / 2 + 0.16f;
+						poseStack.pushPose();
+						poseStack.translate(0.0, lY, 0.0);
+						camera.x = 0;
+						camera.z = 0;
+						poseStack.mulPose(camera);
+						poseStack.mulPose(Axis.YP.rotationDegrees(180));
+						poseStack.scale(-0.025F, -0.025F, 0.025F);
+						draw(livingEntity, submitNodeCollector, poseStack, minecraft, renderState.lightCoords , healthBarData);
+						poseStack.popPose();
+					}
 				}
 			}
-		}
+		});
 
 	}
 
@@ -117,18 +120,18 @@ public class MobHealthBar {
 
 	private static double rotationAngle = 0;
 
-	public static double getAngle() {
-		if (HealthBarConfig.I.getData().effectImageRotationAngle() == 0) {
+	public static double getAngle(HealthBarData healthBarData) {
+		if (healthBarData.effectImageRotationAngle() == 0) {
 			return 0;
 		}
-		rotationAngle += Math.PI / HealthBarConfig.I.getData().effectImageRotationAngle();
+		rotationAngle += Math.PI / healthBarData.effectImageRotationAngle();
 		if (rotationAngle >= _Math.TWICE_PI) {
 			rotationAngle = 0.0;
 		}
 		return rotationAngle;
 	}
 
-	private static void draw(LivingEntity entity, SubmitNodeCollector multiBufferSource, PoseStack poseStack, Minecraft minecraft, int packedLight) {
+	private static void draw(LivingEntity entity, SubmitNodeCollector multiBufferSource, PoseStack poseStack, Minecraft minecraft, int packedLight, HealthBarData healthBarData) {
 		Collection<MobEffectInstance> effects = entity.getActiveEffects();
 		if (effects.isEmpty()) {
 			return;
@@ -142,9 +145,9 @@ public class MobHealthBar {
 		GlStateManager._enableDepthTest();
 
 		int[] i = new int[]{0};
-		ArrayList<Point2D.Double> pointPoss = UniformCircleDistribution.distributePoints(entity.getBbWidth() * 40, effects.size(), getAngle());
+		ArrayList<Point2D.Double> pointPoss = UniformCircleDistribution.distributePoints(entity.getBbWidth() * 40, effects.size(), getAngle(healthBarData));
 		effects.forEach(mobEffectInstance -> {
-			if (HealthBarConfig.I.getData().effectRenderImage()) {
+			if (healthBarData.effectRenderImage()) {
 				Point2D.Double point = pointPoss.get(i[0]);
 				poseStack.pushPose();
 				poseStack.translate(point.x - 16, 0, point.y);
@@ -167,7 +170,7 @@ public class MobHealthBar {
 				//guiGraphics.pose().mul(poseStack.last().pose());
 			} else {
 				Component name = getName(mobEffectInstance);
-				multiBufferSource.submitText(poseStack, -(float) minecraft.font.width(name) / 2, 16 - (float) minecraft.font.lineHeight / 2, FormattedCharSequence.forward(name.getString(), Style.EMPTY), false, Font.DisplayMode.NORMAL, packedLight, HealthBarConfig.I.getData().tempColor(), 0, 0);
+				multiBufferSource.submitText(poseStack, -(float) minecraft.font.width(name) / 2, 16 - (float) minecraft.font.lineHeight / 2, FormattedCharSequence.forward(name.getString(), Style.EMPTY), false, Font.DisplayMode.NORMAL, packedLight, healthBarData.tempColor(), 0, 0);
 				/*
 				MultiBufferSource.BufferSource bufferSource = minecraft.renderBuffers().bufferSource();
 				minecraft.font.drawInBatch(getName(mobEffectInstance), 0, 0, -0xff000000, false, poseStack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);

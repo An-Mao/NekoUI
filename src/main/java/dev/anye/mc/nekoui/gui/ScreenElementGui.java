@@ -18,7 +18,11 @@ import java.util.HashMap;
 
 public class ScreenElementGui {
 	public static final Identifier KEY = Identifier.fromNamespaceAndPath(NekoUI.MOD_ID, "screen_element");
-	private static int screenWidthCache = 0, screenHeightCache = 0;
+	private static int screenWidthCache = 0;
+	private static int screenHeightCache = 0;
+
+	private ScreenElementGui(){}
+
 
 	public static void render(GuiGraphicsExtractor guiGraphics, DeltaTracker pPartialTick) {
 		Minecraft minecraft = Minecraft.getInstance();
@@ -34,7 +38,7 @@ public class ScreenElementGui {
 				screenWidthCache = screenWidth;
 				screenHeightCache = screenHeight;
 			}
-			Configs.ScreenRenders.forEach(screenElement -> {
+			Configs.SCREEN_RENDERS.forEach(screenElement -> {
 				if (needResize) screenElement.reSize(screenWidth, screenHeight);
 				screenElement.render(minecraft, localPlayer, guiGraphics, screenWidth, screenHeight);
 			});
@@ -56,7 +60,7 @@ public class ScreenElementGui {
 
 	public static Reader getJsFile(String name) throws FileNotFoundException {
 		if (!fileTemp.containsKey(name))
-			fileTemp.put(name, new FileReader(_File.getFilePath(Configs.ConfigDir_JS, name)));
+			fileTemp.put(name, new FileReader(_File.getFilePath(Configs.CONFIG_DIR_JS, name)));
 		return fileTemp.get(name);
 	}
 

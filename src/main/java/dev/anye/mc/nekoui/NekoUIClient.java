@@ -40,9 +40,11 @@ public class NekoUIClient {
 
 	@SubscribeEvent
 	public static void onGuiRender(RenderGuiLayerEvent.Pre event) {
-		if (Config.INSTANCE.getData().isOutputGuiId()) {
-			LOGGER.info("GUI ID: {}", event.getName());
-		}
+		Config.INSTANCE.ifPresent(configData -> {
+			if (configData.outputGuiId()) {
+				LOGGER.info("GUI ID: {}", event.getName());
+			}
+		});
 		if (HideHudConfig.I.isHide(event.getName())) {
 			event.setCanceled(true);
 		}
@@ -64,26 +66,28 @@ public class NekoUIClient {
 			if (event.getKey() >= 49 && event.getKey() <= 57) {
 				HotBarSys.setNowTime();
 			}
-			if (Config.INSTANCE.getData().isMenu()) {
-				if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
-					Screen screen = Minecraft.getInstance().gui.screen();
-					if (event.getAction() == 0) {
-						if (screen instanceof MenuScreen menuScreen) {
-							menuScreen.onClose();
-						}
-					} else if (event.getAction() == 1 && screen == null) {
+			Config.INSTANCE.ifPresent(configData -> {
+				if (configData.menu()) {
+					if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
+						Screen screen = Minecraft.getInstance().gui.screen();
+						if (event.getAction() == 0) {
+							if (screen instanceof MenuScreen menuScreen) {
+								menuScreen.onClose();
+							}
+						} else if (event.getAction() == 1 && screen == null) {
 							Minecraft.getInstance().setScreenAndShow(new MenuScreen());
 						}
-					
-				}
-				if (event.getKey() == KeyBinding.OPEN_SET_MENU.getKey().getValue()) {
-					Screen screen = Minecraft.getInstance().gui.screen();
-					if (event.getAction() == 1 && screen == null) {
+
+					}
+					if (event.getKey() == KeyBinding.OPEN_SET_MENU.getKey().getValue()) {
+						Screen screen = Minecraft.getInstance().gui.screen();
+						if (event.getAction() == 1 && screen == null) {
 							Minecraft.getInstance().setScreenAndShow(new SettingScreen());
 						}
-					
+
+					}
 				}
-			}
+			});
 		}
 	}
 
@@ -93,10 +97,12 @@ public class NekoUIClient {
 
 	@SubscribeEvent
 	public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-		if (Config.INSTANCE.getData().isMenu()) {
-			event.register(KeyBinding.OPEN_MENU);
-			event.register(KeyBinding.OPEN_SET_MENU);
-		}
+		Config.INSTANCE.ifPresent(configData -> {
+			if (configData.menu()) {
+				event.register(KeyBinding.OPEN_MENU);
+				event.register(KeyBinding.OPEN_SET_MENU);
+			}
+		});
 	}
 
 	@SubscribeEvent

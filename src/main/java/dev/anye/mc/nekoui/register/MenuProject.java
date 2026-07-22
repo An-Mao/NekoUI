@@ -13,40 +13,22 @@ import org.slf4j.Logger;
 
 import java.awt.*;
 
-public class MenuProject {
-	protected static final Logger LOGGER = LogUtils.getLogger();
-	private String name;
-	private MenuProjectData.Type type;
-	private String value;
+public record MenuProject(
+		String name,
+		MenuProjectData.Type type,
+		String value) {
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public MenuProject(MenuProjectData menuProjectData) {
 		this(menuProjectData.name(), menuProjectData.type(), menuProjectData.value());
 	}
 
-	public MenuProject(String name, MenuProjectData.Type type, String value) {
-		this.name = name;
-		this.type = type;
-		this.value = value;
-	}
-
-	public String name() {
-		return name;
-	}
-
-	public MenuProjectData.Type type() {
-		return type;
-	}
-
-	public String value() {
-		return value;
-	}
-
 	public void onClick() {
 		if (value.isEmpty()) return;
 		switch (type) {
-			case message -> sendChat(value);
-			case command -> sendCommand(value);
-			case button -> {
+			case MESSAGE -> sendChat(value);
+			case COMMAND -> sendCommand(value);
+			case BUTTON -> {
 				String[] keyA = value.split(" ");
 				int[] keys = new int[keyA.length];
 				for (int i = 0; i < keyA.length; i++) {
@@ -54,8 +36,8 @@ public class MenuProject {
 				}
 				simulateKey(keys);
 			}
-			case js -> CJS.E.addParameter("minecraft", Minecraft.getInstance())
-					.runFile(name, _File.getFilePath(Configs.ConfigDir_JS, value));
+			case JS -> CJS.E.addParameter("minecraft", Minecraft.getInstance())
+					.runFile(name, _File.getFilePath(Configs.CONFIG_DIR_JS, value));
 		}
 	}
 

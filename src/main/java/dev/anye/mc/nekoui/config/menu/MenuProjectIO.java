@@ -8,7 +8,6 @@ import dev.anye.mc.nekoui.dat_type.MenuProjectData;
 
 public class MenuProjectIO extends _JsonConfig<MenuProjectData> {
 	public MenuProjectIO(String filePath) {
-		super(_File.getFilePath(Configs.ConfigDir_MenuProject, filePath), "", new TypeToken<>() {
-		}, false);
+		super(_File.getFilePath(Configs.CONFIG_DIR_MENU_PROJECT, filePath), MenuProjectData.EMPTY, new TypeToken<>() {}, false);
 	}
 }

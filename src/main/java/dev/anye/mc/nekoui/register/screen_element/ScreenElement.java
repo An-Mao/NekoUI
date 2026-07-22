@@ -1,5 +1,6 @@
 package dev.anye.mc.nekoui.register.screen_element;
 
+import com.mojang.logging.LogUtils;
 import dev.anye.core.color._ColorSupport;
 import dev.anye.core.format._FormatToString;
 import dev.anye.core.system._File;
@@ -14,10 +15,12 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.joml.Vector3i;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 
 public class ScreenElement {
+	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final HashMap<String, Identifier> Resources = new HashMap<>();
 	private final ScreenRender config;
 	private int x;
@@ -46,21 +49,22 @@ public class ScreenElement {
 
 	public void render(Minecraft minecraft, LocalPlayer localPlayer, GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight) {
 		config.elements().forEach(element -> {
+			if (element.type().equals(ScreenRender.Type.ERROR)) return;
 			Vector3i ePos = element.pos();
 			int dx = this.x + ePos.x, dy = this.y + ePos.y;
 			guiGraphics.pose().pushMatrix();
 			guiGraphics.pose().translate(0, 0);
 			String tmpS = "";
 			switch (element.type()) {
-				case Image -> {
+				case IMAGE -> {
 					Identifier res = Resources.getOrDefault(element.key(), Identifier.tryParse(element.key()));
 					if (res != null)
 						guiGraphics.blit(RenderPipelines.GUI_TEXTURED, res, dx, dy, 0, 0, element.width(), element.height(), element.width(), element.height());
 				}
-				case Self -> tmpS = element.key();
-				case Custom -> tmpS = PlayerInfo.getPlayerDat(element.key());
-				case PlayerData -> tmpS = _FormatToString.formatValue(PlayerInfo.getPlayerAttribute(element.key()), 2);
-				case Js -> {
+				case SELF -> tmpS = element.key();
+				case CUSTOM -> tmpS = PlayerInfo.getPlayerDat(element.key());
+				case PLAYER_DATA -> tmpS = _FormatToString.formatValue(PlayerInfo.getPlayerAttribute(element.key()), 2);
+				case JS -> {
 					String key = element.key();
 					tmpS = CJS.E.addParameter("x", dx)
 							.addParameter("y", dy)
@@ -71,9 +75,9 @@ public class ScreenElement {
 							.addParameter("playerNbt", localPlayer.getPersistentData())
 							.addParameter("guiGraphics", guiGraphics)
 							.addParameter("minecraft", minecraft)
-							.runFile(key, _File.getFilePath(Configs.ConfigDir_JS, key)).toString();
+							.runFile(key, _File.getFilePath(Configs.CONFIG_DIR_JS, key)).toString();
 				}
-				case Slot ->
+				case SLOT ->
 						guiGraphics.item(localPlayer.getInventory().getItem(Integer.parseInt(element.key())), dx, dy);
 			}
 			if (!tmpS.isEmpty()) {
