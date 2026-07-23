@@ -34,3 +34,20 @@
     //注册
     public static final DeferredHolder<ScreenElement,YourScreenElement> YOUR_SCREEN_ELEMENT = ITEMS.register("you_screen_element_name", YourScreenElement::new);
 ```
+
+## 各版本支持情况  
+    B : 仅修复bug
+    X : 不再更新
+    U : 正常更新
+    L ：低更新状态
+    趋势 : U -> L -> B -> X
+| Version                                | Forge                       | Neoforge                    | Fabric                   |
+|----------------------------------------|-----------------------------|-----------------------------|--------------------------|
+| <font color=yellow>1.20.1</font>       | <font color=yellow>B</font> | <font color=yellow>B</font> | <font color=red>X</font> |
+| <font color=red>1.20.2 - 1.21.0</font> | <font color=red>X</font>    | <font color=red>X</font>    | <font color=red>X</font> |
+| <font color=yellow>1.21.1</font>       | <font color=yellow>B</font> | <font color=yellow>B</font> | <font color=red>X</font> |
+| <font color=red>1.21.2-26.0</font>     | <font color=red>X</font>    | <font color=red>X</font>    | <font color=red>X</font> |
+| <font color=blue>26.1</font>           | <font color=blue>L</font>   | <font color=blue>L</font>   | <font color=red>X</font> |
+| **<font color=green>26.2</font>**      | <font color=green>U</font>  | <font color=green>U</font>  | <font color=red>X</font> |
+
+
