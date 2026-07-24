@@ -2,22 +2,19 @@ package dev.anye.mc.nekoui.config;
 
 import com.google.gson.reflect.TypeToken;
 import dev.anye.core.json._JsonConfig;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-@OnlyIn(Dist.CLIENT)
+import dev.anye.core.system._File;
+
 public class Config extends _JsonConfig<ConfigData> {
-    private static final String configFile = Configs.ConfigDir +"config.json";
+	private static final String CONFIG_FILE = _File.getFilePath(Configs.CONFIG_DIR, "config.json");
 
-    public static final Config INSTANCE = new Config();
+	public static final Config INSTANCE = new Config();
 
-    public Config() {
-        super(configFile, """
-                {
-                  "renderScreenElement": true,
-                  "outputGuiId": false,
-                  "outputScreenPathName": false,
-                  "menu":true,
-                  "autoPage":false
-                }""", new TypeToken<>(){});
-    }
+	public Config() {
+		super(CONFIG_FILE, ConfigData.DEFAULT, new TypeToken<>() {});
+	}
+
+
+
+
+
 }

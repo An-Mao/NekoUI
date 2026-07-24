@@ -65,7 +65,7 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
     modId="cores"
     mandatory=true
-    versionRange="[${minecraft_version}-${amlib_version},)"
+    versionRange="[${minecraft_version}-${cores_version},)"
     ordering="AFTER"
     side="BOTH"
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

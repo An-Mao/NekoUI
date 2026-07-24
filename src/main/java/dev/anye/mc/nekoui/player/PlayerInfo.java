@@ -19,7 +19,7 @@ public class PlayerInfo {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static String getPlayerDat(String s){
-            return _FormatToString.numberToString(getPlayerData(s));
+            return _FormatToString.formatValue(getPlayerData(s), 2);
 
     }
 
@@ -42,6 +42,7 @@ public class PlayerInfo {
             return 0;
         }
         return switch (string) {
+			case "fps" -> Minecraft.getInstance().getFps();
             case "xp" -> player.experienceProgress;
             case "lvl" -> player.experienceLevel;
             case "health" -> player.getHealth();

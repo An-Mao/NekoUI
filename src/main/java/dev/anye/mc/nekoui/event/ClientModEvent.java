@@ -18,15 +18,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientModEvent {
     @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent event){
-        if (Config.INSTANCE.getDatas().isRenderScreenElement()){
-            event.registerAboveAll(ScreenElementGui.id, ScreenElementGui.UI);
-        }
-        if (HotBarConfig.INSTANCE.getDatas().isEnable()){
-            event.registerAboveAll(HotBarGui.id, HotBarGui.UI);
-        }
-        if (MobDirectionConfig.I.getDatas().isEnable()) {
-            event.registerAboveAll(MobDirectionGui.id, MobDirectionGui.GUI);
-        }
+
+		event.registerAboveAll("screen-element", ScreenElementGui::render);
+		event.registerAboveAll("mob-direction", MobDirectionGui::render);
+		event.registerAboveAll("hot-bar", HotBarGui::render);
+
     }
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event)
@@ -34,9 +30,11 @@ public class ClientModEvent {
     }
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event){
-        if (Config.INSTANCE.getDatas().isMenu()){
-            event.register(KeyBinding.OPEN_MENU);
-            event.register(KeyBinding.OPEN_SET_MENU);
-        }
+		Config.INSTANCE.ifPresent(configData -> {
+			if (configData.menu()) {
+				event.register(KeyBinding.OPEN_MENU);
+				event.register(KeyBinding.OPEN_SET_MENU);
+			}
+		});
     }
 }

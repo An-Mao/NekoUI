@@ -4,9 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.anye.core.format._FormatToString;
 import dev.anye.core.math._Math;
+import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.render.DrawImage;
 import dev.anye.mc.nekoui.NekoUI;
 import dev.anye.mc.nekoui.config.health$bar.HealthBarConfig;
+import dev.anye.mc.nekoui.config.health$bar.HealthBarData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,40 +31,45 @@ import java.util.Collection;
 public class MobHealthBar {
     private static final ResourceLocation HealthBar = new ResourceLocation(NekoUI.MOD_ID,"textures/hud/mob/health_bar.png");
     public static void render(Entity entity, PoseStack poseStack,int packedLight){
-        if (HealthBarConfig.I.getDatas().enable && entity instanceof LivingEntity livingEntity) {
-            Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.player != null  && (HealthBarConfig.I.getDatas().renderOnlyView && checkView(minecraft,livingEntity))) {
-                if (livingEntity.distanceTo(minecraft.player) > HealthBarConfig.I.getDatas().renderDistance)return;
-                Quaternionf camera = minecraft.getEntityRenderDispatcher().cameraOrientation();
-                if (HealthBarConfig.I.getDatas().renderHealthBar) {
-                    float y = livingEntity.getBbHeight() + HealthBarConfig.I.getDatas().renderTop;
-                    int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 121), 0);
-                    poseStack.pushPose();
-                    poseStack.translate(0, y, 0);
-                    poseStack.mulPose(camera);
-                    poseStack.scale(-0.0125F, -0.005F, 0.0125F);
-                    DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 0, 128, 32, 128, 128);
-                    DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 32, Math.min(h, 121), 32, 128, 128);
-                    if (HealthBarConfig.I.getDatas().renderHealthBarText) {
-                        String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
-                        minecraft.font.drawInBatch(txt, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, 0x0000000, false, poseStack.last().pose(), minecraft.renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, packedLight);
-                    }
-                    poseStack.popPose();
-                }
-                if (HealthBarConfig.I.getDatas().renderEffect) {
-                    float lY = livingEntity.getBbHeight() / 2 + 0.16f;
-                    poseStack.pushPose();
-                    poseStack.translate(0.0, lY, 0.0);
-                    camera.x = 0;
-                    camera.z = 0;
-                    poseStack.mulPose(camera);
-                    poseStack.scale(-0.025F, -0.025F, 0.025F);
-                    draw(livingEntity, poseStack, minecraft, packedLight);
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    poseStack.popPose();
-                }
-            }
-        }
+
+		HealthBarConfig.I.ifPresent(healthBarData -> {
+			if (healthBarData.enable() && entity instanceof LivingEntity livingEntity) {
+				Minecraft minecraft = Minecraft.getInstance();
+				if (minecraft.player != null  && (healthBarData.renderOnlyView() && checkView(minecraft,livingEntity))) {
+					if (livingEntity.distanceTo(minecraft.player) > healthBarData.renderDistance())return;
+					Quaternionf camera = minecraft.getEntityRenderDispatcher().cameraOrientation();
+					if (healthBarData.renderHealthBar()) {
+						float y = livingEntity.getBbHeight() + healthBarData.renderTop();
+						int h = Math.max((int) (livingEntity.getHealth() / livingEntity.getMaxHealth() * 121), 0);
+						poseStack.pushPose();
+						poseStack.translate(0, y, 0);
+						poseStack.mulPose(camera);
+						poseStack.scale(-0.0125F, -0.005F, 0.0125F);
+						DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 0, 128, 32, 128, 128);
+						DrawImage.blit(poseStack, HealthBar, -64, 0, 0, 0, 32, Math.min(h, 121), 32, 128, 128);
+						if (healthBarData.renderHealthBarText()) {
+							String txt = _FormatToString.numberToString(livingEntity.getHealth()) + "/" + _FormatToString.numberToString(livingEntity.getMaxHealth());
+							minecraft.font.drawInBatch(txt, -(float) minecraft.font.width(txt) / 2, 16 - (float) minecraft.font.lineHeight / 2, 0x0000000, false, poseStack.last().pose(), minecraft.renderBuffers().bufferSource(), Font.DisplayMode.NORMAL, 0, packedLight);
+						}
+						poseStack.popPose();
+					}
+					if (healthBarData.renderEffect()) {
+						float lY = livingEntity.getBbHeight() / 2 + 0.16f;
+						poseStack.pushPose();
+						poseStack.translate(0.0, lY, 0.0);
+						camera.x = 0;
+						camera.z = 0;
+						poseStack.mulPose(camera);
+						poseStack.scale(-0.025F, -0.025F, 0.025F);
+						draw(livingEntity,healthBarData, poseStack, minecraft, packedLight);
+						RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+						poseStack.popPose();
+					}
+				}
+			}
+		});
+
+
 
     }
 
@@ -73,17 +80,17 @@ public class MobHealthBar {
         return false;
     }
     private static double rotationAngle = 0;
-    public static double getAngle(){
-        if (HealthBarConfig.I.getDatas().effectImageRotationAngle == 0){
+    public static double getAngle(HealthBarData healthBarData){
+        if (healthBarData.effectImageRotationAngle() == 0){
             return 0;
         }
-        rotationAngle += Math.PI / HealthBarConfig.I.getDatas().effectImageRotationAngle ;
-        if (rotationAngle >= _Math.TWICE_PI) {
+        rotationAngle += Math.PI / healthBarData.effectImageRotationAngle() ;
+        if (rotationAngle >= _MathCDT.TWICE_PI) {
             rotationAngle = 0.0;
         }
         return rotationAngle;
     }
-    private static void draw(LivingEntity entity, PoseStack poseStack,Minecraft minecraft,int packedLight){
+    private static void draw(LivingEntity entity,HealthBarData healthBarData, PoseStack poseStack,Minecraft minecraft,int packedLight){
         Collection<MobEffectInstance> effects = entity.getActiveEffects();
         if (effects.isEmpty()){
             return;
@@ -91,9 +98,9 @@ public class MobHealthBar {
         RenderSystem.enableDepthTest();
         RenderSystem.defaultBlendFunc();
         int[] i = new int[]{0};
-        ArrayList<Point2D.Double> pointPoss = UniformCircleDistribution.distributePoints(entity.getBbWidth()* 40, effects.size(),getAngle());
+        ArrayList<Point2D.Double> pointPoss = UniformCircleDistribution.distributePoints(entity.getBbWidth()* 40, effects.size(),getAngle(healthBarData));
         effects.forEach(mobEffectInstance -> {
-            if (HealthBarConfig.I.getDatas().effectRenderImage) {
+            if (healthBarData.effectRenderImage()) {
                 Point2D.Double point = pointPoss.get(i[0]);
                 poseStack.pushPose();
                 poseStack.translate(point.x - 16, 0, point.y);

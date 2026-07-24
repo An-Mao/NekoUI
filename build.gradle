@@ -63,9 +63,9 @@ dependencies {
     compileOnly "dev.anye:core:$core_version"
 
 
-    implementation fg.deobf( "dev.anye.mc:cores:${minecraft_version}-${amlib_version}:all")
+    implementation fg.deobf( "dev.anye.mc:cores:${minecraft_version}-${cores_version}:all")
     //minecraftLibrary 'anmao.dev:easy_json:1.0.0'
-    jarJar(group:'dev.anye.mc', name:'cores', version: "[${minecraft_version}-${amlib_version}:all,)")
+    jarJar(group:'dev.anye.mc', name:'cores', version: "[${minecraft_version}-${cores_version}:all,)")
 }
 mixin{
     add sourceSets.main, "refmap.${mod_id}.json"
@@ -76,12 +76,19 @@ mixin{
 
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
+            minecraft_version: minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version,
+            forge_version_range: forge_version_range,
             loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors: mod_authors, mod_description: mod_description,
-            amlib_version: amlib_version,core_version: core_version,
+            mod_id: mod_id,
+            mod_name: mod_name,
+            mod_license: mod_license,
+            mod_version: mod_version,
+            mod_authors: mod_authors,
+            mod_description: mod_description,
+            cores_version: cores_version,
+            core_version: core_version,
     ]
     inputs.properties replaceProperties
 

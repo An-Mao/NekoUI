@@ -21,12 +21,12 @@ public class MinecraftMixin {
     public void nekoui$setScreen$ban(Screen pGuiScreen, CallbackInfo ci){
         if (pGuiScreen != null) {
             String path = pGuiScreen.getClass().getName();
-            if (Config.INSTANCE.getDatas().isOutputScreenPathName()) {
-                nekoUI$LOGGER.info(path);
-            }
-            if (BanScreenConfig.isBan(path)) {
-                ci.cancel();
-            }
+			Config.INSTANCE.ifPresent(configData -> {
+				if (configData.outputScreenPathName()) nekoUI$LOGGER.info(path);
+			});
+			if (BanScreenConfig.I.isBan(path)) {
+				ci.cancel();
+			}
         }
     }
 }

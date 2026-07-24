@@ -1,23 +1,31 @@
 package dev.anye.mc.nekoui.screen;
 
+import com.mojang.logging.LogUtils;
+import dev.anye.core.cdt._SuffixCDT;
+import dev.anye.core.system._File;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
 import dev.anye.mc.cores.screen.widget.simple.SimpleDropDownSelectBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
 import dev.anye.mc.nekoui.NekoUI;
-import dev.anye.mc.nekoui.config.menu.MenuConfig;
-import dev.anye.mc.nekoui.config.menu.MenuData;
+import dev.anye.mc.nekoui.config.Configs;
+import dev.anye.mc.nekoui.config.menu.MenuProjectIO;
+import dev.anye.mc.nekoui.dat_type.MenuProject;
+import dev.anye.mc.nekoui.dat_type.MenuProjectData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.slf4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ProjectsSettingScreen extends ScreenCore {
     public static final String ID = "screen."+ NekoUI.MOD_ID +".projects_setting";
+	private static final Logger LOGGER = LogUtils.getLogger();
     public boolean KeyListen;
     public SimpleEditBox idEditBox,nameEditBox,valueEditBox;
     public SimpleDropDownSelectBox runType;
@@ -64,31 +72,29 @@ public class ProjectsSettingScreen extends ScreenCore {
 
         addRenderableWidget(delete);
     }
-    public void delete(){
-        String id = idEditBox.getValue();
-        if (!id.isEmpty()){
-            if (MenuConfig.INSTANCE.getDatas().get(id) != null){
-                MenuConfig.INSTANCE.getDatas().remove(id);
-                MenuConfig.INSTANCE.save();
-            }
-        }
-        Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
-    }
-    public void saveConfig(){
-        String id = idEditBox.getValue();
-        if (id.isEmpty()){
-            return;
-        }
-        MenuData menuData = new MenuData();
-        menuData.setName(nameEditBox.getValue());
-        int index = runType.getNowSelectIndex();
-        menuData.setType(index);
-        menuData.setValue(valueEditBox.getValue());
-        MenuConfig.INSTANCE.getDatas().put(id,menuData);
-        MenuConfig.INSTANCE.save();
-        //md.put(id,menuData);
-        Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
-    }
+
+	public void delete() {
+		String id = idEditBox.getValue();
+		if (!id.isEmpty()) {
+			if (Configs.MENU_PROJECTS.get(id) != null) {
+				Configs.MENU_PROJECTS.remove(id);
+				File file = new File(_File.getFilePath(Configs.CONFIG_DIR_MENU_PROJECT, id + ".json"));
+				if (file.exists() && file.delete()) LOGGER.info("delete {}", id);
+				else LOGGER.error("delete fail {}", id);
+			}
+		}
+		Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
+	}
+
+	public void saveConfig() {
+		String id = idEditBox.getValue();
+		if (id.isEmpty()) return;
+		MenuProjectData menuProjectData = new MenuProjectData(id, runType.getNowSelectIndex(), valueEditBox.getValue());
+		Configs.MENU_PROJECTS.put(id, new MenuProject(menuProjectData));
+		new MenuProjectIO(id + _SuffixCDT.JSON_SUFFIX).save(menuProjectData);
+		Minecraft.getInstance().setScreen(new ProjectsSettingScreen());
+	}
+
     public void setKeyListen(){
         this.KeyListen = !this.KeyListen;
     }
@@ -106,11 +112,12 @@ public class ProjectsSettingScreen extends ScreenCore {
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
-    public List<DT_ListBoxData> getConfigData(){
-        List<DT_ListBoxData> data = new ArrayList<>();
-        MenuConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(s),s,this::setData)));
-        return data;
-    }
+	public List<DT_ListBoxData> getConfigData() {
+		List<DT_ListBoxData> data = new ArrayList<>();
+		Configs.MENU_PROJECTS.forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(s), s, this::setData)));
+		return data;
+	}
+
     public List<DT_ListBoxData> getTypes(){
         List<DT_ListBoxData> data = new ArrayList<>();
         for (RunType type : RunType.values()){
@@ -118,17 +125,21 @@ public class ProjectsSettingScreen extends ScreenCore {
         }
         return data;
     }
-    public void setData(Object v){
-        if (v instanceof String id){
-            MenuData menuData = MenuConfig.INSTANCE.getDatas().get(id);
-            if (menuData != null){
-                idEditBox.setValue(id);
-                nameEditBox.setValue(menuData.getName());
-                runType.setSelect(menuData.getType());
-                valueEditBox.setValue(menuData.getValue());
-            }
-        }
-    }
+
+	public void setData(Object v) {
+		if (v instanceof String id) {
+			MenuProject menuProject = Configs.MENU_PROJECTS.get(id);
+			if (menuProject != null) {
+				idEditBox.setValue(id);
+				nameEditBox.setValue(menuProject.name());
+				runType.setSelect(menuProject.type().v());
+				valueEditBox.setValue(menuProject.value());
+			}
+		}
+	}
+
+
+
     public enum RunType{
         message(0),
         command(1),

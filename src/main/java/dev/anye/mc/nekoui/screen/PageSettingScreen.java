@@ -1,19 +1,23 @@
 package dev.anye.mc.nekoui.screen;
 
 import com.mojang.logging.LogUtils;
+import dev.anye.core.cdt._SuffixCDT;
+import dev.anye.core.system._File;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
 import dev.anye.mc.cores.screen.widget.simple.SimpleDropDownSelectBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleLabel;
-import dev.anye.mc.nekoui.config.page.PageConfig;
-import dev.anye.mc.nekoui.config.page.PageData;
+import dev.anye.mc.nekoui.config.Configs;
+import dev.anye.mc.nekoui.config.menu.MenuPageIO;
+import dev.anye.mc.nekoui.dat_type.MenuPageData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,11 +119,15 @@ public class PageSettingScreen extends ScreenCore {
         SimpleButton delete =createNewButton(rx +save.getWidth() + 12,py,32,16,getComponent("delete_page"),this::delete);
         addRenderableWidget(delete);
     }
-    public List<DT_ListBoxData> getConfigData(){
-        List<DT_ListBoxData> data = new ArrayList<>();
-        PageConfig.INSTANCE.getDatas().forEach((s, menuData) -> data.add(new DT_ListBoxData(Component.literal(s),s,this::setData)));
-        return data;
-    }
+	public List<DT_ListBoxData> getConfigData() {
+		List<DT_ListBoxData> data = new ArrayList<>();
+
+		_File.getFiles(Configs.CONFIG_DIR_MENU_PAGE, ".json").forEach(path -> {
+			String s = Configs.getFileNameWithoutExtension(path.getFileName().toString());
+			data.add(new DT_ListBoxData(Component.literal(s), s, this::setData));
+		});
+		return data;
+	}
     public List<DT_ListBoxData> getProjects(){
         List<DT_ListBoxData> data = new ArrayList<>();
         if (!projectNumberEditBox.getValue().isEmpty()) {
@@ -132,85 +140,99 @@ public class PageSettingScreen extends ScreenCore {
         }
         return data;
     }
-    public void setData(Object v){
-        if (v instanceof String id){
-            PageData pageData = PageConfig.INSTANCE.getPageData(id);
-            if (pageData != null){
-                idEditBox.setValue(id);
-                nameEditBox.setValue(pageData.getTitle());
-                projectNumberEditBox.setValue(String.valueOf(pageData.projectNumber));
-                innerRadiusEditBox.setValue(String.valueOf(pageData.innerRadius));
-                outerRadiusEditBox.setValue(String.valueOf(pageData.outerRadius));
-                projectId.setDataList(getProjects());
-                projectId.setLine(7);
-            }
-        }
-    }
-    public void setProjectData(Object v){
-        if (v instanceof String id){
-            PageData pageData = PageConfig.INSTANCE.getPageData(idEditBox.getValue());
-            if (pageData != null) {
-                PageData.ProjectData pd = pageData.getProject(id);
-                if (pd != null) {
-                    keyEditBox.setValue(checkValue(pd.key(), "project key"));
-                    textNormalColorEditBox.setValue(checkValue(pd.textNormalColor(), "auto"));
-                    textHighlightColorEditBox.setValue(checkValue(pd.textHighlightColor(), "auto"));
-                    backgroundNormalColorEditBox.setValue(checkValue(pd.backgroundNormalColor(), "auto"));
-                    backgroundHighlightColorEditBox.setValue(checkValue(pd.backgroundHighlightColor(), "auto"));
-                }else {
-                    keyEditBox.setValue( "project key");
-                    textNormalColorEditBox.setValue("");
-                    textHighlightColorEditBox.setValue("");
-                    backgroundNormalColorEditBox.setValue("");
-                    backgroundHighlightColorEditBox.setValue( "");
-                }
-            }
-        }
-    }
-    public void saveConfig() {
-        String id = idEditBox.getValue();
-        if (id.isEmpty()) {
-            return;
-        }
-        PageData newPageData = PageConfig.INSTANCE.getPageData(id) ;
-        if (newPageData == null) newPageData = new PageData();
-        newPageData.setTitle(checkValue(nameEditBox.getValue(), "page title"));
-        int pn = Integer.parseInt(checkValue(projectNumberEditBox.getValue(), "7"));
-        if (pn > 0) {
-            newPageData.setProjectNumber(pn);
-            newPageData.setInnerRadius(Integer.parseInt(checkValue(innerRadiusEditBox.getValue(), "20")));
-            newPageData.setOuterRadius(Integer.parseInt(checkValue(outerRadiusEditBox.getValue(), "80")));
-            if (newPageData.getProjects() == null) newPageData.setProjects(new HashMap<>());
-            
 
-            if (projectId.getNowSelectIndex() >= 0 && projectId.getNowSelectIndex() < projectId.getDataList().size()) {
-                String pid = (String) projectId.getSelectValue();
-                PageData.ProjectData projectData = new PageData.ProjectData(
-                        checkValue(keyEditBox.getValue(), "project key"),
-                        checkValue(textNormalColorEditBox.getValue(), "auto"),
-                        checkValue(textHighlightColorEditBox.getValue(), "auto"),
-                        checkValue(backgroundNormalColorEditBox.getValue(), "auto"),
-                        checkValue(backgroundHighlightColorEditBox.getValue(), "auto")
-                );
-                newPageData.projects.put(pid, projectData);
-            }
+	public void setData(Object v) {
+		if (v instanceof String id) {
+			MenuPageData pageData = new MenuPageIO(id + _SuffixCDT.JSON_SUFFIX).getData();
+			if (pageData != null) {
+				idEditBox.setValue(id);
+				nameEditBox.setValue(pageData.title());
+				projectNumberEditBox.setValue(String.valueOf(pageData.projectNumber()));
+				innerRadiusEditBox.setValue(String.valueOf(pageData.innerRadius()));
+				outerRadiusEditBox.setValue(String.valueOf(pageData.outerRadius()));
+				projectId.setDataList(getProjects());
+				projectId.setLine(7);
+			}
+		}
+	}
 
-            PageConfig.INSTANCE.getDatas().put(id, newPageData);
-            PageConfig.INSTANCE.save();
-            Minecraft.getInstance().setScreen(new PageSettingScreen());
+	public void setProjectData(Object v) {
+		if (v instanceof String id) {
+			MenuPageData pageData = new MenuPageIO(idEditBox.getValue() + _SuffixCDT.JSON_SUFFIX).getData();
+			if (pageData != null) {
+				int index = Integer.parseInt(id);
+				MenuPageData.ProjectInfo pd = null;
+				if (index < pageData.projects().size()) pd = pageData.projects().get(index);
+				if (pd != null) {
+					keyEditBox.setValue(checkValue(pd.key(), "project key"));
+					textNormalColorEditBox.setValue(checkValue(pd.textNormalColor(), "auto"));
+					textHighlightColorEditBox.setValue(checkValue(pd.textHighlightColor(), "auto"));
+					backgroundNormalColorEditBox.setValue(checkValue(pd.backgroundNormalColor(), "auto"));
+					backgroundHighlightColorEditBox.setValue(checkValue(pd.backgroundHighlightColor(), "auto"));
+				} else {
+					keyEditBox.setValue("project key");
+					textNormalColorEditBox.setValue("");
+					textHighlightColorEditBox.setValue("");
+					backgroundNormalColorEditBox.setValue("");
+					backgroundHighlightColorEditBox.setValue("");
+				}
+			}
+		}
+	}
 
-        }
+	public void saveConfig() {
+		String id = idEditBox.getValue();
+		if (id.isEmpty()) {
+			return;
+		}
+		MenuPageIO menuPageIO = new MenuPageIO(id + _SuffixCDT.JSON_SUFFIX);
+		MenuPageData menuPageData = menuPageIO.getData();
+		String title = checkValue(nameEditBox.getValue(), "page title");
+		int pn = Integer.parseInt(checkValue(projectNumberEditBox.getValue(), "7"));
+		if (pn > 0) {
+			int innerR = Integer.parseInt(checkValue(innerRadiusEditBox.getValue(), "20")),
+					outerR = Integer.parseInt(checkValue(outerRadiusEditBox.getValue(), "80"));
+			List<MenuPageData.ProjectInfo> projectInfos = new ArrayList<>();
+			if (menuPageData != null) projectInfos.addAll(menuPageData.projects());
 
-    }
-    public void delete(){
-        String id = idEditBox.getValue();
-        if (!id.isEmpty()){
-            if (PageConfig.INSTANCE.getDatas().get(id) != null){
-                PageConfig.INSTANCE.getDatas().remove(id);
-            }
-        }
-        Minecraft.getInstance().setScreen(new PageSettingScreen());
-    }
+			if (projectId.getNowSelectIndex() >= 0 && projectId.getNowSelectIndex() < projectId.getDataList().size()) {
+				int pid = Integer.parseInt((String) projectId.getSelectValue());
+				MenuPageData.ProjectInfo projectData = new MenuPageData.ProjectInfo(
+						checkValue(keyEditBox.getValue(), "project key"),
+						checkValue(textNormalColorEditBox.getValue(), "auto"),
+						checkValue(textHighlightColorEditBox.getValue(), "auto"),
+						checkValue(backgroundNormalColorEditBox.getValue(), "auto"),
+						checkValue(backgroundHighlightColorEditBox.getValue(), "auto")
+				);
+				while (projectInfos.size() <= pid) projectInfos.add(MenuPageData.ProjectInfo.EMPTY);
+
+				projectInfos.set(pid, projectData);
+			}
+
+			menuPageIO.setData(new MenuPageData(title, pn, innerR, outerR, projectInfos));
+			menuPageIO.save();
+			Configs.LoadMenuPage();
+			//PageConfig.INSTANCE.getDatas().put(id, menuPageIO);
+			//PageConfig.INSTANCE.save();
+			Minecraft.getInstance().setScreen(new PageSettingScreen());
+
+		}
+
+	}
+
+	public void delete() {
+		String id = idEditBox.getValue();
+		if (!id.isEmpty()) {
+			File file = new File(_File.getFilePath(Configs.CONFIG_DIR_MENU_PAGE, id + _SuffixCDT.JSON_SUFFIX));
+			if (file.exists()) {
+				if (file.delete()) Configs.LoadMenuPage();
+				else LOGGER.warn("Delete file {} error", id);
+
+			}
+		}
+		Minecraft.getInstance().setScreen(new PageSettingScreen());
+	}
+
 
     public String checkValue(String v,String defaultValue){
         if (v == null || v.isEmpty()){
