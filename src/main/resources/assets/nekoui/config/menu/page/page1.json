@@ -1,0 +1,71 @@
+{
+  "title": "Item Page",
+  "projectNumber": 9,
+  "innerRadius": 15,
+  "outerRadius": 70,
+  "projects": [
+    {
+      "key": "SwitchItemSlot0",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot1",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot2",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot3",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot4",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot5",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot6",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot7",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    },
+    {
+      "key": "SwitchItemSlot8",
+      "textNormalColor": "auto",
+      "textHighlightColor": "auto",
+      "backgroundNormalColor": "auto",
+      "backgroundHighlightColor": "auto"
+    }
+  ]
+}
