@@ -229,7 +229,6 @@ public class CircularNewMenu extends CircularMenu {
 				} else if (projectInfo.key().isEmpty() || projectInfo.key().equals("-empty-")) continue;
 				String tColor = projectInfo.backgroundNormalColor().isEmpty() ? "auto" : projectInfo.backgroundNormalColor();
 				int bgc = tColor.equals("auto") ? getBackgroundUsualColor() : _ColorSupport.HexToColor(tColor);
-
 				tColor = projectInfo.textNormalColor().isEmpty() ? "auto" : projectInfo.textNormalColor();
 				int tc = tColor.equals("auto") ? getTextUsualColor() : _ColorSupport.HexToColor(tColor);
 				float size = 1;
@@ -263,59 +262,6 @@ public class CircularNewMenu extends CircularMenu {
 			}
 		}
 	}
-
-/*
-
-	public void drawTextName(GuiGraphicsExtractor guiGraphics, String name, int color) {
-		name = font.plainSubstrByWidth(name, outerRadius - getFanTextInnerSpace());
-		guiGraphics.text(font, name, getFanTextInnerSpace(), -font.lineHeight / 2, color, false);
-	}
-	protected void drawName(GuiGraphicsExtractor guiGraphics, double rad, String name, int color, float size) {
-		Matrix3x2fStack pose = guiGraphics.pose();
-		pose.pushMatrix();
-		String[] parts = name.split("\\?");
-		if (parts.length == 2) {
-			//pose.mulPose(Axis.ZP.rotation((float) -rad));
-			double r = getFanTextInnerSpace() + (outerRadius - innerRadius) / 2d;
-			double x = Math.cos(rad) * r;
-			double y = Math.sin(rad) * r;
-			pose.translate((float) x, (float) y);
-			pose.scale(size, size);
-			switch (parts[0]) {
-				case "slot" -> {
-					LocalPlayer player = Minecraft.getInstance().player;
-					if (player != null) {
-						ItemStack item = player.getInventory().getItem(Integer.parseInt(parts[1]));
-						guiGraphics.item(item, -8, -8);
-						guiGraphics.itemDecorations(font, item, -8, -8);
-					}
-				}
-				case "item" -> {
-					Item item = ItemHelper.getItem(parts[1]);
-					guiGraphics.item(new ItemStack(item), -8,-8);
-				}
-				case "image" -> {
-					Identifier res = Identifier.tryParse(parts[1]);
-					if (res != null) {
-						guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-								res,
-								-8, -8,
-								0, 0,
-								0, 16,
-								16, 16,
-								16
-						);
-					}
-				}
-				case null, default -> LOGGER.warn("unknow type {}",parts[0]);
-			}
-		} else {
-			pose.scale(size, size);
-			drawTextName(guiGraphics, name, color);
-		}
-		pose.popMatrix();
-	}
-*/
 
 	public record RenderPageData(MenuPageData pageData, List<SimpleListBoxData> projects) {
 		public static RenderPageData create(MenuPageData pageData, IOnPress func) {
